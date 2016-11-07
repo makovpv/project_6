@@ -1,0 +1,37 @@
+.centerBlockHomePage {
+	width:70%;
+	margin-top: 50px;
+	margin-left: auto; /* Отступ слева */
+	margin-right: auto; /* Отступ справа */
+	overflow: auto;
+}
+
+.welcomeHomePage {
+	color: #1D3344;
+	text-shadow: inset 0px 0px 1px 1px rgba(15,35,90,0.5);
+	margin-top: 50px;
+	font: 550% sans-serif bold italic;
+	text-align:  center;
+
+}
+
+.icons {
+margin-left: 30px; 
+text-align: left;
+list-style-position: outside;
+border-bottom: 
+}
+
+.Biglock {
+  background:url(img/gray_jean.png);
+  background-repeat:repeat;
+}
+
+.addTestUser {
+width:100%;
+padding: 20px 60px; 
+}
+
+.mailAddTest{
+margin-left:60px;
+}

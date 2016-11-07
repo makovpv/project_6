@@ -1,0 +1,92 @@
+.centerBlock {
+    width:70%;
+	margin-top: 50px;
+	margin-left: auto; /* Отступ слева */
+	margin-right: auto; /* Отступ справа */
+    background: #fff; /* Цвет фона */
+    clear:both;/* запрещено обтекание слева и справа */
+	min-height: 400px;
+	border: 1px solid #c0c0c0; /* Параметры рамки */
+	overflow: auto;
+    border-radius: 10px 10px 10px 10px; /* Для современных браузеров */
+	-webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+       -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+            box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    -webkit-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.5), 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+       -moz-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.5), 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+            box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.5), 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+}
+
+.title {
+    height: 75px;
+	border:1px solid #0D202E;
+	background: #1D3344; /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(40,80,110,1) 0%, rgba(15,35,55,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(40,80,110,1)), color-stop(100%,rgba(15,35,55,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(40,80,110,1) 0%,rgba(15,35,55,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(40,80,110,1) 0%,rgba(15,35,55,1) 100%); /* Opera11.10+ */
+	background: linear-gradient(top, rgba(40,80,110,1) 0%,rgba(15,35,55,1) 100%); /* W3C */
+
+	color: #fff;
+	padding: 20px 40px;
+}
+.title_abr {
+    color: #FFFFFF;
+    font-size: xx-large;
+    margin-left: 40px;
+    margin-top: 15px;
+	text-shadow:0px 1px 1px #fff;
+	text-decoration:none;
+	font-size:200%;
+	text-shadow:0px -2px 0 rgba(0,0,0,0.5);
+
+}
+.title_name {
+	margin-left:55%;
+	text-align:right;
+    color: #FFFFFF;
+    }
+.addName {
+	margin-top:55px;
+	width:300px;
+	margin-left:32%;
+}
+.clock {
+	float: left;
+	margin-top:20px;
+	margin-left:40px;
+}
+.QuestTest {
+	margin-left:20%;
+	margin-top:20px;
+	width:60%;
+	padding-left:15px;
+	text-align: left;
+	display:block;
+	font-size:1.2em;
+	color:#1D3344; 
+}
+.Answer {
+	margin-top: 20px;
+	margin-left:20%;
+	width:60%;
+	padding:5px;
+	text-align: left;
+	font-size:1.1em;
+	color:#1D3344; 
+}
+.answerButton {
+	margin-top: 5px;
+	width:70%;
+	margin-left: 15%;
+}
+
+.answerButtonBack{
+	float: left;
+	width:50px;
+}
+
+.answerButtonNext{
+	width:100%;
+	text-align: right;
+}

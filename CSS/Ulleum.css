@@ -1,0 +1,290 @@
+﻿table td 
+{
+    padding: 0px;   
+    border: solid 0px black;
+}
+
+
+/**************** login style **************/
+
+.loginTextBox 
+{
+    width: 95%;
+    vertical-align: middle;
+    margin: 0px 0px 0px 0px;
+    padding: 1px 5px 1px 5px;
+    text-align: left;
+    border-radius: 5px;
+    height: 30px;
+}
+.loginText
+{
+    vertical-align: middle;
+    margin: 0px 0px 0px 0px;
+    padding: 5px 0px 0px 20px;
+    font-family: Verdana;
+    font-size: small;
+}
+.loginCheckBox 
+{
+    text-align:left;
+    font-family: Verdana;
+    font-size: small;
+    padding: 2px 0px 5px 84px;
+}
+.loginFailure
+{
+    max-width: 200px;
+    margin: 10 10 10 10;
+    
+}
+
+/**************** analyse style **************/
+.analyseTitle
+{
+    font-size: 12pt;
+    font-style: italic;    
+}
+
+.mainTableVisible
+{
+    width: 100%;
+}
+.mainTableUnVisible
+{
+    display: none;
+}
+
+
+/*************** Компания. Активные угрозыы - табличная часть ***************/
+.mainPanelTitle
+{
+    margin-top: 0px; 
+    margin-left: 2%;
+    width: 96%; 
+    height: 30px;
+    background: orange;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4); 
+    border-radius: 0px; 
+    position: absolute;   
+}
+
+.mainPanel
+{
+    margin-top: 4px; 
+    margin-left: 2%;
+    width: 96%; 
+    height: 85%;
+    background: white; 
+    background: rgba(255,255,255,.5); 
+    box-shadow: 0 0 10px rgba(0,0,0,0.6); 
+    border-radius: 0px;
+    position: absolute;   
+}
+
+.mainPanelTitle_alone
+{
+    margin-top: 0px; 
+    margin-left: 2%;
+    width: 96%; 
+    height: 70px;
+    background: white; 
+    background: rgba(255,255,255,.1); 
+    box-shadow: 0 0 10px rgba(0,0,0,0.6); 
+    border-radius: 5px; 
+    position: absolute;   
+}
+
+.mainPanel_alone
+{
+    margin-top: 84px; 
+    margin-left: 2%;
+    width: 96%; 
+    height: 80%;
+    background: white; 
+    background: rgba(255,255,255,.5); 
+    box-shadow: 0 0 10px rgba(0,0,0,0.6); 
+    border-radius: 5px;
+    position: absolute;   
+}
+
+.mainPanelTitleTable
+{
+    width: 100%;
+    /*
+    background-image: url(../Images/headerLine.png);    
+    background-repeat: repeat-x; 
+    background-position: bottom;
+    */
+}
+
+
+.companySubTable
+{
+    background: none;
+    /*background: rgba(255,255,255,.6); */
+    border-radius: 5px; 
+    width: 100%;  
+}
+.companySubTableLabel
+{
+    font-weight: bold;
+}
+.companySubTableImg
+{
+    width: 300px;
+    height: 26px;
+    margin-left: -5px;
+}
+.companySubTableLink
+{
+    margin-left: -20px; 
+    text-shadow: 1px 2px 2px #000000;
+    font-size: 16pt;
+    color: White;  
+    text-decoration: none;
+}
+.companySubTableLinkLabel
+{
+    
+}
+
+.companySubTableLinkLabelText
+{
+    margin: 0px 10px 0px 10px; 
+    font-size: 10pt;
+    color: Black;  
+    text-decoration: none; 
+    text-shadow: none; 
+}
+
+.companyPanelContent
+{
+    width: 100%; 
+    margin: -10px 0px -10px 0px;
+}
+
+/*----------------------menu--------------------------*/
+.menuHint
+{
+    font-weight: bold;
+    font-size: 10pt;
+    text-shadow: 1px 1px 3px #ffffb7;
+    font-style: italic;
+}
+
+.titleText
+{
+    font-weight: bold;
+    font-size: 18pt;
+    font-style: italic;
+    text-shadow: 0px 0px 6px #ffffb7;
+    margin: 0px 0px 0px 20px; 
+}
+
+.titleTextInfo
+{
+    font-style: italic;
+    font-size: 8pt;
+    font-weight: normal;
+}
+.menuButtonBackPanelCell
+{
+    /*width: 150px;    */
+    vertical-align: middle;
+}
+.menuButtonBackPanel
+{
+    position: absolute;
+    top: 0px;
+    height: 30px;
+    width: 150px;
+    border-right: 1 solid white;
+    background: #e4e4e4;    
+}
+
+.menuLinkButton
+{
+    /*position: absolute; */
+    border: 0px; 
+    background: none; 
+    color: White; 
+    /*font-weight: bold; */
+    text-align: left; 
+    padding: 0px 20px 2px 20px; 
+    font-size: 10pt; 
+    top: 5px;  
+    text-decoration: none; 
+    text-shadow: 0px 0px 1px #000000;
+}
+.menuLinkButton:hover
+{
+    color: Black; 
+    text-shadow: 0px 0px 1px #ffffff;
+}
+
+/*иконки - кнопки для нового горизонтального меню*/
+.rowMenuImg
+{
+    width: 30px; 
+    height: 30px; 
+    border: 0px; 
+    background: none; 
+    margin: 0px 5px 0px 20px;
+}
+
+/*кнопки - текст для нового горизонтального меню*/
+button.rowMenuButton
+{
+    border: 0px; 
+    background: none; 
+    color: Black; 
+    font-weight: bold; 
+    text-align: left; 
+    padding: 0px 20px 5px 0px;
+    text-shadow: none;
+}
+/*----------------------misc--------------------------*/
+.clsAchivementLabel
+{
+    color:Black;
+    font-style:italic;
+}
+.clsIndicatorName
+{
+    color:Black;
+    font-weight:bold;
+}
+.clsIndicatorGroup
+{
+    color:Blue;
+    font-weight:bold;
+}
+.clsMiscLines
+{
+    font-style:italic;
+}
+.clsMyPlanAnswer
+{
+    font-size:larger;
+    font-weight:bold;
+}
+
+/*---------------------------------------------------------*/
+.testerChartLabel
+{
+    font-weight:bold;
+    width: 50px;
+    vertical-align: middle;
+    /*margin-left: 15px; */
+    margin-bottom: 20px; 
+    font-size: 20px;
+
+}.clsIndexDescr
+{
+    display: inline-block;
+    word-break: break-word;
+    text-align: center;
+    vertical-align: middle;
+    margin-right: 20px;
+}
