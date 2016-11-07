@@ -1,0 +1,29 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="PlayerBusinessMasterPage.master.cs" Inherits="PlayerBusinessMasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+        <meta name="robots" content="noindex,nofollow"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link href="CSS/style.css" rel="stylesheet" type="text/css"/>
+        <asp:ContentPlaceHolder ID="head" runat="server">    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div class="title">
+        <div class="title_all_name">
+<%--            <div id="Div1" class="title_Name_Site_Block">
+                <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/Default.aspx" CssClass="title_Name_Site">Home</asp:HyperLink>
+		    </div>--%>
+            <div id="tnt" class="title_name_Test_Block">
+                <asp:Label ID="TestName_lbl" runat="server" CssClass="title_name_Test"></asp:Label>
+		    </div>
+	    </div>
+    </div>
+	
+    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server" ></asp:ContentPlaceHolder>	
+	
+    </form>
+</body>
+</html>

@@ -1,0 +1,37 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MyMasterPage.master.cs"
+    Inherits="MyMasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta name="robots" content="noindex,nofollow">
+    <title>Редактор</title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <style type="text/css">
+        #form1
+        {
+            height: 267px;
+        }
+    </style>
+
+</head>
+<body>
+    <form id="form1" runat="server" style="height: 80%; white-space: normal">
+    <div style="border: thin solid #808080; background-color: #EAFFEA;">
+        &nbsp;
+        <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/Designer/TestList.aspx"
+            Font-Bold="True" Font-Names="Verdana" Font-Size="Large" ForeColor="Gray">Psy Tester </asp:HyperLink>
+        <asp:Label ID="lblUserName" runat="server"></asp:Label>
+    </div>
+    <p/>
+        &nbsp;<asp:Panel runat="server" Height="60%">
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+    </asp:Panel>
+    </form>
+    <div style="border: thin solid #808080; height: 10%; background-color: #EAFFEA;">
+        <asp:Label ID="LabelBottom" runat="server" Text="***"> </asp:Label>
+    </div>
+</body>
+</html>

@@ -1,0 +1,124 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MainMasterPage.master.cs" Inherits="MainMasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <%--<title>ТестПлеер</title>--%>
+    <style type="text/css">
+	/* <![CDATA[ */
+	#Menu1 { background-color:#B5C7DE; }
+	#Menu1 img.icon { border-style:none;vertical-align:middle; }
+	#Menu1 img.separator { border-style:none;display:block; }
+	#Menu1 img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#Menu1 ul { list-style:none;margin:0;padding:0;width:auto; }
+	#Menu1 ul.dynamic { background-color:#B5C7DE;z-index:1;margin-left:2px; }
+	#Menu1 a { color:#284E98;font-family:Verdana;font-size:0.8em;text-decoration:none;white-space:nowrap;display:block; }
+	#Menu1 a.static { padding:2px 5px 2px 5px;text-decoration:none; }
+	#Menu1 a.popout { background-image:url("/WebResource.axd?d=sUkwRNvdlFwiiYhX_ROdScj7DVinNaPbXlhwXit9iXQr4VGgcWHK7XN14Q5s8v0ggIkW47-FvsveG0C95_rEGHxDSG0kNR08pOJ3sEldpbg1&t=635147041110920824");background-repeat:no-repeat;background-position:right center;padding-right:14px; }
+	#Menu1 a.dynamic { padding:2px 5px 2px 5px;text-decoration:none; }
+	#Menu1 a.static.selected { background-color:#507CD1;text-decoration:none; }
+	#Menu1 a.dynamic.selected { background-color:#507CD1;text-decoration:none; }
+	#Menu1 a.static.highlighted { color:White;background-color:#284E98; }
+	#Menu1 a.dynamic.highlighted { color:White;background-color:#284E98; }
+	/* ]]> */
+    </style>
+    <script>window["_GOOG_TRANS_EXT_VER"] = "1";</script>
+    <link rel="stylesheet" type="text/css" href="CSS/style.css" media="all"/>
+    <link href="/CSS/Ulleum.css" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Tenor+Sans" rel="stylesheet" type="text/css"/>
+    <script src="Scripts/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="Scripts/kickstart.js"></script>                                  <!-- KICKSTART -->
+
+    <asp:ContentPlaceHolder id="head" runat="server"/>
+
+    <script type="text/javascript">
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+ m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-46981071-1', 'testplayer.org');
+        ga('send', 'pageview');
+    </script>
+
+</head>
+<body class="Biglock">
+    <form id="form1" runat="server">
+    <div>
+<!-- Menu Horizontal -->
+ 
+<ul class="menu">
+<li class="current"><a href="Default.aspx">
+<%--onclick="__doPostBack(&#39;Menu1&#39;,&#39;New Item&#39;)">--%>
+ТестПлеер</a>
+<ul>
+<li><a href="Default.aspx#">На главную</a></li>
+<li><a href="About.aspx">О проекте</a></li>
+</ul>
+</li>
+<li><a href="" style=" text-align: left;">Тестотека</a>
+<ul>
+<li><a href="Default.aspx#tabr1" style=" text-align: left;">Все тесты</a></li>
+<li><a href="Default.aspx#tabr2" style=" text-align: left;">Отношения</a></li>
+<li><a href="Default.aspx#tabr3" style=" text-align: left;">Работа</a></li>
+<li><a href="Default.aspx#tabr4" style=" text-align: left;">Интеллект</a></li>
+<li><a href="Default.aspx#tabr5" style=" text-align: left;">Личность</a></li>
+<li><a href="Default.aspx#tabr6" style=" text-align: left;">Психическое здоровье</a></li>
+<li><a href="addTest.aspx" style=" text-align: left;">Заказать тест</a></li>
+<li><a href="lk.aspx" style=" text-align: left;">Поиск</a></li>
+</ul>
+</li>
+<li><a href="">Исследования</a>
+<ul>
+<li><a href="addTest.aspx">Заказать исследование</a></li>
+</ul>
+</li>
+<li><a href="lk.aspx">Мои результаты</a></li>
+
+<li><a href="http://blog.testplayer.org">Блог</a></li>
+
+</ul>
+<!-- Menu Horizontal  ending-->
+        <div class="welcomeHomePage">
+            "Все тесты в одном месте!"
+            <p>- ТестПлеер</p>
+        </div>
+        <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server"/>
+    </div>
+
+    </form>
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function (d, w, c) {
+            (w[c] = w[c] || []).push(function () {
+                try {
+                    w.yaCounter23917483 = new Ya.Metrika({ id: 23917483,
+                        clickmap: true,
+                        trackLinks: true,
+                        accurateTrackBounce: true
+                    });
+                } catch (e) { }
+            });
+
+            var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+            s.type = "text/javascript";
+            s.async = true;
+            s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+            if (w.opera == "[object Opera]") {
+                d.addEventListener("DOMContentLoaded", f, false);
+            } else { f(); }
+        })(document, window, "yandex_metrika_callbacks");
+    </script>
+    <noscript><div><img src="//mc.yandex.ru/watch/23917483" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+
+
+</body>
+</html>

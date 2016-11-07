@@ -1,0 +1,73 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="PlayerMasterPage.master.cs"
+    Inherits="MyMasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link href="CSS/style.css" rel="stylesheet" type="text/css"/>
+
+        <asp:ContentPlaceHolder ID="head" runat="server">    </asp:ContentPlaceHolder>
+
+        <script>
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date(); a = s.createElement(o),
+ m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', 'UA-46981071-1', 'testplayer.org');
+            ga('send', 'pageview');
+    </script>
+</head>
+
+<body class="Biglock">
+    <form id="form1" runat="server" >
+    <div class="title">
+        <div class="title_all_name">
+            <div id="Div1" class="title_Name_Site_Block">
+                <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/Default.aspx" CssClass="title_Name_Site">Тест Плеер</asp:HyperLink>
+		    </div>
+            <div id="tnt" class="title_name_Test_Block">
+                <asp:Label ID="TestName_lbl" runat="server" CssClass="title_name_Test"></asp:Label>
+		    </div>
+	    </div>
+    </div>
+
+    <%--<asp:Panel runat="server" Height="100%" >--%>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server" ></asp:ContentPlaceHolder>
+    <%--</asp:Panel>--%>
+    </form>
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function (d, w, c) {
+            (w[c] = w[c] || []).push(function () {
+                try {
+                    w.yaCounter23917483 = new Ya.Metrika({ id: 23917483,
+                        clickmap: true,
+                        trackLinks: true,
+                        accurateTrackBounce: true
+                    });
+                } catch (e) { }
+            });
+
+            var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+            s.type = "text/javascript";
+            s.async = true;
+            s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+            if (w.opera == "[object Opera]") {
+                d.addEventListener("DOMContentLoaded", f, false);
+            } else { f(); }
+        })(document, window, "yandex_metrika_callbacks");
+    </script>
+    <noscript><div><img src="//mc.yandex.ru/watch/23917483" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+
+</body>
+</html>
