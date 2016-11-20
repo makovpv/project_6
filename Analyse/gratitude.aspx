@@ -6,6 +6,10 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
 
+    <script type="text/javascript" language="javascript">
+        function OnConfirmDelete() { if (confirm('Удалить благодарность ?')) return true; return false;}
+    </script>   
+
     <ajaxToolkit:ToolkitScriptManager runat="Server" EnablePartialRendering="true" ID="ScriptManager1" />    
 
     <asp:HyperLink ID="HyperLink1" runat="server" Text="вернуться в личный кабинет" NavigateUrl="~/lk2.aspx"/>
@@ -38,22 +42,28 @@
     <hr/>
     <br/>
 
-    <asp:GridView runat="server" DataSourceID="sqlGratitude" AutoGenerateColumns="false" ID="gridGratitude"
-        
-        OnRowCommand="grid_RowCommand">
+    <asp:GridView runat="server" DataSourceID="sqlGratitude" 
+        AutoGenerateColumns="false" ID="gridGratitude"
+        OnRowCommand="grid_RowCommand" DataKeyNames="subj_id">
         <Columns>
             <asp:BoundField DataField="SubjectName" HeaderText="Кто поблагодарил" ItemStyle-Width="15%" />
             <asp:BoundField DataField="test_date" HeaderText="Дата" ItemStyle-Width="13%"/>
             <asp:BoundField DataField="ObjectName" HeaderText="Кого поблагодарили" ItemStyle-Width="15%"/>
             <asp:BoundField DataField="gratitude_text" HeaderText="Благодарность" ItemStyle-Width="57%"/>
             
+            <asp:TemplateField>
+                <ItemTemplate>
+                    <asp:Button runat="server" OnClientClick="return OnConfirmDelete();" 
+                        CommandName="Delete" Text="Удалить" CommandArgument="subj_id"/>
+                </ItemTemplate>
+            </asp:TemplateField>
         </Columns>    
         <AlternatingRowStyle BackColor="#ccffcc"/>
     </asp:GridView>
 
     <asp:SqlDataSource runat="server" ID="sqlGratitude"
         ConnectionString="<%$ ConnectionStrings:tester_dataConnectionString %>"
-        SelectCommand="select ts.Test_Date, ts.fio as subjectName, txt.text as gratitude_text, ss.name as objectname
+        SelectCommand="select ts.Test_Date, ts.fio as subjectName, txt.text as gratitude_text, ss.name as objectname, ts.id as subj_id
             from subject_group sg
             join test_subject ts on ts.group_id = sg.id and ts.Test_Date is not null
             join Test_Results_Txt txt on txt.subject_id = ts.id
@@ -65,7 +75,8 @@
                 and ss.name = case @obj when '<все>' then ss.name else @obj end
                 and ts.fio = case @subj_filter when '<все>' then ts.fio else @subj_filter end
                 and ss.name = case @obj_filter when '<все>' then ss.name else @obj_filter end
-            order by ts.Test_Date desc, ts.id">
+            order by ts.Test_Date desc, ts.id"
+		DeleteCommand="exec dbo.Delete_Subject @subj_id">
         <SelectParameters>
             <asp:ControlParameter ControlID="ddlSubject" Name="subj" PropertyName="SelectedItem.Text" Type="String"/>
             <asp:ControlParameter ControlID="ddlObject" Name="obj" PropertyName="SelectedItem.Text" Type="String" />
@@ -74,10 +85,10 @@
             <asp:Parameter Name="subj_filter" DefaultValue="<все>" />
             <asp:Parameter Name="obj_filter" DefaultValue="<все>" />
         </SelectParameters>
-
-            <%--<asp:QueryStringParameter Name="subj_filter" QueryStringField="s" DefaultValue="<все>" />
-            <asp:QueryStringParameter Name="obj_filter" QueryStringField="o" DefaultValue="<все>" />--%>
-        
+		<DeleteParameters>
+			<asp:Parameter Name="subj_id" />
+		</DeleteParameters>
+       
     </asp:SqlDataSource>
 
     <asp:SqlDataSource runat="server" ID="SqlUser"

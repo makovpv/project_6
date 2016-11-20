@@ -31,9 +31,9 @@ public partial class Analyse_gratitude : System.Web.UI.Page
             System.Web.Security.MembershipUser usr = System.Web.Security.Membership.GetUser();
             if (usr != null)
             {
-                if (User.IsInRole ("HR"))
+                if (!User.IsInRole ("HR"))
                 {
-                    gridGratitude.Columns.Add( new ButtonField () { CommandName = "Delete", ButtonType=ButtonType.Button, Text="Удалить" });
+                    gridGratitude.Columns.RemoveAt(4); // remove column with "Delete" button
                 }
                 
                 using (TesterDataClassesDataContext dc = new TesterDataClassesDataContext())
