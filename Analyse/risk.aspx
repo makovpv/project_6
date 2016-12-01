@@ -45,7 +45,7 @@
     <asp:SqlDataSource runat="server" ID="sqlRisk"
      ConnectionString="<%$ ConnectionStrings:tester_dataConnectionString %>"
      SelectCommand="select ts.Test_Date, 
-     left(txt.text, 250) as risk_text, ts.fio as subjectName
+     txt.text as risk_text, ts.fio as subjectName
 from subject_group sg
 join test_subject ts on ts.group_id = sg.id and ts.Test_Date is not null
 join Test_Results_Txt txt on txt.subject_id = ts.id
