@@ -1,0 +1,794 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ulleum" Class="TesterDataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Table Name="dbo.projects" Member="projects">
+    <Type Name="project">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="code" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="StartMessage" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="FinalMessage" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Association Name="project_ProjectTest_Link" Member="ProjectTest_Links" ThisKey="id" OtherKey="Project_ID" Type="ProjectTest_Link" />
+      <Association Name="project_Test_Subject" Member="Test_Subjects" ThisKey="id" OtherKey="project_id" Type="Test_Subject" />
+      <Association Name="project_subject_group" Member="subject_groups" ThisKey="id" OtherKey="project_id" Type="subject_group" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ProjectTest_Link" Member="ProjectTest_Links">
+    <Type Name="ProjectTest_Link">
+      <Column Name="Project_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Test_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OrdNumber" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Association Name="project_ProjectTest_Link" Member="project" ThisKey="Project_ID" OtherKey="id" Type="project" IsForeignKey="true" />
+      <Association Name="test_ProjectTest_Link" Member="test" ThisKey="Test_ID" OtherKey="id" Type="test" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Dimension_Type" Member="Dimension_Types">
+    <Type Name="Dimension_Type">
+      <Column Name="id" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="ForItem" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="ForAnket" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Dimension_Type_SubScaleDimension" Member="SubScaleDimensions" ThisKey="id" OtherKey="dimension_type" Type="SubScaleDimension" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Dimension_Mode" Member="Dimension_Modes">
+    <Type Name="Dimension_Mode">
+      <Column Name="id" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Association Name="Dimension_Mode_SubScaleDimension" Member="SubScaleDimensions" ThisKey="id" OtherKey="dimension_mode" Type="SubScaleDimension" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Quest_Type" Member="Quest_Types">
+    <Type Name="Quest_Type">
+      <Column Name="id" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Association Name="Quest_Type_item" Member="items" ThisKey="id" OtherKey="item_type" Type="item" />
+    </Type>
+  </Table>
+  <Table Name="dbo.inter_condition" Member="inter_conditions">
+    <Type Name="inter_condition">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="inter_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="scale_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="min_value" Type="System.Decimal" DbType="Decimal(6,3)" CanBeNull="true" />
+      <Column Name="max_value" Type="System.Decimal" DbType="Decimal(6,3)" CanBeNull="true" />
+      <Column Name="range_type" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Association Name="ConditionRangeType_inter_condition" Member="ConditionRangeType" ThisKey="range_type" OtherKey="id" Type="ConditionRangeType" IsForeignKey="true" />
+      <Association Name="Scale_inter_condition" Member="Scale" ThisKey="scale_id" OtherKey="id" Type="Scale" IsForeignKey="true" />
+      <Association Name="interpretation_inter_condition" Member="interpretation" ThisKey="inter_id" OtherKey="id" Type="interpretation" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Test_Data" Member="Test_Datas">
+    <Type Name="Test_Data">
+      <Column Name="Subject_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Scale_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Test_Value" Type="System.Decimal" DbType="decimal(8,3) NOT NULL" CanBeNull="false" />
+      <Association Name="Scale_Test_Data" Member="Scale" ThisKey="Scale_ID" OtherKey="id" Type="Scale" IsForeignKey="true" />
+      <Association Name="Test_Subject_Test_Data" Member="Test_Subject" ThisKey="Subject_ID" OtherKey="id" Type="Test_Subject" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.test_diagram" Member="test_diagrams">
+    <Type Name="test_diagram">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="test_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="diagram_type" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="NormLow" Type="System.Decimal" DbType="Decimal(6,2)" CanBeNull="true" />
+      <Column Name="NormHigh" Type="System.Decimal" DbType="Decimal(6,2)" CanBeNull="true" />
+      <Association Name="test_diagram_Resume_Item" Member="Resume_Items" ThisKey="id" OtherKey="diagram_id" Type="Resume_Item" />
+      <Association Name="test_diagram_Test_Diagram_Scale" Member="Test_Diagram_Scales" ThisKey="id" OtherKey="diagram_id" Type="Test_Diagram_Scale" />
+      <Association Name="test_diagram_indicator" Member="indicators" ThisKey="id" OtherKey="idDiagram" Type="indicator" />
+      <Association Name="Diagram_Type_test_diagram" Member="Diagram_Type1" ThisKey="diagram_type" OtherKey="id" Type="Diagram_Type" IsForeignKey="true" />
+      <Association Name="test_test_diagram" Member="test" ThisKey="test_id" OtherKey="id" Type="test" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.vItemScaleLink" Member="vItemScaleLinks">
+    <Type Name="vItemScaleLink">
+      <Column Name="item_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="number" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="text" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="scale_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+    <DeleteFunction FunctionId="FunctionId1">
+      <Argument Parameter="itemID" Member="item_id" Version="Original" />
+      <Argument Parameter="scaleID" Member="scale_id" Version="Original" />
+    </DeleteFunction>
+  </Table>
+  <Table Name="dbo.Resume_Item_Type" Member="Resume_Item_Types">
+    <Type Name="Resume_Item_Type">
+      <Column Name="id" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="Resume_Item_Type_Resume_Item" Member="Resume_Items" ThisKey="id" OtherKey="Resume_Item_Type" Type="Resume_Item" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Param_Values" Member="Param_Values">
+    <Type Name="Param_Value">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Param_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="str_value" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="ivalue_1" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="ivalue_2" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Association Name="Param_Value_Param_Result" Member="Param_Results" ThisKey="id" OtherKey="Param_Value_ID" Type="Param_Result" />
+      <Association Name="Param_Value_Scale_Range" Member="Scale_Ranges" ThisKey="id" OtherKey="Param2_Value_ID" Type="Scale_Range" />
+      <Association Name="Param_Value_Scale_Range1" Member="Scale_Ranges1" ThisKey="id" OtherKey="Param_Value_ID" Type="Scale_Range" />
+      <Association Name="Param_Param_Value" Member="Param" ThisKey="Param_ID" OtherKey="id" Type="Param" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Test_Results_Txt" Member="Test_Results_Txts">
+    <Type Name="Test_Results_Txt">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="subject_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="item_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="text" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Association Name="item_Test_Results_Txt" Member="item" ThisKey="item_id" OtherKey="id" Type="item" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="Test_Subject_Test_Results_Txt" Member="Test_Subject" ThisKey="subject_id" OtherKey="id" Type="Test_Subject" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ConditionRangeType" Member="ConditionRangeTypes">
+    <Type Name="ConditionRangeType">
+      <Column Name="id" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="ConditionRangeType_inter_condition" Member="inter_conditions" ThisKey="id" OtherKey="range_type" Type="inter_condition" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Test_Type" Member="Test_Types">
+    <Type Name="Test_Type">
+      <Column Name="id" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="Test_Type_test" Member="tests" ThisKey="id" OtherKey="test_type" Type="test" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Resume_Items" Member="Resume_Items">
+    <Type Name="Resume_Item">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="test_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OrderNumber" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Resume_Item_Type" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="item_text" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="scale_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="diagram_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="is_scale_exclusive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="resume_image" Type="System.Data.Linq.Binary" DbType="Image" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="txt_template_id" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Association Name="test_diagram_Resume_Item" Member="test_diagram" ThisKey="diagram_id" OtherKey="id" Type="test_diagram" IsForeignKey="true" />
+      <Association Name="Resume_Item_Type_Resume_Item" Member="Resume_Item_Type1" ThisKey="Resume_Item_Type" OtherKey="id" Type="Resume_Item_Type" IsForeignKey="true" />
+      <Association Name="Passport_Template_Resume_Item" Member="Passport_Template" ThisKey="txt_template_id" OtherKey="id" Type="Passport_Template" IsForeignKey="true" />
+      <Association Name="Scale_Resume_Item" Member="Scale" ThisKey="scale_id" OtherKey="id" Type="Scale" IsForeignKey="true" />
+      <Association Name="test_Resume_Item" Member="test" ThisKey="test_id" OtherKey="id" Type="test" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Diagram_Type" Member="Diagram_Types">
+    <Type Name="Diagram_Type">
+      <Column Name="id" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="Diagram_Type_test_diagram" Member="test_diagrams" ThisKey="id" OtherKey="diagram_type" Type="test_diagram" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Test_Diagram_Scales" Member="Test_Diagram_Scales">
+    <Type Name="Test_Diagram_Scale">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="diagram_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="scale_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="group_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OrderNumber" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Association Name="test_diagram_Test_Diagram_Scale" Member="test_diagram" ThisKey="diagram_id" OtherKey="id" Type="test_diagram" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="Scale_Test_Diagram_Scale" Member="Scale" ThisKey="scale_id" OtherKey="id" Type="Scale" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Passport_Template" Member="Passport_Templates">
+    <Type Name="Passport_Template">
+      <Column Name="id" Type="System.Int16" DbType="SmallInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="comment" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="template_text" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Association Name="Passport_Template_Resume_Item" Member="Resume_Items" ThisKey="id" OtherKey="txt_template_id" Type="Resume_Item" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ScoreCalcType" Member="ScoreCalcTypes">
+    <Type Name="ScoreCalcType">
+      <Column Name="id" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="ScoreCalcType_Scale" Member="Scales" ThisKey="id" OtherKey="ScoreCalcType" Type="Scale" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SubScaleDimension" Member="SubScaleDimensions">
+    <Type Name="SubScaleDimension">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="test_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="dimension_type" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="dimension_mode" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="GradationCount" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="isUniqueSelect" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="min_value" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="max_value" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="step_value" Type="System.Decimal" DbType="Decimal(8,3)" CanBeNull="true" />
+      <Association Name="SubScaleDimension_SubScale" Member="SubScales" ThisKey="id" OtherKey="Dimension_ID" Type="SubScale" />
+      <Association Name="SubScaleDimension_item" Member="items" ThisKey="id" OtherKey="dimension_id" Type="item" />
+      <Association Name="Dimension_Mode_SubScaleDimension" Member="Dimension_Mode1" ThisKey="dimension_mode" OtherKey="id" Type="Dimension_Mode" IsForeignKey="true" />
+      <Association Name="Dimension_Type_SubScaleDimension" Member="Dimension_Type1" ThisKey="dimension_type" OtherKey="id" Type="Dimension_Type" IsForeignKey="true" />
+      <Association Name="test_SubScaleDimension" Member="test" ThisKey="test_id" OtherKey="id" Type="test" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DiagnosticFieldType" Member="DiagnosticFieldTypes">
+    <Type Name="DiagnosticFieldType">
+      <Column Name="id" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="DiagnosticFieldType_test" Member="tests" ThisKey="id" OtherKey="diagnostic_field" Type="test" />
+    </Type>
+  </Table>
+  <Table Name="dbo.language" Member="languages">
+    <Type Name="language">
+      <Column Name="id" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="language_test" Member="tests" ThisKey="id" OtherKey="language_type" Type="test" />
+    </Type>
+  </Table>
+  <Table Name="dbo.test_category" Member="test_categories">
+    <Type Name="test_category">
+      <Column Name="id" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="test_category_test" Member="tests" ThisKey="id" OtherKey="category_id" Type="test" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SubScales" Member="SubScales">
+    <Type Name="SubScale">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Dimension_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="OrderNumber" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Association Name="SubScale_ItemScale_Link" Member="ItemScale_Links" ThisKey="id,Dimension_ID" OtherKey="subscale_id,dimension_id" Type="ItemScale_Link" />
+      <Association Name="SubScale_Test_Result" Member="Test_Results" ThisKey="id" OtherKey="SubScale_ID" Type="Test_Result" />
+      <Association Name="SubScaleDimension_SubScale" Member="SubScaleDimension" ThisKey="Dimension_ID" OtherKey="id" Type="SubScaleDimension" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ItemScale_Link" Member="ItemScale_Links">
+    <Type Name="ItemScale_Link">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="item_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="scale_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="subscale_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="kf" Type="System.Decimal" DbType="Decimal(8,3) NOT NULL" CanBeNull="false" />
+      <Column Name="dimension_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="SubScale_ItemScale_Link" Member="SubScale" ThisKey="subscale_id,dimension_id" OtherKey="id,Dimension_ID" Type="SubScale" IsForeignKey="true" />
+      <Association Name="item_ItemScale_Link" Member="item" ThisKey="item_id,dimension_id" OtherKey="id,dimension_id" Type="item" IsForeignKey="true" />
+      <Association Name="Scale_ItemScale_Link" Member="Scale" ThisKey="scale_id" OtherKey="id" Type="Scale" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.items" Member="items">
+    <Type Name="item">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="text" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="item_type" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="group_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="number" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="dimension_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="item_Test_Results_Txt" Member="Test_Results_Txts" ThisKey="id" OtherKey="item_id" Type="Test_Results_Txt" />
+      <Association Name="item_ItemScale_Link" Member="ItemScale_Links" ThisKey="id,dimension_id" OtherKey="item_id,dimension_id" Type="ItemScale_Link" />
+      <Association Name="item_Test_Result" Member="Test_Results" ThisKey="id" OtherKey="item_id" Type="Test_Result" />
+      <Association Name="SubScaleDimension_item" Member="SubScaleDimension" ThisKey="dimension_id" OtherKey="id" Type="SubScaleDimension" IsForeignKey="true" />
+      <Association Name="Quest_Type_item" Member="Quest_Type" ThisKey="item_type" OtherKey="id" Type="Quest_Type" IsForeignKey="true" />
+      <Association Name="Test_Question_item" Member="Test_Question" ThisKey="group_id" OtherKey="id" Type="Test_Question" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Param_Results" Member="Param_Results">
+    <Type Name="Param_Result">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Param_Value_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Subject_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="txt_value" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="Param_Value_Param_Result" Member="Param_Value" ThisKey="Param_Value_ID" OtherKey="id" Type="Param_Value" IsForeignKey="true" />
+      <Association Name="Test_Subject_Param_Result" Member="Test_Subject" ThisKey="Subject_ID" OtherKey="id" Type="Test_Subject" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Scale_Range" Member="Scale_Ranges">
+    <Type Name="Scale_Range">
+      <Column Name="Scale_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Max_Value" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Score" Type="System.Decimal" DbType="Decimal(6,3) NOT NULL" CanBeNull="false" />
+      <Column Name="Param_Value_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Param2_Value_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Param_Value_Scale_Range" Member="Param_Value" ThisKey="Param2_Value_ID" OtherKey="id" Type="Param_Value" IsForeignKey="true" />
+      <Association Name="Param_Value_Scale_Range1" Member="Param_Value1" ThisKey="Param_Value_ID" OtherKey="id" Type="Param_Value" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="Scale_Scale_Range" Member="Scale" ThisKey="Scale_ID" OtherKey="id" Type="Scale" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Scale_Norm" Member="Scale_Norms">
+    <Type Name="Scale_Norm">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="NormType_id" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Scale_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LowRange" Type="System.Decimal" DbType="Decimal(10,4) NOT NULL" CanBeNull="false" />
+      <Column Name="HighRange" Type="System.Decimal" DbType="Decimal(10,4) NOT NULL" CanBeNull="false" />
+      <Association Name="Scale_Scale_Norm" Member="Scale" ThisKey="Scale_ID" OtherKey="id" Type="Scale" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="Norm_Type_Scale_Norm" Member="Norm_Type" ThisKey="NormType_id" OtherKey="id" Type="Norm_Type" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Test_Results" Member="Test_Results">
+    <Type Name="Test_Result">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Subject_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="item_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SubScale_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SelectedValue" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Association Name="item_Test_Result" Member="item" ThisKey="item_id" OtherKey="id" Type="item" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="SubScale_Test_Result" Member="SubScale" ThisKey="SubScale_ID" OtherKey="id" Type="SubScale" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="Test_Subject_Test_Result" Member="Test_Subject" ThisKey="Subject_ID" OtherKey="id" Type="Test_Subject" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Test_Question" Member="Test_Questions">
+    <Type Name="Test_Question">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="test_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="text" Type="System.String" DbType="NVarChar(512)" CanBeNull="true" />
+      <Column Name="number" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="instruction" Type="System.String" DbType="NVarChar(1024)" CanBeNull="true" />
+      <Column Name="comment" Type="System.String" DbType="NVarChar(512)" CanBeNull="true" />
+      <Column Name="isShuffledItem" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="isTimeRestrict" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="isShuffledAns" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Test_Question_item" Member="items" ThisKey="id" OtherKey="group_id" Type="item" />
+      <Association Name="test_Test_Question" Member="test" ThisKey="test_id" OtherKey="id" Type="test" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Params" Member="Params">
+    <Type Name="Param">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Test_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Param_Type" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Group_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Param_Param_Value" Member="Param_Values" ThisKey="id" OtherKey="Param_ID" Type="Param_Value" />
+      <Association Name="Param_Scale" Member="Scales" ThisKey="id" OtherKey="Param2_ID" Type="Scale" />
+      <Association Name="Param_Scale1" Member="Scales1" ThisKey="id" OtherKey="Param_ID" Type="Scale" />
+      <Association Name="test_Param" Member="test" ThisKey="Test_ID" OtherKey="id" Type="test" IsForeignKey="true" />
+      <Association Name="subject_group_Param" Member="subject_group" ThisKey="Group_ID" OtherKey="id" Type="subject_group" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.dept" Member="depts">
+    <Type Name="dept">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="idCompany" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="dept_user_account" Member="user_accounts" ThisKey="id" OtherKey="idDept" Type="user_account" />
+      <Association Name="Company_dept" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Company" Member="Companies">
+    <Type Name="Company">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="Company_dept" Member="depts" ThisKey="id" OtherKey="idCompany" Type="dept" />
+      <Association Name="Company_user_account" Member="user_accounts" ThisKey="id" OtherKey="idCompany" Type="user_account" />
+      <Association Name="Company_indicator" Member="indicators" ThisKey="id" OtherKey="idCompany" Type="indicator" />
+      <Association Name="Company_subject_group" Member="subject_groups" ThisKey="id" OtherKey="idCompany" Type="subject_group" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Job" Member="Jobs">
+    <Type Name="Job">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="Job_user_account" Member="user_accounts" ThisKey="id" OtherKey="idJob" Type="user_account" />
+    </Type>
+  </Table>
+  <Table Name="dbo.user_state" Member="user_states">
+    <Type Name="user_state">
+      <Column Name="id" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="user_state_user_account" Member="user_accounts" ThisKey="id" OtherKey="idState" Type="user_account" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Scales" Member="Scales">
+    <Type Name="Scale">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="test_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="min_value" Type="System.Decimal" DbType="Decimal(6,3)" CanBeNull="true" />
+      <Column Name="max_value" Type="System.Decimal" DbType="Decimal(6,3)" CanBeNull="true" />
+      <Column Name="abreviature" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="sumtype" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="use_raw_data" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="ScoreCalcType" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="kf1" Type="System.Decimal" DbType="Decimal(8,4) NOT NULL" CanBeNull="false" />
+      <Column Name="kf2" Type="System.Decimal" DbType="Decimal(8,4) NOT NULL" CanBeNull="false" />
+      <Column Name="precision" Type="System.Decimal" DbType="Decimal(8,4)" CanBeNull="true" />
+      <Column Name="description" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="Param_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Formula" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="max_limit" Type="System.Decimal" DbType="Decimal(8,3)" CanBeNull="true" />
+      <Column Name="min_limit" Type="System.Decimal" DbType="Decimal(8,3)" CanBeNull="true" />
+      <Column Name="AVG_Value" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Standard_Dev" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Param2_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="isMain" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Scale_inter_condition" Member="inter_conditions" ThisKey="id" OtherKey="scale_id" Type="inter_condition" />
+      <Association Name="Scale_Test_Data" Member="Test_Datas" ThisKey="id" OtherKey="Scale_ID" Type="Test_Data" />
+      <Association Name="Scale_Resume_Item" Member="Resume_Items" ThisKey="id" OtherKey="scale_id" Type="Resume_Item" />
+      <Association Name="Scale_Test_Diagram_Scale" Member="Test_Diagram_Scales" ThisKey="id" OtherKey="scale_id" Type="Test_Diagram_Scale" />
+      <Association Name="Scale_ItemScale_Link" Member="ItemScale_Links" ThisKey="id" OtherKey="scale_id" Type="ItemScale_Link" />
+      <Association Name="Scale_Scale_Range" Member="Scale_Ranges" ThisKey="id" OtherKey="Scale_ID" Type="Scale_Range" />
+      <Association Name="Scale_Scale_Norm" Member="Scale_Norms" ThisKey="id" OtherKey="Scale_ID" Type="Scale_Norm" />
+      <Association Name="Scale_indicator" Member="indicators" ThisKey="id" OtherKey="idScale" Type="indicator" />
+      <Association Name="Param_Scale" Member="Param" ThisKey="Param2_ID" OtherKey="id" Type="Param" IsForeignKey="true" />
+      <Association Name="ScoreCalcType_Scale" Member="ScoreCalcType1" ThisKey="ScoreCalcType" OtherKey="id" Type="ScoreCalcType" IsForeignKey="true" />
+      <Association Name="Param_Scale1" Member="Param1" ThisKey="Param_ID" OtherKey="id" Type="Param" IsForeignKey="true" />
+      <Association Name="test_Scale" Member="test" ThisKey="test_id" OtherKey="id" Type="test" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.report" Member="reports">
+    <Type Name="report">
+      <Column Name="idReport" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="report_subject_group" Member="subject_groups" ThisKey="idReport" OtherKey="idReport" Type="subject_group" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Test_Subject" Member="Test_Subjects">
+    <Type Name="Test_Subject">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="project_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Nick_Name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Test_Date" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="Age" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="Gender" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Test_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Test_Date_Start" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="group_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="fio" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="BaseSubject_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MeasureNumber" Type="System.Int32" DbType="Int NOT NULL" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="idUser" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="MailWasSent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="idTestLink" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Test_Subject_Test_Data" Member="Test_Datas" ThisKey="id" OtherKey="Subject_ID" Type="Test_Data" />
+      <Association Name="Test_Subject_Test_Results_Txt" Member="Test_Results_Txts" ThisKey="id" OtherKey="subject_id" Type="Test_Results_Txt" />
+      <Association Name="Test_Subject_Param_Result" Member="Param_Results" ThisKey="id" OtherKey="Subject_ID" Type="Param_Result" />
+      <Association Name="Test_Subject_Test_Result" Member="Test_Results" ThisKey="id" OtherKey="Subject_ID" Type="Test_Result" />
+      <Association Name="Test_Subject_Test_Subject" Member="Test_Subjects" ThisKey="id" OtherKey="BaseSubject_id" Type="Test_Subject" />
+      <Association Name="Test_Subject_idea" Member="ideas" ThisKey="id" OtherKey="idSubject" Type="idea" />
+      <Association Name="Test_Subject_test_subject_approved" Member="test_subject_approveds" ThisKey="id" OtherKey="idSubject" Type="test_subject_approved" />
+      <Association Name="Test_Subject_Test_Subject" Member="Test_Subject1" ThisKey="BaseSubject_id" OtherKey="id" Type="Test_Subject" IsForeignKey="true" />
+      <Association Name="project_Test_Subject" Member="project" ThisKey="project_id" OtherKey="id" Type="project" IsForeignKey="true" />
+      <Association Name="user_account_Test_Subject" Member="user_account" ThisKey="idUser" OtherKey="idUser" Type="user_account" IsForeignKey="true" />
+      <Association Name="Test_SubjectGroup_Link_Test_Subject" Member="Test_SubjectGroup_Link" ThisKey="idTestLink" OtherKey="id" Type="Test_SubjectGroup_Link" IsForeignKey="true" />
+      <Association Name="test_Test_Subject" Member="test" ThisKey="Test_Id" OtherKey="id" Type="test" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="subject_group_Test_Subject" Member="subject_group" ThisKey="group_id" OtherKey="id" Type="subject_group" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.user_account" Member="user_accounts">
+    <Type Name="user_account">
+      <Column Name="idUser" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="idCompany" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="idDept" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="login_name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="fio" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="tags" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="birth_year" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="gender" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="comment" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="idJob" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="idState" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="RecruteDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="DismissalDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Association Name="user_account_Test_Subject" Member="Test_Subjects" ThisKey="idUser" OtherKey="idUser" Type="Test_Subject" />
+      <Association Name="user_account_test_measure_link" Member="test_measure_links" ThisKey="idUser" OtherKey="idUser" Type="test_measure_link" />
+      <Association Name="user_account_test_subject_approved" Member="test_subject_approveds" ThisKey="idUser" OtherKey="ApprovedByUser" Type="test_subject_approved" />
+      <Association Name="Job_user_account" Member="Job" ThisKey="idJob" OtherKey="id" Type="Job" IsForeignKey="true" />
+      <Association Name="user_state_user_account" Member="user_state" ThisKey="idState" OtherKey="id" Type="user_state" IsForeignKey="true" />
+      <Association Name="Company_user_account" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" />
+      <Association Name="dept_user_account" Member="dept" ThisKey="idDept" OtherKey="id" Type="dept" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Test_SubjectGroup_Link" Member="Test_SubjectGroup_Links">
+    <Type Name="Test_SubjectGroup_Link">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="idTest" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idGroup" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OrdNumber" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="MeasureObjectName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="isObjectRequired" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Test_SubjectGroup_Link_Test_Subject" Member="Test_Subjects" ThisKey="id" OtherKey="idTestLink" Type="Test_Subject" />
+      <Association Name="Test_SubjectGroup_Link_test_measure_link" Member="test_measure_links" ThisKey="id" OtherKey="idTestMeasure" Type="test_measure_link" />
+      <Association Name="test_Test_SubjectGroup_Link" Member="test" ThisKey="idTest" OtherKey="id" Type="test" IsForeignKey="true" />
+      <Association Name="subject_group_Test_SubjectGroup_Link" Member="subject_group" ThisKey="idGroup" OtherKey="id" Type="subject_group" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.rep_item_type" Member="rep_item_types">
+    <Type Name="rep_item_type">
+      <Column Name="idItemType" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(250) NOT NULL" CanBeNull="false" />
+      <Association Name="rep_item_type_rep_item_link" Member="rep_item_links" ThisKey="idItemType" OtherKey="idItemType" Type="rep_item_link" />
+      <Association Name="rep_item_type_rep_test_link" Member="rep_test_links" ThisKey="idItemType" OtherKey="idItemType" Type="rep_test_link" />
+    </Type>
+  </Table>
+  <Table Name="dbo.rep_item_link" Member="rep_item_links">
+    <Type Name="rep_item_link">
+      <Column Name="idLink" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="idGroup" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idItemType" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Association Name="rep_item_type_rep_item_link" Member="rep_item_type" ThisKey="idItemType" OtherKey="idItemType" Type="rep_item_type" IsForeignKey="true" />
+      <Association Name="subject_group_rep_item_link" Member="subject_group" ThisKey="idGroup" OtherKey="id" Type="subject_group" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Norm_Type" Member="Norm_Types">
+    <Type Name="Norm_Type">
+      <Column Name="id" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="bk_color" Type="System.String" DbType="Char(6) NOT NULL" CanBeNull="false" />
+      <Association Name="Norm_Type_Scale_Norm" Member="Scale_Norms" ThisKey="id" OtherKey="NormType_id" Type="Scale_Norm" />
+    </Type>
+  </Table>
+  <Table Name="dbo.interpretation" Member="interpretations">
+    <Type Name="interpretation">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="test_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="text" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="idInterKind" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Association Name="interpretation_inter_condition" Member="inter_conditions" ThisKey="id" OtherKey="inter_id" Type="inter_condition" />
+      <Association Name="test_interpretation" Member="test" ThisKey="test_id" OtherKey="id" Type="test" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.rep_test_link" Member="rep_test_links">
+    <Type Name="rep_test_link">
+      <Column Name="idLink" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="idTest" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idItemType" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="OrdNumber" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Association Name="rep_item_type_rep_test_link" Member="rep_item_type" ThisKey="idItemType" OtherKey="idItemType" Type="rep_item_type" IsForeignKey="true" />
+      <Association Name="test_rep_test_link" Member="test" ThisKey="idTest" OtherKey="id" Type="test" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.test_measure_link" Member="test_measure_links">
+    <Type Name="test_measure_link">
+      <Column Name="idLink" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="idTestMeasure" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idUser" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Association Name="Test_SubjectGroup_Link_test_measure_link" Member="Test_SubjectGroup_Link" ThisKey="idTestMeasure" OtherKey="id" Type="Test_SubjectGroup_Link" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="user_account_test_measure_link" Member="user_account" ThisKey="idUser" OtherKey="idUser" Type="user_account" IsForeignKey="true" DeleteRule="CASCADE" />
+    </Type>
+  </Table>
+  <Table Name="dbo.subj_fill_type" Member="subj_fill_types">
+    <Type Name="subj_fill_type">
+      <Column Name="idFillType" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="subj_fill_type_schedule" Member="schedules" ThisKey="idFillType" OtherKey="idFillType" Type="schedule" />
+    </Type>
+  </Table>
+  <Table Name="dbo.sch_frequency" Member="sch_frequencies">
+    <Type Name="sch_frequency">
+      <Column Name="idFreq" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Association Name="sch_frequency_schedule" Member="schedules" ThisKey="idFreq" OtherKey="idFreq" Type="schedule" />
+    </Type>
+  </Table>
+  <Table Name="dbo.schedule" Member="schedules">
+    <Type Name="schedule">
+      <Column Name="idShedule" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="idBaseGroup" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idFreq" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="idFillType" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Association Name="subj_fill_type_schedule" Member="subj_fill_type" ThisKey="idFillType" OtherKey="idFillType" Type="subj_fill_type" IsForeignKey="true" />
+      <Association Name="sch_frequency_schedule" Member="sch_frequency" ThisKey="idFreq" OtherKey="idFreq" Type="sch_frequency" IsForeignKey="true" />
+      <Association Name="subject_group_schedule" Member="subject_group" ThisKey="idBaseGroup" OtherKey="id" Type="subject_group" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.idea_state" Member="idea_states">
+    <Type Name="idea_state">
+      <Column Name="idState" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="idea_state_idea" Member="ideas" ThisKey="idState" OtherKey="idState" Type="idea" />
+    </Type>
+  </Table>
+  <Table Name="dbo.test" Member="tests">
+    <Type Name="test">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="author" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="guid_code" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="abbreviature" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="instruction" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="isPublished" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Tags" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="StimulSource" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="ins_date" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="Comment" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="version_number" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="test_type" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="publish_year" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="publisher" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Theory_Construct_Info" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="reliability_info" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="validation_info" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="test_norms" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="jur_law" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="develop_history" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="key_security" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="psy_task" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="diagnostic_subj" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="ITVersionSpecific" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="diagnostic_field" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="social_advisability_idx" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="qualification_demand" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="mthd_recomendation" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="use_restriction" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="lnk_analog" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="lnk_research" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="lnk_FullMethodInfo" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="lnk_DeveloperInfo" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="lnk_SaleMethodic" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="language_type" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="category_id" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="Short_Description" Type="System.String" DbType="NVarChar(2000)" CanBeNull="true" />
+      <Column Name="monitoring_area" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="isSinglePage" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="test_ProjectTest_Link" Member="ProjectTest_Links" ThisKey="id" OtherKey="Test_ID" Type="ProjectTest_Link" />
+      <Association Name="test_test_diagram" Member="test_diagrams" ThisKey="id" OtherKey="test_id" Type="test_diagram" />
+      <Association Name="test_Resume_Item" Member="Resume_Items" ThisKey="id" OtherKey="test_id" Type="Resume_Item" />
+      <Association Name="test_SubScaleDimension" Member="SubScaleDimensions" ThisKey="id" OtherKey="test_id" Type="SubScaleDimension" />
+      <Association Name="test_Test_Question" Member="Test_Questions" ThisKey="id" OtherKey="test_id" Type="Test_Question" />
+      <Association Name="test_Param" Member="Params" ThisKey="id" OtherKey="Test_ID" Type="Param" />
+      <Association Name="test_Scale" Member="Scales" ThisKey="id" OtherKey="test_id" Type="Scale" />
+      <Association Name="test_Test_Subject" Member="Test_Subjects" ThisKey="id" OtherKey="Test_Id" Type="Test_Subject" />
+      <Association Name="test_Test_SubjectGroup_Link" Member="Test_SubjectGroup_Links" ThisKey="id" OtherKey="idTest" Type="Test_SubjectGroup_Link" />
+      <Association Name="test_interpretation" Member="interpretations" ThisKey="id" OtherKey="test_id" Type="interpretation" />
+      <Association Name="test_rep_test_link" Member="rep_test_links" ThisKey="id" OtherKey="idTest" Type="rep_test_link" />
+      <Association Name="test_idea_generator" Member="idea_generators" ThisKey="id" OtherKey="idTest" Type="idea_generator" />
+      <Association Name="test_category_test" Member="test_category" ThisKey="category_id" OtherKey="id" Type="test_category" IsForeignKey="true" />
+      <Association Name="DiagnosticFieldType_test" Member="DiagnosticFieldType" ThisKey="diagnostic_field" OtherKey="id" Type="DiagnosticFieldType" IsForeignKey="true" />
+      <Association Name="language_test" Member="language" ThisKey="language_type" OtherKey="id" Type="language" IsForeignKey="true" />
+      <Association Name="Test_Type_test" Member="Test_Type1" ThisKey="test_type" OtherKey="id" Type="Test_Type" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.indicator" Member="indicators">
+    <Type Name="indicator">
+      <Column Name="idIndicator" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="idType" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="idScale" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="idCompany" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idDiagram" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="isPersonal" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="idGroup" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="category_header" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="abstract" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="repeat_lnk" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="full_report_lnk" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Company_indicator" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="test_diagram_indicator" Member="test_diagram" ThisKey="idDiagram" OtherKey="id" Type="test_diagram" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="Scale_indicator" Member="Scale" ThisKey="idScale" OtherKey="id" Type="Scale" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="subject_group_indicator" Member="subject_group" ThisKey="idGroup" OtherKey="id" Type="subject_group" IsForeignKey="true" DeleteRule="CASCADE" />
+    </Type>
+  </Table>
+  <Table Name="dbo.generator_type" Member="generator_types">
+    <Type Name="generator_type">
+      <Column Name="id" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="generator_type_idea_generator" Member="idea_generators" ThisKey="id" OtherKey="idGeneratorType" Type="idea_generator" />
+    </Type>
+  </Table>
+  <Table Name="dbo.idea_generator" Member="idea_generators">
+    <Type Name="idea_generator">
+      <Column Name="idTest" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idGeneratorType" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Association Name="generator_type_idea_generator" Member="generator_type" ThisKey="idGeneratorType" OtherKey="id" Type="generator_type" IsForeignKey="true" />
+      <Association Name="test_idea_generator" Member="test" ThisKey="idTest" OtherKey="id" Type="test" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.idea" Member="ideas">
+    <Type Name="idea">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="idState" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="idSubject" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="resume" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="implement_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="idea_state_idea" Member="idea_state" ThisKey="idState" OtherKey="idState" Type="idea_state" IsForeignKey="true" />
+      <Association Name="Test_Subject_idea" Member="Test_Subject" ThisKey="idSubject" OtherKey="id" Type="Test_Subject" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.test_subject_approved" Member="test_subject_approveds">
+    <Type Name="test_subject_approved">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="idSubject" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="isApproved" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ApprovedByUser" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="ApprovedDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="commentary" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Association Name="user_account_test_subject_approved" Member="user_account" ThisKey="ApprovedByUser" OtherKey="idUser" Type="user_account" IsForeignKey="true" />
+      <Association Name="Test_Subject_test_subject_approved" Member="Test_Subject" ThisKey="idSubject" OtherKey="id" Type="Test_Subject" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.subject_group" Member="subject_groups">
+    <Type Name="subject_group">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="project_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="UserKey" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="idCompany" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="create_date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="stop_date" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="mail_template" Type="System.String" DbType="NVarChar(2000)" CanBeNull="true" />
+      <Column Name="start_date" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="idReport" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="instruction" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="isForYearPlan" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="isAutoSubjAdd" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="isAutoEmpNew" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="isAnonymous" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="subject_group_Param" Member="Params" ThisKey="id" OtherKey="Group_ID" Type="Param" />
+      <Association Name="subject_group_Test_Subject" Member="Test_Subjects" ThisKey="id" OtherKey="group_id" Type="Test_Subject" />
+      <Association Name="subject_group_Test_SubjectGroup_Link" Member="Test_SubjectGroup_Links" ThisKey="id" OtherKey="idGroup" Type="Test_SubjectGroup_Link" />
+      <Association Name="subject_group_rep_item_link" Member="rep_item_links" ThisKey="id" OtherKey="idGroup" Type="rep_item_link" />
+      <Association Name="subject_group_schedule" Member="schedules" ThisKey="id" OtherKey="idBaseGroup" Type="schedule" />
+      <Association Name="subject_group_indicator" Member="indicators" ThisKey="id" OtherKey="idGroup" Type="indicator" />
+      <Association Name="project_subject_group" Member="project" ThisKey="project_id" OtherKey="id" Type="project" IsForeignKey="true" />
+      <Association Name="report_subject_group" Member="report" ThisKey="idReport" OtherKey="idReport" Type="report" IsForeignKey="true" />
+      <Association Name="Company_subject_group" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.IsInterpretationFor" Method="IsInterpretationFor" IsComposable="true">
+    <Parameter Name="inter_id" Type="System.Int32" DbType="Int" />
+    <Parameter Name="SubjectID" Parameter="subjectID" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Boolean" />
+  </Function>
+  <Function Name="dbo.Test_Delete" Method="Test_Delete">
+    <Parameter Name="Test_ID" Parameter="test_ID" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.Add_ItemScaleLink" Method="Add_ItemScaleLink">
+    <Parameter Name="ItemID" Parameter="itemID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ScaleID" Parameter="scaleID" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Id="FunctionId1" Name="dbo.Delete_ItemScaleLink" Method="Delete_ItemScaleLink">
+    <Parameter Name="ItemID" Parameter="itemID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ScaleID" Parameter="scaleID" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.Recalc_Scale_Range" Method="Recalc_Scale_Range">
+    <Parameter Name="ScaleID" Parameter="scaleID" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.Delete_Subject" Method="Delete_Subject">
+    <Parameter Name="SubjectID" Parameter="subjectID" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.CopyItemScaleKF_To" Method="CopyItemScaleKF_To">
+    <Parameter Name="ScaleID" Parameter="scaleID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="SourceItemId" Parameter="sourceItemId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DestItemNumber" Parameter="destItemNumber" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.SetItemDimension" Method="SetItemDimension">
+    <Parameter Name="ItemID" Parameter="itemID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DimensionID" Parameter="dimensionID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="SetMode" Parameter="setMode" Type="System.Byte" DbType="TinyInt" />
+    <Parameter Name="DimensionType" Parameter="dimensionType" Type="System.Byte" DbType="TinyInt" />
+    <Parameter Name="DimensionMode" Parameter="dimensionMode" Type="System.Byte" DbType="TinyInt" />
+    <Parameter Name="GradationCount" Parameter="gradationCount" Type="System.Byte" DbType="TinyInt" />
+    <Parameter Name="MinValue" Parameter="minValue" Type="System.Int32" DbType="Int" />
+    <Parameter Name="MaxValue" Parameter="maxValue" Type="System.Int32" DbType="Int" />
+    <Parameter Name="StepValue" Parameter="stepValue" Type="System.Decimal" DbType="Decimal(8,3)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.Add_Param_Age" Method="Add_Param_Age">
+    <Parameter Name="TestID" Parameter="testID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="GroupID" Parameter="groupID" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.Add_Param_Gender" Method="Add_Param_Gender">
+    <Parameter Name="TestID" Parameter="testID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="GroupID" Parameter="groupID" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.Test_Copy" Method="Test_Copy">
+    <Parameter Name="idTest" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.CalcTestValues" Method="CalcTestValues">
+    <Parameter Name="BaseSubjectID" Parameter="baseSubjectID" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.CalcSubjectTestValues" Method="CalcSubjectTestValues">
+    <Parameter Name="SubjectID" Parameter="subjectID" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>
