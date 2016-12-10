@@ -27,52 +27,7 @@ public class ObjectIndicator
     {
         switch (p_indicator.idType) 
         {
-            case 160:  // план развития
-                Test_Subject tsubj = p_dc.Test_Subjects.Where(
-                        ts => ts.idUser == p_ua.idUser && ts.group_id == p_indicator.idGroup && ts.Test_Date != null
-                    ).OrderByDescending (o=> o.Test_Date).FirstOrDefault();
-                if (tsubj != null)
-                {
-                    //p_container.Controls.Add(new LiteralControl("<hr/>"));
-                    p_container.Controls.Add(new Label() { Text = p_indicator.name, CssClass = "clsIndicatorName" });
-                    p_container.Controls.Add(new HyperLink() { Text = "Редактировать", NavigateUrl = "~\\Group\\AnsAll.aspx?id="+tsubj.id.ToString()});
 
-                    foreach (ps1 line in (
-                        from txt in p_dc.Test_Results_Txts 
-                        join i in p_dc.items on txt.item_id equals i.id
-                        join ssd in p_dc.SubScaleDimensions on i.dimension_id equals ssd.id
-                        where txt.subject_id == tsubj.id
-                        select new ps1()
-                        {
-                            item_name = i.text,
-                            txt_answer = txt.text,
-                            OrderNumber = i.number,
-                            DimensionType = ssd.dimension_type,
-                            ID = txt.id
-                        }
-                        ).Union(
-                        from rs in p_dc.Test_Results 
-                        join ss in p_dc.SubScales on rs.SubScale_ID equals ss.id
-                        join i in p_dc.items on rs.item_id equals i.id
-                        join ssd in p_dc.SubScaleDimensions on i.dimension_id equals ssd.id
-                        where rs.Subject_ID == tsubj.id && rs.SelectedValue == 1
-                        select new ps1()
-                        {
-                            item_name = i.text,
-                            txt_answer = ss.name,
-                            OrderNumber = i.number,
-                            DimensionType = ssd.dimension_type,
-                            ID = rs.id
-                        }
-                        ).OrderBy(q => q.OrderNumber))
-                    {
-                        p_container.Controls.Add(new LiteralControl("<hr/>"));
-                        p_container.Controls.Add(new Label() { Text = line.item_name});
-                        p_container.Controls.Add(new LiteralControl("<br/>"));
-                        p_container.Controls.Add(new Label() { Text = line.txt_answer, CssClass = "clsMyPlanAnswer" });
-                    }
-                }
-                break;
             case 140: // integral
                 try
                 {
@@ -255,6 +210,9 @@ public class ObjectIndicator
                     p_container.Controls.Add(new HyperLink() { NavigateUrl = "~\\Analyse\\IdeaList.aspx", Text = "База идей" });
 
                     break;
+                case 160:  // план развития
+                    DevelopmentPlan(p_dc, p_indicator, p_container, p_ua);
+                    break;
                 case 170: // благодарности
                     if (p_indicator.isPersonal)
                     {
@@ -388,7 +346,65 @@ public class ObjectIndicator
             // write to log please
         }
     }
+    /// <summary>
+    /// план развития
+    /// </summary>
+    private static void DevelopmentPlan (TesterDataClassesDataContext p_dc, indicator p_indicator, Control p_container, user_account p_ua)
+    {
+        Test_Subject tsubj = p_dc.Test_Subjects.Where(
+                ts => ts.idUser == p_ua.idUser && ts.group_id == p_indicator.idGroup && ts.Test_Date != null
+            ).OrderByDescending(o => o.Test_Date).FirstOrDefault();
+        if (tsubj != null)
+        {// индивидуальный
+            p_container.Controls.Add(new Label() { Text = p_indicator.name, CssClass = "clsIndicatorName" });
+            p_container.Controls.Add(new HyperLink() { Text = "Редактировать", NavigateUrl = "~\\Group\\AnsAll.aspx?id=" + tsubj.id.ToString() });
 
+            foreach (ps1 line in (
+                from txt in p_dc.Test_Results_Txts
+                join i in p_dc.items on txt.item_id equals i.id
+                join ssd in p_dc.SubScaleDimensions on i.dimension_id equals ssd.id
+                where txt.subject_id == tsubj.id
+                select new ps1()
+                {
+                    item_name = i.text,
+                    txt_answer = txt.text,
+                    OrderNumber = i.number,
+                    DimensionType = ssd.dimension_type,
+                    ID = txt.id
+                }
+                ).Union(
+                from rs in p_dc.Test_Results
+                join ss in p_dc.SubScales on rs.SubScale_ID equals ss.id
+                join i in p_dc.items on rs.item_id equals i.id
+                join ssd in p_dc.SubScaleDimensions on i.dimension_id equals ssd.id
+                where rs.Subject_ID == tsubj.id && rs.SelectedValue == 1
+                select new ps1()
+                {
+                    item_name = i.text,
+                    txt_answer = ss.name,
+                    OrderNumber = i.number,
+                    DimensionType = ssd.dimension_type,
+                    ID = rs.id
+                }
+                ).OrderBy(q => q.OrderNumber))
+            {
+                p_container.Controls.Add(new LiteralControl("<hr/>"));
+                p_container.Controls.Add(new Label() { Text = line.item_name });
+                p_container.Controls.Add(new LiteralControl("<br/>"));
+                p_container.Controls.Add(new Label() { Text = line.txt_answer, CssClass = "clsMyPlanAnswer" });
+            }
+        }
+        else // групповой
+        { 
+            /*по каждой компетенции
+             * лидер и кол-во (?) выбравших эту компетенцию
+             * 
+             * +всего общее кол-во, полностью заполнивших
+             */
+
+        }
+    }
+    
     /// <summary>
     /// квартальная оценка
     /// </summary>

@@ -359,8 +359,8 @@
       <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Association Name="Company_dept" Member="depts" ThisKey="id" OtherKey="idCompany" Type="dept" />
       <Association Name="Company_user_account" Member="user_accounts" ThisKey="id" OtherKey="idCompany" Type="user_account" />
-      <Association Name="Company_indicator" Member="indicators" ThisKey="id" OtherKey="idCompany" Type="indicator" />
       <Association Name="Company_subject_group" Member="subject_groups" ThisKey="id" OtherKey="idCompany" Type="subject_group" />
+      <Association Name="Company_indicator" Member="indicators" ThisKey="id" OtherKey="idCompany" Type="indicator" />
     </Type>
   </Table>
   <Table Name="dbo.Job" Member="Jobs">
@@ -638,26 +638,6 @@
       <Association Name="Test_Type_test" Member="Test_Type1" ThisKey="test_type" OtherKey="id" Type="Test_Type" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.indicator" Member="indicators">
-    <Type Name="indicator">
-      <Column Name="idIndicator" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="idType" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
-      <Column Name="idScale" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="idCompany" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="idDiagram" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="isPersonal" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="idGroup" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="category_header" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="abstract" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="repeat_lnk" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="full_report_lnk" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="Company_indicator" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
-      <Association Name="test_diagram_indicator" Member="test_diagram" ThisKey="idDiagram" OtherKey="id" Type="test_diagram" IsForeignKey="true" DeleteRule="CASCADE" />
-      <Association Name="Scale_indicator" Member="Scale" ThisKey="idScale" OtherKey="id" Type="Scale" IsForeignKey="true" DeleteRule="CASCADE" />
-      <Association Name="subject_group_indicator" Member="subject_group" ThisKey="idGroup" OtherKey="id" Type="subject_group" IsForeignKey="true" DeleteRule="CASCADE" />
-    </Type>
-  </Table>
   <Table Name="dbo.generator_type" Member="generator_types">
     <Type Name="generator_type">
       <Column Name="id" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -722,6 +702,28 @@
       <Association Name="project_subject_group" Member="project" ThisKey="project_id" OtherKey="id" Type="project" IsForeignKey="true" />
       <Association Name="report_subject_group" Member="report" ThisKey="idReport" OtherKey="idReport" Type="report" IsForeignKey="true" />
       <Association Name="Company_subject_group" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.indicator" Member="indicators">
+    <Type Name="indicator">
+      <Column Name="idIndicator" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="idType" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="idScale" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="idCompany" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idDiagram" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="isPersonal" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="idGroup" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="category_header" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="abstract" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="repeat_lnk" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="full_report_lnk" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="link_URL" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="link_title" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Association Name="Company_indicator" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="test_diagram_indicator" Member="test_diagram" ThisKey="idDiagram" OtherKey="id" Type="test_diagram" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="Scale_indicator" Member="Scale" ThisKey="idScale" OtherKey="id" Type="Scale" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="subject_group_indicator" Member="subject_group" ThisKey="idGroup" OtherKey="id" Type="subject_group" IsForeignKey="true" DeleteRule="CASCADE" />
     </Type>
   </Table>
   <Function Name="dbo.IsInterpretationFor" Method="IsInterpretationFor" IsComposable="true">

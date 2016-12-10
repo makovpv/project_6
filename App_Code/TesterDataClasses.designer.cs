@@ -179,9 +179,6 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
   partial void Inserttest(test instance);
   partial void Updatetest(test instance);
   partial void Deletetest(test instance);
-  partial void Insertindicator(indicator instance);
-  partial void Updateindicator(indicator instance);
-  partial void Deleteindicator(indicator instance);
   partial void Insertgenerator_type(generator_type instance);
   partial void Updategenerator_type(generator_type instance);
   partial void Deletegenerator_type(generator_type instance);
@@ -194,6 +191,9 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
   partial void Insertsubject_group(subject_group instance);
   partial void Updatesubject_group(subject_group instance);
   partial void Deletesubject_group(subject_group instance);
+  partial void Insertindicator(indicator instance);
+  partial void Updateindicator(indicator instance);
+  partial void Deleteindicator(indicator instance);
   #endregion
 	
 	public TesterDataClassesDataContext() : 
@@ -642,14 +642,6 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
 		}
 	}
 	
-	public System.Data.Linq.Table<indicator> indicators
-	{
-		get
-		{
-			return this.GetTable<indicator>();
-		}
-	}
-	
 	public System.Data.Linq.Table<generator_type> generator_types
 	{
 		get
@@ -687,6 +679,14 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
 		get
 		{
 			return this.GetTable<subject_group>();
+		}
+	}
+	
+	public System.Data.Linq.Table<indicator> indicators
+	{
+		get
+		{
+			return this.GetTable<indicator>();
 		}
 	}
 	
@@ -7948,9 +7948,9 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 	
 	private EntitySet<user_account> _user_accounts;
 	
-	private EntitySet<indicator> _indicators;
-	
 	private EntitySet<subject_group> _subject_groups;
+	
+	private EntitySet<indicator> _indicators;
 	
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -7966,8 +7966,8 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		this._depts = new EntitySet<dept>(new Action<dept>(this.attach_depts), new Action<dept>(this.detach_depts));
 		this._user_accounts = new EntitySet<user_account>(new Action<user_account>(this.attach_user_accounts), new Action<user_account>(this.detach_user_accounts));
-		this._indicators = new EntitySet<indicator>(new Action<indicator>(this.attach_indicators), new Action<indicator>(this.detach_indicators));
 		this._subject_groups = new EntitySet<subject_group>(new Action<subject_group>(this.attach_subject_groups), new Action<subject_group>(this.detach_subject_groups));
+		this._indicators = new EntitySet<indicator>(new Action<indicator>(this.attach_indicators), new Action<indicator>(this.detach_indicators));
 		OnCreated();
 	}
 	
@@ -8037,19 +8037,6 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_indicator", Storage="_indicators", ThisKey="id", OtherKey="idCompany")]
-	public EntitySet<indicator> indicators
-	{
-		get
-		{
-			return this._indicators;
-		}
-		set
-		{
-			this._indicators.Assign(value);
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_subject_group", Storage="_subject_groups", ThisKey="id", OtherKey="idCompany")]
 	public EntitySet<subject_group> subject_groups
 	{
@@ -8060,6 +8047,19 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 		set
 		{
 			this._subject_groups.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_indicator", Storage="_indicators", ThisKey="id", OtherKey="idCompany")]
+	public EntitySet<indicator> indicators
+	{
+		get
+		{
+			return this._indicators;
+		}
+		set
+		{
+			this._indicators.Assign(value);
 		}
 	}
 	
@@ -8107,18 +8107,6 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 		entity.Company = null;
 	}
 	
-	private void attach_indicators(indicator entity)
-	{
-		this.SendPropertyChanging();
-		entity.Company = this;
-	}
-	
-	private void detach_indicators(indicator entity)
-	{
-		this.SendPropertyChanging();
-		entity.Company = null;
-	}
-	
 	private void attach_subject_groups(subject_group entity)
 	{
 		this.SendPropertyChanging();
@@ -8126,6 +8114,18 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 	}
 	
 	private void detach_subject_groups(subject_group entity)
+	{
+		this.SendPropertyChanging();
+		entity.Company = null;
+	}
+	
+	private void attach_indicators(indicator entity)
+	{
+		this.SendPropertyChanging();
+		entity.Company = this;
+	}
+	
+	private void detach_indicators(indicator entity)
 	{
 		this.SendPropertyChanging();
 		entity.Company = null;
@@ -14310,496 +14310,6 @@ public partial class test : INotifyPropertyChanging, INotifyPropertyChanged
 	}
 }
 
-[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.indicator")]
-public partial class indicator : INotifyPropertyChanging, INotifyPropertyChanged
-{
-	
-	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-	
-	private int _idIndicator;
-	
-	private string _name;
-	
-	private short _idType;
-	
-	private System.Nullable<int> _idScale;
-	
-	private int _idCompany;
-	
-	private System.Nullable<int> _idDiagram;
-	
-	private bool _isPersonal;
-	
-	private System.Nullable<int> _idGroup;
-	
-	private string _category_header;
-	
-	private string _abstract;
-	
-	private bool _repeat_lnk;
-	
-	private bool _full_report_lnk;
-	
-	private EntityRef<Company> _Company;
-	
-	private EntityRef<test_diagram> _test_diagram;
-	
-	private EntityRef<Scale> _Scale;
-	
-	private EntityRef<subject_group> _subject_group;
-	
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnidIndicatorChanging(int value);
-    partial void OnidIndicatorChanged();
-    partial void OnnameChanging(string value);
-    partial void OnnameChanged();
-    partial void OnidTypeChanging(short value);
-    partial void OnidTypeChanged();
-    partial void OnidScaleChanging(System.Nullable<int> value);
-    partial void OnidScaleChanged();
-    partial void OnidCompanyChanging(int value);
-    partial void OnidCompanyChanged();
-    partial void OnidDiagramChanging(System.Nullable<int> value);
-    partial void OnidDiagramChanged();
-    partial void OnisPersonalChanging(bool value);
-    partial void OnisPersonalChanged();
-    partial void OnidGroupChanging(System.Nullable<int> value);
-    partial void OnidGroupChanged();
-    partial void Oncategory_headerChanging(string value);
-    partial void Oncategory_headerChanged();
-    partial void OnabstractChanging(string value);
-    partial void OnabstractChanged();
-    partial void Onrepeat_lnkChanging(bool value);
-    partial void Onrepeat_lnkChanged();
-    partial void Onfull_report_lnkChanging(bool value);
-    partial void Onfull_report_lnkChanged();
-    #endregion
-	
-	public indicator()
-	{
-		this._Company = default(EntityRef<Company>);
-		this._test_diagram = default(EntityRef<test_diagram>);
-		this._Scale = default(EntityRef<Scale>);
-		this._subject_group = default(EntityRef<subject_group>);
-		OnCreated();
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idIndicator", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-	public int idIndicator
-	{
-		get
-		{
-			return this._idIndicator;
-		}
-		set
-		{
-			if ((this._idIndicator != value))
-			{
-				this.OnidIndicatorChanging(value);
-				this.SendPropertyChanging();
-				this._idIndicator = value;
-				this.SendPropertyChanged("idIndicator");
-				this.OnidIndicatorChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_name", DbType="NVarChar(255)")]
-	public string name
-	{
-		get
-		{
-			return this._name;
-		}
-		set
-		{
-			if ((this._name != value))
-			{
-				this.OnnameChanging(value);
-				this.SendPropertyChanging();
-				this._name = value;
-				this.SendPropertyChanged("name");
-				this.OnnameChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idType", DbType="SmallInt NOT NULL")]
-	public short idType
-	{
-		get
-		{
-			return this._idType;
-		}
-		set
-		{
-			if ((this._idType != value))
-			{
-				this.OnidTypeChanging(value);
-				this.SendPropertyChanging();
-				this._idType = value;
-				this.SendPropertyChanged("idType");
-				this.OnidTypeChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idScale", DbType="Int")]
-	public System.Nullable<int> idScale
-	{
-		get
-		{
-			return this._idScale;
-		}
-		set
-		{
-			if ((this._idScale != value))
-			{
-				if (this._Scale.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnidScaleChanging(value);
-				this.SendPropertyChanging();
-				this._idScale = value;
-				this.SendPropertyChanged("idScale");
-				this.OnidScaleChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idCompany", DbType="Int NOT NULL")]
-	public int idCompany
-	{
-		get
-		{
-			return this._idCompany;
-		}
-		set
-		{
-			if ((this._idCompany != value))
-			{
-				if (this._Company.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnidCompanyChanging(value);
-				this.SendPropertyChanging();
-				this._idCompany = value;
-				this.SendPropertyChanged("idCompany");
-				this.OnidCompanyChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idDiagram", DbType="Int")]
-	public System.Nullable<int> idDiagram
-	{
-		get
-		{
-			return this._idDiagram;
-		}
-		set
-		{
-			if ((this._idDiagram != value))
-			{
-				if (this._test_diagram.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnidDiagramChanging(value);
-				this.SendPropertyChanging();
-				this._idDiagram = value;
-				this.SendPropertyChanged("idDiagram");
-				this.OnidDiagramChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_isPersonal", DbType="Bit NOT NULL")]
-	public bool isPersonal
-	{
-		get
-		{
-			return this._isPersonal;
-		}
-		set
-		{
-			if ((this._isPersonal != value))
-			{
-				this.OnisPersonalChanging(value);
-				this.SendPropertyChanging();
-				this._isPersonal = value;
-				this.SendPropertyChanged("isPersonal");
-				this.OnisPersonalChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idGroup", DbType="Int")]
-	public System.Nullable<int> idGroup
-	{
-		get
-		{
-			return this._idGroup;
-		}
-		set
-		{
-			if ((this._idGroup != value))
-			{
-				if (this._subject_group.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnidGroupChanging(value);
-				this.SendPropertyChanging();
-				this._idGroup = value;
-				this.SendPropertyChanged("idGroup");
-				this.OnidGroupChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_category_header", DbType="VarChar(255)")]
-	public string category_header
-	{
-		get
-		{
-			return this._category_header;
-		}
-		set
-		{
-			if ((this._category_header != value))
-			{
-				this.Oncategory_headerChanging(value);
-				this.SendPropertyChanging();
-				this._category_header = value;
-				this.SendPropertyChanged("category_header");
-				this.Oncategory_headerChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Name="abstract", Storage="_abstract", DbType="VarChar(255)")]
-	public string @abstract
-	{
-		get
-		{
-			return this._abstract;
-		}
-		set
-		{
-			if ((this._abstract != value))
-			{
-				this.OnabstractChanging(value);
-				this.SendPropertyChanging();
-				this._abstract = value;
-				this.SendPropertyChanged("@abstract");
-				this.OnabstractChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_repeat_lnk", DbType="Bit NOT NULL")]
-	public bool repeat_lnk
-	{
-		get
-		{
-			return this._repeat_lnk;
-		}
-		set
-		{
-			if ((this._repeat_lnk != value))
-			{
-				this.Onrepeat_lnkChanging(value);
-				this.SendPropertyChanging();
-				this._repeat_lnk = value;
-				this.SendPropertyChanged("repeat_lnk");
-				this.Onrepeat_lnkChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_full_report_lnk", DbType="Bit NOT NULL")]
-	public bool full_report_lnk
-	{
-		get
-		{
-			return this._full_report_lnk;
-		}
-		set
-		{
-			if ((this._full_report_lnk != value))
-			{
-				this.Onfull_report_lnkChanging(value);
-				this.SendPropertyChanging();
-				this._full_report_lnk = value;
-				this.SendPropertyChanged("full_report_lnk");
-				this.Onfull_report_lnkChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_indicator", Storage="_Company", ThisKey="idCompany", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-	public Company Company
-	{
-		get
-		{
-			return this._Company.Entity;
-		}
-		set
-		{
-			Company previousValue = this._Company.Entity;
-			if (((previousValue != value) 
-						|| (this._Company.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._Company.Entity = null;
-					previousValue.indicators.Remove(this);
-				}
-				this._Company.Entity = value;
-				if ((value != null))
-				{
-					value.indicators.Add(this);
-					this._idCompany = value.id;
-				}
-				else
-				{
-					this._idCompany = default(int);
-				}
-				this.SendPropertyChanged("Company");
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="test_diagram_indicator", Storage="_test_diagram", ThisKey="idDiagram", OtherKey="id", IsForeignKey=true, DeleteRule="CASCADE")]
-	public test_diagram test_diagram
-	{
-		get
-		{
-			return this._test_diagram.Entity;
-		}
-		set
-		{
-			test_diagram previousValue = this._test_diagram.Entity;
-			if (((previousValue != value) 
-						|| (this._test_diagram.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._test_diagram.Entity = null;
-					previousValue.indicators.Remove(this);
-				}
-				this._test_diagram.Entity = value;
-				if ((value != null))
-				{
-					value.indicators.Add(this);
-					this._idDiagram = value.id;
-				}
-				else
-				{
-					this._idDiagram = default(Nullable<int>);
-				}
-				this.SendPropertyChanged("test_diagram");
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Scale_indicator", Storage="_Scale", ThisKey="idScale", OtherKey="id", IsForeignKey=true, DeleteRule="CASCADE")]
-	public Scale Scale
-	{
-		get
-		{
-			return this._Scale.Entity;
-		}
-		set
-		{
-			Scale previousValue = this._Scale.Entity;
-			if (((previousValue != value) 
-						|| (this._Scale.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._Scale.Entity = null;
-					previousValue.indicators.Remove(this);
-				}
-				this._Scale.Entity = value;
-				if ((value != null))
-				{
-					value.indicators.Add(this);
-					this._idScale = value.id;
-				}
-				else
-				{
-					this._idScale = default(Nullable<int>);
-				}
-				this.SendPropertyChanged("Scale");
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="subject_group_indicator", Storage="_subject_group", ThisKey="idGroup", OtherKey="id", IsForeignKey=true, DeleteRule="CASCADE")]
-	public subject_group subject_group
-	{
-		get
-		{
-			return this._subject_group.Entity;
-		}
-		set
-		{
-			subject_group previousValue = this._subject_group.Entity;
-			if (((previousValue != value) 
-						|| (this._subject_group.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._subject_group.Entity = null;
-					previousValue.indicators.Remove(this);
-				}
-				this._subject_group.Entity = value;
-				if ((value != null))
-				{
-					value.indicators.Add(this);
-					this._idGroup = value.id;
-				}
-				else
-				{
-					this._idGroup = default(Nullable<int>);
-				}
-				this.SendPropertyChanged("subject_group");
-			}
-		}
-	}
-	
-	public event PropertyChangingEventHandler PropertyChanging;
-	
-	public event PropertyChangedEventHandler PropertyChanged;
-	
-	protected virtual void SendPropertyChanging()
-	{
-		if ((this.PropertyChanging != null))
-		{
-			this.PropertyChanging(this, emptyChangingEventArgs);
-		}
-	}
-	
-	protected virtual void SendPropertyChanged(String propertyName)
-	{
-		if ((this.PropertyChanged != null))
-		{
-			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-		}
-	}
-}
-
 [global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.generator_type")]
 public partial class generator_type : INotifyPropertyChanging, INotifyPropertyChanged
 {
@@ -16121,6 +15631,544 @@ public partial class subject_group : INotifyPropertyChanging, INotifyPropertyCha
 	{
 		this.SendPropertyChanging();
 		entity.subject_group = null;
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.indicator")]
+public partial class indicator : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private int _idIndicator;
+	
+	private string _name;
+	
+	private short _idType;
+	
+	private System.Nullable<int> _idScale;
+	
+	private int _idCompany;
+	
+	private System.Nullable<int> _idDiagram;
+	
+	private bool _isPersonal;
+	
+	private System.Nullable<int> _idGroup;
+	
+	private string _category_header;
+	
+	private string _abstract;
+	
+	private bool _repeat_lnk;
+	
+	private bool _full_report_lnk;
+	
+	private string _link_URL;
+	
+	private string _link_title;
+	
+	private EntityRef<Company> _Company;
+	
+	private EntityRef<test_diagram> _test_diagram;
+	
+	private EntityRef<Scale> _Scale;
+	
+	private EntityRef<subject_group> _subject_group;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidIndicatorChanging(int value);
+    partial void OnidIndicatorChanged();
+    partial void OnnameChanging(string value);
+    partial void OnnameChanged();
+    partial void OnidTypeChanging(short value);
+    partial void OnidTypeChanged();
+    partial void OnidScaleChanging(System.Nullable<int> value);
+    partial void OnidScaleChanged();
+    partial void OnidCompanyChanging(int value);
+    partial void OnidCompanyChanged();
+    partial void OnidDiagramChanging(System.Nullable<int> value);
+    partial void OnidDiagramChanged();
+    partial void OnisPersonalChanging(bool value);
+    partial void OnisPersonalChanged();
+    partial void OnidGroupChanging(System.Nullable<int> value);
+    partial void OnidGroupChanged();
+    partial void Oncategory_headerChanging(string value);
+    partial void Oncategory_headerChanged();
+    partial void OnabstractChanging(string value);
+    partial void OnabstractChanged();
+    partial void Onrepeat_lnkChanging(bool value);
+    partial void Onrepeat_lnkChanged();
+    partial void Onfull_report_lnkChanging(bool value);
+    partial void Onfull_report_lnkChanged();
+    partial void Onlink_URLChanging(string value);
+    partial void Onlink_URLChanged();
+    partial void Onlink_titleChanging(string value);
+    partial void Onlink_titleChanged();
+    #endregion
+	
+	public indicator()
+	{
+		this._Company = default(EntityRef<Company>);
+		this._test_diagram = default(EntityRef<test_diagram>);
+		this._Scale = default(EntityRef<Scale>);
+		this._subject_group = default(EntityRef<subject_group>);
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idIndicator", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+	public int idIndicator
+	{
+		get
+		{
+			return this._idIndicator;
+		}
+		set
+		{
+			if ((this._idIndicator != value))
+			{
+				this.OnidIndicatorChanging(value);
+				this.SendPropertyChanging();
+				this._idIndicator = value;
+				this.SendPropertyChanged("idIndicator");
+				this.OnidIndicatorChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_name", DbType="NVarChar(255)")]
+	public string name
+	{
+		get
+		{
+			return this._name;
+		}
+		set
+		{
+			if ((this._name != value))
+			{
+				this.OnnameChanging(value);
+				this.SendPropertyChanging();
+				this._name = value;
+				this.SendPropertyChanged("name");
+				this.OnnameChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idType", DbType="SmallInt NOT NULL")]
+	public short idType
+	{
+		get
+		{
+			return this._idType;
+		}
+		set
+		{
+			if ((this._idType != value))
+			{
+				this.OnidTypeChanging(value);
+				this.SendPropertyChanging();
+				this._idType = value;
+				this.SendPropertyChanged("idType");
+				this.OnidTypeChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idScale", DbType="Int")]
+	public System.Nullable<int> idScale
+	{
+		get
+		{
+			return this._idScale;
+		}
+		set
+		{
+			if ((this._idScale != value))
+			{
+				if (this._Scale.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidScaleChanging(value);
+				this.SendPropertyChanging();
+				this._idScale = value;
+				this.SendPropertyChanged("idScale");
+				this.OnidScaleChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idCompany", DbType="Int NOT NULL")]
+	public int idCompany
+	{
+		get
+		{
+			return this._idCompany;
+		}
+		set
+		{
+			if ((this._idCompany != value))
+			{
+				if (this._Company.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidCompanyChanging(value);
+				this.SendPropertyChanging();
+				this._idCompany = value;
+				this.SendPropertyChanged("idCompany");
+				this.OnidCompanyChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idDiagram", DbType="Int")]
+	public System.Nullable<int> idDiagram
+	{
+		get
+		{
+			return this._idDiagram;
+		}
+		set
+		{
+			if ((this._idDiagram != value))
+			{
+				if (this._test_diagram.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidDiagramChanging(value);
+				this.SendPropertyChanging();
+				this._idDiagram = value;
+				this.SendPropertyChanged("idDiagram");
+				this.OnidDiagramChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_isPersonal", DbType="Bit NOT NULL")]
+	public bool isPersonal
+	{
+		get
+		{
+			return this._isPersonal;
+		}
+		set
+		{
+			if ((this._isPersonal != value))
+			{
+				this.OnisPersonalChanging(value);
+				this.SendPropertyChanging();
+				this._isPersonal = value;
+				this.SendPropertyChanged("isPersonal");
+				this.OnisPersonalChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idGroup", DbType="Int")]
+	public System.Nullable<int> idGroup
+	{
+		get
+		{
+			return this._idGroup;
+		}
+		set
+		{
+			if ((this._idGroup != value))
+			{
+				if (this._subject_group.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidGroupChanging(value);
+				this.SendPropertyChanging();
+				this._idGroup = value;
+				this.SendPropertyChanged("idGroup");
+				this.OnidGroupChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_category_header", DbType="VarChar(255)")]
+	public string category_header
+	{
+		get
+		{
+			return this._category_header;
+		}
+		set
+		{
+			if ((this._category_header != value))
+			{
+				this.Oncategory_headerChanging(value);
+				this.SendPropertyChanging();
+				this._category_header = value;
+				this.SendPropertyChanged("category_header");
+				this.Oncategory_headerChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Name="abstract", Storage="_abstract", DbType="VarChar(255)")]
+	public string @abstract
+	{
+		get
+		{
+			return this._abstract;
+		}
+		set
+		{
+			if ((this._abstract != value))
+			{
+				this.OnabstractChanging(value);
+				this.SendPropertyChanging();
+				this._abstract = value;
+				this.SendPropertyChanged("@abstract");
+				this.OnabstractChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_repeat_lnk", DbType="Bit NOT NULL")]
+	public bool repeat_lnk
+	{
+		get
+		{
+			return this._repeat_lnk;
+		}
+		set
+		{
+			if ((this._repeat_lnk != value))
+			{
+				this.Onrepeat_lnkChanging(value);
+				this.SendPropertyChanging();
+				this._repeat_lnk = value;
+				this.SendPropertyChanged("repeat_lnk");
+				this.Onrepeat_lnkChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_full_report_lnk", DbType="Bit NOT NULL")]
+	public bool full_report_lnk
+	{
+		get
+		{
+			return this._full_report_lnk;
+		}
+		set
+		{
+			if ((this._full_report_lnk != value))
+			{
+				this.Onfull_report_lnkChanging(value);
+				this.SendPropertyChanging();
+				this._full_report_lnk = value;
+				this.SendPropertyChanged("full_report_lnk");
+				this.Onfull_report_lnkChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_link_URL", DbType="VarChar(255)")]
+	public string link_URL
+	{
+		get
+		{
+			return this._link_URL;
+		}
+		set
+		{
+			if ((this._link_URL != value))
+			{
+				this.Onlink_URLChanging(value);
+				this.SendPropertyChanging();
+				this._link_URL = value;
+				this.SendPropertyChanged("link_URL");
+				this.Onlink_URLChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_link_title", DbType="VarChar(255)")]
+	public string link_title
+	{
+		get
+		{
+			return this._link_title;
+		}
+		set
+		{
+			if ((this._link_title != value))
+			{
+				this.Onlink_titleChanging(value);
+				this.SendPropertyChanging();
+				this._link_title = value;
+				this.SendPropertyChanged("link_title");
+				this.Onlink_titleChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_indicator", Storage="_Company", ThisKey="idCompany", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+	public Company Company
+	{
+		get
+		{
+			return this._Company.Entity;
+		}
+		set
+		{
+			Company previousValue = this._Company.Entity;
+			if (((previousValue != value) 
+						|| (this._Company.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Company.Entity = null;
+					previousValue.indicators.Remove(this);
+				}
+				this._Company.Entity = value;
+				if ((value != null))
+				{
+					value.indicators.Add(this);
+					this._idCompany = value.id;
+				}
+				else
+				{
+					this._idCompany = default(int);
+				}
+				this.SendPropertyChanged("Company");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="test_diagram_indicator", Storage="_test_diagram", ThisKey="idDiagram", OtherKey="id", IsForeignKey=true, DeleteRule="CASCADE")]
+	public test_diagram test_diagram
+	{
+		get
+		{
+			return this._test_diagram.Entity;
+		}
+		set
+		{
+			test_diagram previousValue = this._test_diagram.Entity;
+			if (((previousValue != value) 
+						|| (this._test_diagram.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._test_diagram.Entity = null;
+					previousValue.indicators.Remove(this);
+				}
+				this._test_diagram.Entity = value;
+				if ((value != null))
+				{
+					value.indicators.Add(this);
+					this._idDiagram = value.id;
+				}
+				else
+				{
+					this._idDiagram = default(Nullable<int>);
+				}
+				this.SendPropertyChanged("test_diagram");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Scale_indicator", Storage="_Scale", ThisKey="idScale", OtherKey="id", IsForeignKey=true, DeleteRule="CASCADE")]
+	public Scale Scale
+	{
+		get
+		{
+			return this._Scale.Entity;
+		}
+		set
+		{
+			Scale previousValue = this._Scale.Entity;
+			if (((previousValue != value) 
+						|| (this._Scale.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Scale.Entity = null;
+					previousValue.indicators.Remove(this);
+				}
+				this._Scale.Entity = value;
+				if ((value != null))
+				{
+					value.indicators.Add(this);
+					this._idScale = value.id;
+				}
+				else
+				{
+					this._idScale = default(Nullable<int>);
+				}
+				this.SendPropertyChanged("Scale");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="subject_group_indicator", Storage="_subject_group", ThisKey="idGroup", OtherKey="id", IsForeignKey=true, DeleteRule="CASCADE")]
+	public subject_group subject_group
+	{
+		get
+		{
+			return this._subject_group.Entity;
+		}
+		set
+		{
+			subject_group previousValue = this._subject_group.Entity;
+			if (((previousValue != value) 
+						|| (this._subject_group.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._subject_group.Entity = null;
+					previousValue.indicators.Remove(this);
+				}
+				this._subject_group.Entity = value;
+				if ((value != null))
+				{
+					value.indicators.Add(this);
+					this._idGroup = value.id;
+				}
+				else
+				{
+					this._idGroup = default(Nullable<int>);
+				}
+				this.SendPropertyChanged("subject_group");
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
 	}
 }
 #pragma warning restore 1591

@@ -256,7 +256,8 @@ public partial class lk2 : System.Web.UI.Page
                 break;
             case 140: // integral
             case 160: // plan
-                ObjectIndicator.BuildAndPut(p_dc, ind, p_ua, tc, Server.MapPath(@"~\Images\Indicator"));
+                //ObjectIndicator.BuildAndPut(p_dc, ind, p_ua, tc, Server.MapPath(@"~\Images\Indicator"));
+                ObjectIndicator.BuildAndPut(p_dc, ind, p_ua, tc);
                 break;
             default:
                 ObjectIndicator.BuildAndPut(p_dc, ind, p_ua, tc);
@@ -298,11 +299,26 @@ public partial class lk2 : System.Web.UI.Page
                     prior_header = ind.category_header;
                     prior_Group = pnlGroup;
                 }
-                DrawSingleIndicator(p_dc, ind, p_ua, p_canViewAllDept, pnlGroup == null ? (Control)compPersonalIndicatorData : pnlGroup);
+
+                Control pnl = pnlGroup == null ? (Control)compPersonalIndicatorData : pnlGroup;
+                if (ind.link_URL != null)
+                {
+                    if (!ind.link_URL.StartsWith("http://") || !ind.link_URL.StartsWith("https://"))
+                    {
+                        ind.link_URL = "http://" + ind.link_URL;
+                    }
+                    pnl.Controls.Add(new HyperLink()
+                    {
+                        NavigateUrl = ind.link_URL,
+                        Text = ind.link_title == null || ind.link_title == "" ? ind.link_URL : ind.link_title
+                    });
+                    pnl.Controls.Add(new Label() { CssClass = "clsIndexDescr" });
+                }
+
+                DrawSingleIndicator(p_dc, ind, p_ua, p_canViewAllDept, pnl);
                 //DrawSingleIndicator(p_dc, ind, p_ua, p_canViewAllDept, (Control)compPersonalIndicatorData);
                 if (ind.subject_group != null)
                 {
-                    Control pnl = pnlGroup == null ? (Control)compPersonalIndicatorData : pnlGroup;
                     if (ind.repeat_lnk) // ссылка на повторное прохождение
                     {
                         Test_Subject NextTimeSubject = ind.subject_group.Test_Subjects.Where(ts => ts.idUser == p_ua.idUser && ts.Test_Date == null).FirstOrDefault();
@@ -325,6 +341,7 @@ public partial class lk2 : System.Web.UI.Page
                             });
                         }
                     }
+
 
                     compPersonalIndicatorData.Controls.Add(new LiteralControl("<br/>"));
                 }
