@@ -24,6 +24,7 @@ public class ObjectIndicator
         public string name;
         public int ssID;
         public int? subjID;
+        public int? LeaderCode;
     }
     struct dpSummary
     {
@@ -31,7 +32,7 @@ public class ObjectIndicator
         public string name;
         public int ssID;
         public int? Number;
-        public int? LeaderID;
+        public int? LeaderCode;
         public string LeaderName;
     }
     struct InfoByDept
@@ -414,11 +415,7 @@ public class ObjectIndicator
         }
         else // групповой
         {
-            /*по каждой компетенции
-             * лидер и кол-во (?) выбравших эту компетенцию
-             * 
-             * +всего общее кол-во, полностью заполнивших
-             */
+            //по каждой компетенции - лидер и кол-во выбравших эту компетенцию
             var n =
                 from ss in p_dc.SubScales
                 join i in p_dc.items on ss.Dimension_ID equals i.dimension_id
@@ -426,9 +423,9 @@ public class ObjectIndicator
                 where i.id == 13346 /*hard*/
                 from ou in outer.DefaultIfEmpty()
 
-                join trr in p_dc.Test_Results on new {jpSubjID = ou.Subject_ID, jpFixItemID = 13348} equals new {jpSubjID = trr.Subject_ID, jpFixItemID = trr.item_id} into outer2
+                join trr in p_dc.Test_Results on new {jpSubjID = ou.Subject_ID, jpFixItemID = 13348/*hard*/} equals new {jpSubjID = trr.Subject_ID, jpFixItemID = trr.item_id} into outer2
                 from ou2 in outer2.DefaultIfEmpty()
-                select new dp() { name = ss.name, subjID = ou.Subject_ID, OrdNumber = ss.OrderNumber, ssID = ss.id };
+                select new dp() { name = ss.name, subjID = ou.Subject_ID, OrdNumber = ss.OrderNumber, ssID = ss.id, LeaderCode = ou2.SubScale_ID };
 
             List<dpSummary> qq = n.GroupBy (gg=> new { gg.ssID, gg.name } ).Select (
                 dd=> new dpSummary {
@@ -438,39 +435,28 @@ public class ObjectIndicator
                 }).ToList();
             
 
-            foreach (dp line in n)
-            { 
-                
-
-
-            }
-
-
-
             p_container.Controls.Add(new Label() { Text = p_indicator.name, CssClass = "clsIndicatorName" });
             foreach (dpSummary smr in qq)
             {
-                p_container.Controls.Add(new Label() { Text = string.Format ("<br/>{0} кол-во {1} лидер {2}", smr.name, smr.Number, "??") });
+                var ldc =
+                    n.Where(w => w.ssID == smr.ssID).GroupBy(g => g.LeaderCode).Select(s => new { kk = s.Key, cnt = s.Count() }).OrderByDescending(ob => ob.cnt).FirstOrDefault();
+                
+                string LeaderName = ldc.kk == null ? "" : p_dc.SubScales.Where(ww => ww.id == ldc.kk).FirstOrDefault().name;
+                p_container.Controls.Add(new Label() { Text = string.Format ("<br/>{0} <b>{1} чел</b> (лидер {2})", smr.name, smr.Number, LeaderName) });
+            }
+            // общее кол-во, полностью заполнивших
+            int CompleteNumber = 0;
+            foreach (Test_Subject ts in p_dc.Test_Subjects.Where (w=> w.group_id == 1115/*hard*/ && w.Test_Date != null )) 
+            {
+                if ((p_dc.Test_Results_Txts.Where (ww=> ww.subject_id == ts.id && ww.text != "").Count() == 4) &&
+                   (p_dc.Test_Results.Where (ww=> ww.Subject_ID == ts.id).Select (s=> s.item_id).Distinct().Count() == 3))
+                {
+                    CompleteNumber++;
+                }
             }
 
-
-            //            SELECT * FROM (
-            //SELECT 
-            //ss.OrderNumber, ss.id, ss.[name]
-            //, COUNT(*) AS id_number
-            //, COUNT(*) sdsds
-            //,trr.SubScale_ID
-            //, ROW_NUMBER () OVER (PARTITION BY ss.ID ORDER BY COUNT(trr.SubScale_ID) desc) AS rr
-            //FROM SubScales ss
-            //JOIN items i ON ss.Dimension_ID = i.dimension_id 
-            //LEFT JOIN Test_Results tr ON tr.item_id = i.id and tr.SubScale_ID = ss.id
-            //LEFT JOIN Test_Results trr ON trr.Subject_ID = tr.Subject_ID AND trr.item_id = 13348/*!!!*/
-            //--left join SubScales sss ON sss.id = trr.SubScale_ID
-            //WHERE i.id = 13346 /*!!!*/
-            //GROUP BY ss.OrderNumber, ss.id, ss.[name], trr.SubScale_ID
-            //) q
-            //WHERE q.rr = 1 
-
+            p_container.Controls.Add(new Label() { Text = string.Format ("<br/><br/>полностью заполнили {0} человек", CompleteNumber)});
+                
         }
     }
     
