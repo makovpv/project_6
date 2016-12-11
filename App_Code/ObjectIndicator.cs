@@ -19,6 +19,39 @@ public class ObjectIndicator
         public byte DimensionType;
         public int ID;
     }
+    struct dp {
+        public int OrdNumber;
+        public string name;
+        public int ssID;
+        public int? subjID;
+    }
+    struct dpSummary
+    {
+        public int OrdNumber;
+        public string name;
+        public int ssID;
+        public int? Number;
+        public int? LeaderID;
+        public string LeaderName;
+    }
+    struct InfoByDept
+    {
+        public int? idDept;
+        public int Number;
+    }
+    struct InfoByUserName
+    {
+        public string Name;
+        //public int id;
+        public int Number;
+    }
+    struct FieldDataSet
+    {
+        public decimal Value;
+        public string Name;
+        public int Order;
+    }
+
     /// <summary>
     /// </summary>
     /// <param name="p_isSubLevel">для корректного определения относительного пути к папке с картинками</param>
@@ -77,24 +110,6 @@ public class ObjectIndicator
                 }
                 break;
         }
-    }
-
-    struct InfoByDept 
-    {
-        public int? idDept;
-        public int Number;
-    }
-    struct InfoByUserName
-    {
-        public string Name;
-        //public int id;
-        public int Number;
-    }
-    struct FieldDataSet
-    {
-        public decimal Value;
-        public string Name;
-        public int Order;
     }
 
     public static void BuildAndPut(TesterDataClassesDataContext p_dc, indicator p_indicator, user_account p_ua,
@@ -351,56 +366,110 @@ public class ObjectIndicator
     /// </summary>
     private static void DevelopmentPlan (TesterDataClassesDataContext p_dc, indicator p_indicator, Control p_container, user_account p_ua)
     {
-        Test_Subject tsubj = p_dc.Test_Subjects.Where(
-                ts => ts.idUser == p_ua.idUser && ts.group_id == p_indicator.idGroup && ts.Test_Date != null
-            ).OrderByDescending(o => o.Test_Date).FirstOrDefault();
-        if (tsubj != null)
+        if (p_indicator.isPersonal)
         {// индивидуальный
-            p_container.Controls.Add(new Label() { Text = p_indicator.name, CssClass = "clsIndicatorName" });
-            p_container.Controls.Add(new HyperLink() { Text = "Редактировать", NavigateUrl = "~\\Group\\AnsAll.aspx?id=" + tsubj.id.ToString() });
-
-            foreach (ps1 line in (
-                from txt in p_dc.Test_Results_Txts
-                join i in p_dc.items on txt.item_id equals i.id
-                join ssd in p_dc.SubScaleDimensions on i.dimension_id equals ssd.id
-                where txt.subject_id == tsubj.id
-                select new ps1()
-                {
-                    item_name = i.text,
-                    txt_answer = txt.text,
-                    OrderNumber = i.number,
-                    DimensionType = ssd.dimension_type,
-                    ID = txt.id
-                }
-                ).Union(
-                from rs in p_dc.Test_Results
-                join ss in p_dc.SubScales on rs.SubScale_ID equals ss.id
-                join i in p_dc.items on rs.item_id equals i.id
-                join ssd in p_dc.SubScaleDimensions on i.dimension_id equals ssd.id
-                where rs.Subject_ID == tsubj.id && rs.SelectedValue == 1
-                select new ps1()
-                {
-                    item_name = i.text,
-                    txt_answer = ss.name,
-                    OrderNumber = i.number,
-                    DimensionType = ssd.dimension_type,
-                    ID = rs.id
-                }
-                ).OrderBy(q => q.OrderNumber))
+            Test_Subject tsubj = p_dc.Test_Subjects.Where(
+                    ts => ts.idUser == p_ua.idUser && ts.group_id == p_indicator.idGroup && ts.Test_Date != null
+                ).OrderByDescending(o => o.Test_Date).FirstOrDefault();
+            if (tsubj != null)
             {
-                p_container.Controls.Add(new LiteralControl("<hr/>"));
-                p_container.Controls.Add(new Label() { Text = line.item_name });
-                p_container.Controls.Add(new LiteralControl("<br/>"));
-                p_container.Controls.Add(new Label() { Text = line.txt_answer, CssClass = "clsMyPlanAnswer" });
+                p_container.Controls.Add(new Label() { Text = p_indicator.name, CssClass = "clsIndicatorName" });
+                p_container.Controls.Add(new HyperLink() { Text = "Редактировать", NavigateUrl = "~\\Group\\AnsAll.aspx?id=" + tsubj.id.ToString() });
+
+                foreach (ps1 line in (
+                    from txt in p_dc.Test_Results_Txts
+                    join i in p_dc.items on txt.item_id equals i.id
+                    join ssd in p_dc.SubScaleDimensions on i.dimension_id equals ssd.id
+                    where txt.subject_id == tsubj.id
+                    select new ps1()
+                    {
+                        item_name = i.text,
+                        txt_answer = txt.text,
+                        OrderNumber = i.number,
+                        DimensionType = ssd.dimension_type,
+                        ID = txt.id
+                    }
+                    ).Union(
+                    from rs in p_dc.Test_Results
+                    join ss in p_dc.SubScales on rs.SubScale_ID equals ss.id
+                    join i in p_dc.items on rs.item_id equals i.id
+                    join ssd in p_dc.SubScaleDimensions on i.dimension_id equals ssd.id
+                    where rs.Subject_ID == tsubj.id && rs.SelectedValue == 1
+                    select new ps1()
+                    {
+                        item_name = i.text,
+                        txt_answer = ss.name,
+                        OrderNumber = i.number,
+                        DimensionType = ssd.dimension_type,
+                        ID = rs.id
+                    }
+                    ).OrderBy(q => q.OrderNumber))
+                {
+                    p_container.Controls.Add(new LiteralControl("<hr/>"));
+                    p_container.Controls.Add(new Label() { Text = line.item_name });
+                    p_container.Controls.Add(new LiteralControl("<br/>"));
+                    p_container.Controls.Add(new Label() { Text = line.txt_answer, CssClass = "clsMyPlanAnswer" });
+                }
             }
         }
         else // групповой
-        { 
+        {
             /*по каждой компетенции
              * лидер и кол-во (?) выбравших эту компетенцию
              * 
              * +всего общее кол-во, полностью заполнивших
              */
+            var n =
+                from ss in p_dc.SubScales
+                join i in p_dc.items on ss.Dimension_ID equals i.dimension_id
+                join tr in p_dc.Test_Results on new { jpItemID = i.id, jpDimID = (int?)ss.id } equals new { jpItemID = tr.item_id, jpDimID = tr.SubScale_ID } into outer
+                where i.id == 13346 /*hard*/
+                from ou in outer.DefaultIfEmpty()
+
+                join trr in p_dc.Test_Results on new {jpSubjID = ou.Subject_ID, jpFixItemID = 13348} equals new {jpSubjID = trr.Subject_ID, jpFixItemID = trr.item_id} into outer2
+                from ou2 in outer2.DefaultIfEmpty()
+                select new dp() { name = ss.name, subjID = ou.Subject_ID, OrdNumber = ss.OrderNumber, ssID = ss.id };
+
+            List<dpSummary> qq = n.GroupBy (gg=> new { gg.ssID, gg.name } ).Select (
+                dd=> new dpSummary {
+                    ssID = dd.Key.ssID, 
+                    name = dd.Key.name,
+                    Number = dd.Select(x=> x.subjID).Distinct().Count(cn=> cn.Value!=null)
+                }).ToList();
+            
+
+            foreach (dp line in n)
+            { 
+                
+
+
+            }
+
+
+
+            p_container.Controls.Add(new Label() { Text = p_indicator.name, CssClass = "clsIndicatorName" });
+            foreach (dpSummary smr in qq)
+            {
+                p_container.Controls.Add(new Label() { Text = string.Format ("<br/>{0} кол-во {1} лидер {2}", smr.name, smr.Number, "??") });
+            }
+
+
+            //            SELECT * FROM (
+            //SELECT 
+            //ss.OrderNumber, ss.id, ss.[name]
+            //, COUNT(*) AS id_number
+            //, COUNT(*) sdsds
+            //,trr.SubScale_ID
+            //, ROW_NUMBER () OVER (PARTITION BY ss.ID ORDER BY COUNT(trr.SubScale_ID) desc) AS rr
+            //FROM SubScales ss
+            //JOIN items i ON ss.Dimension_ID = i.dimension_id 
+            //LEFT JOIN Test_Results tr ON tr.item_id = i.id and tr.SubScale_ID = ss.id
+            //LEFT JOIN Test_Results trr ON trr.Subject_ID = tr.Subject_ID AND trr.item_id = 13348/*!!!*/
+            //--left join SubScales sss ON sss.id = trr.SubScale_ID
+            //WHERE i.id = 13346 /*!!!*/
+            //GROUP BY ss.OrderNumber, ss.id, ss.[name], trr.SubScale_ID
+            //) q
+            //WHERE q.rr = 1 
 
         }
     }

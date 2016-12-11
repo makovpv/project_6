@@ -270,7 +270,7 @@ public partial class lk2 : System.Web.UI.Page
         {
             string prior_header = "";
             foreach (indicator ind in p_dc.indicators.Where(p => p.idCompany == p_ua.idCompany && p.isPersonal == false).OrderBy(q => q.category_header))
-            {
+            {// group indicators
                 if (prior_header != ind.category_header)
                 {
                     compIndicatorData.Controls.Add(new LiteralControl("<hr/><br/>"));
