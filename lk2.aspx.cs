@@ -303,7 +303,7 @@ public partial class lk2 : System.Web.UI.Page
                 Control pnl = pnlGroup == null ? (Control)compPersonalIndicatorData : pnlGroup;
                 if (ind.link_URL != null)
                 {
-                    if (!ind.link_URL.StartsWith("http://") || !ind.link_URL.StartsWith("https://"))
+                    if (!ind.link_URL.StartsWith("http"))
                     {
                         ind.link_URL = "http://" + ind.link_URL;
                     }

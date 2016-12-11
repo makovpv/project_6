@@ -415,6 +415,18 @@ public class ObjectIndicator
         }
         else // групповой
         {
+            // общее кол-во, полностью заполнивших
+            int CompleteNumber = 0;
+            foreach (Test_Subject ts in p_dc.Test_Subjects.Where(w => w.group_id == 1115/*hard*/ && w.Test_Date != null))
+            {
+                if ((p_dc.Test_Results_Txts.Where(ww => ww.subject_id == ts.id && ww.text != "").Count() == 4) &&
+                   (p_dc.Test_Results.Where(ww => ww.Subject_ID == ts.id).Select(s => s.item_id).Distinct().Count() == 3))
+                {
+                    CompleteNumber++;
+                }
+            }
+
+
             //по каждой компетенции - лидер и кол-во выбравших эту компетенцию
             var n =
                 from ss in p_dc.SubScales
@@ -436,26 +448,16 @@ public class ObjectIndicator
             
 
             p_container.Controls.Add(new Label() { Text = p_indicator.name, CssClass = "clsIndicatorName" });
+            p_container.Controls.Add(new Label() { Text = string.Format("<br/><br/>полностью заполнили {0} человек<br/>", CompleteNumber) });
             foreach (dpSummary smr in qq)
             {
                 var ldc =
                     n.Where(w => w.ssID == smr.ssID).GroupBy(g => g.LeaderCode).Select(s => new { kk = s.Key, cnt = s.Count() }).OrderByDescending(ob => ob.cnt).FirstOrDefault();
                 
                 string LeaderName = ldc.kk == null ? "" : p_dc.SubScales.Where(ww => ww.id == ldc.kk).FirstOrDefault().name;
-                p_container.Controls.Add(new Label() { Text = string.Format ("<br/>{0} <b>{1} чел</b> (лидер {2})", smr.name, smr.Number, LeaderName) });
-            }
-            // общее кол-во, полностью заполнивших
-            int CompleteNumber = 0;
-            foreach (Test_Subject ts in p_dc.Test_Subjects.Where (w=> w.group_id == 1115/*hard*/ && w.Test_Date != null )) 
-            {
-                if ((p_dc.Test_Results_Txts.Where (ww=> ww.subject_id == ts.id && ww.text != "").Count() == 4) &&
-                   (p_dc.Test_Results.Where (ww=> ww.Subject_ID == ts.id).Select (s=> s.item_id).Distinct().Count() == 3))
-                {
-                    CompleteNumber++;
-                }
+                p_container.Controls.Add(new Label() { Text = string.Format ("<br/>{0} <b>развивают {1} сотр.</b> (лидер {2})", smr.name, smr.Number, LeaderName) });
             }
 
-            p_container.Controls.Add(new Label() { Text = string.Format ("<br/><br/>полностью заполнили {0} человек", CompleteNumber)});
                 
         }
     }
