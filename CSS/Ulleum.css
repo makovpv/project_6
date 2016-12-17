@@ -280,11 +280,21 @@ button.rowMenuButton
     margin-bottom: 20px; 
     font-size: 20px;
 
-}.clsIndexDescr
+}
+.clsIndexDescr
 {
     display: inline-block;
     word-break: break-word;
     text-align: center;
     vertical-align: middle;
     margin-right: 20px;
+}
+.AppreciateLink
+{
+    font-weight:bold;
+    width: 50px;
+    vertical-align: baseline;
+    margin-bottom: 20px; 
+    font-size: 20px;
+    text-decoration: none;
 }

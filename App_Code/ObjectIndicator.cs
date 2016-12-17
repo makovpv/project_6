@@ -249,12 +249,13 @@ public class ObjectIndicator
                             select tr.id).Count();
 
                         p_container.Controls.Add(new LiteralControl("<br/>"));
-                        p_container.Controls.Add(new LiteralControl("Вы поблагодарили:"));
+                        p_container.Controls.Add(new Label() { Text = "Вы поблагодарили:"});
                         //Label vlbl = TesterChart.CalcAndDrawIndicator(p_dc, null, null, p_indicator, p_ua.idUser, p_canViewAllDept);
                         HyperLink hlnk = new HyperLink()
                         {
                             Text = cntActive.ToString(),
-                            NavigateUrl = string.Format("~\\Analyse\\gratitude.aspx?s={0}", p_ua.fio)
+                            NavigateUrl = string.Format("~\\Analyse\\gratitude.aspx?s={0}", p_ua.fio),
+                            CssClass = "AppreciateLink"
                         };
                         hlnk.Font.Size = 34;
                         p_container.Controls.Add(hlnk);
@@ -263,7 +264,8 @@ public class ObjectIndicator
                         hlnk = new HyperLink()
                         {
                             Text = cntPassive.ToString(),
-                            NavigateUrl = string.Format("~\\Analyse\\gratitude.aspx?o={0}", p_ua.fio)
+                            NavigateUrl = string.Format("~\\Analyse\\gratitude.aspx?o={0}", p_ua.fio),
+                            CssClass = "AppreciateLink"
                         };
                         hlnk.Font.Size = 34;
                         p_container.Controls.Add(hlnk);
@@ -406,7 +408,7 @@ public class ObjectIndicator
                     }
                     ).OrderBy(q => q.OrderNumber))
                 {
-                    p_container.Controls.Add(new LiteralControl("<hr/>"));
+                    p_container.Controls.Add(new LiteralControl("<br/><br/>"));
                     p_container.Controls.Add(new Label() { Text = line.item_name });
                     p_container.Controls.Add(new LiteralControl("<br/>"));
                     p_container.Controls.Add(new Label() { Text = line.txt_answer, CssClass = "clsMyPlanAnswer" });
