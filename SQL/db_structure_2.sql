@@ -322,13 +322,12 @@ go
 alter table indicator add link_URL varchar(255), link_title varchar(255)
 go
 
---------------insert into idea_generator (idTest, idgeneratortype) values (1220, 2 )
---select * from idea where idstate in (2,3)
+alter table items add [description] varchar(2000)
+go
 
---select * from test_subject_approved
---select * from idea_generator 1226
---select * from test_subject where idUser is null
---select * from indicator
---...
---create table dbo.QuartAssessment (idAssessment int not null identity, idUser uniqueidentifier not null, )
---select * from user_account where idUser = '62EF0C9B-46FB-43C2-8F9E-55CA6D08EA32'
+
+--------------insert into idea_generator (idTest, idgeneratortype) values (1220, 2 )
+
+
+
+

@@ -98,9 +98,6 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
   partial void InsertItemScale_Link(ItemScale_Link instance);
   partial void UpdateItemScale_Link(ItemScale_Link instance);
   partial void DeleteItemScale_Link(ItemScale_Link instance);
-  partial void Insertitem(item instance);
-  partial void Updateitem(item instance);
-  partial void Deleteitem(item instance);
   partial void InsertParam_Result(Param_Result instance);
   partial void UpdateParam_Result(Param_Result instance);
   partial void DeleteParam_Result(Param_Result instance);
@@ -194,6 +191,9 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
   partial void Insertindicator(indicator instance);
   partial void Updateindicator(indicator instance);
   partial void Deleteindicator(indicator instance);
+  partial void Insertitem(item instance);
+  partial void Updateitem(item instance);
+  partial void Deleteitem(item instance);
   #endregion
 	
 	public TesterDataClassesDataContext() : 
@@ -423,14 +423,6 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
 		get
 		{
 			return this.GetTable<ItemScale_Link>();
-		}
-	}
-	
-	public System.Data.Linq.Table<item> items
-	{
-		get
-		{
-			return this.GetTable<item>();
 		}
 	}
 	
@@ -687,6 +679,14 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
 		get
 		{
 			return this.GetTable<indicator>();
+		}
+	}
+	
+	public System.Data.Linq.Table<item> items
+	{
+		get
+		{
+			return this.GetTable<item>();
 		}
 	}
 	
@@ -2791,9 +2791,9 @@ public partial class Test_Results_Txt : INotifyPropertyChanging, INotifyProperty
 	
 	private string _text;
 	
-	private EntityRef<item> _item;
-	
 	private EntityRef<Test_Subject> _Test_Subject;
+	
+	private EntityRef<item> _item;
 	
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2811,8 +2811,8 @@ public partial class Test_Results_Txt : INotifyPropertyChanging, INotifyProperty
 	
 	public Test_Results_Txt()
 	{
-		this._item = default(EntityRef<item>);
 		this._Test_Subject = default(EntityRef<Test_Subject>);
+		this._item = default(EntityRef<item>);
 		OnCreated();
 	}
 	
@@ -2904,40 +2904,6 @@ public partial class Test_Results_Txt : INotifyPropertyChanging, INotifyProperty
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="item_Test_Results_Txt", Storage="_item", ThisKey="item_id", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-	public item item
-	{
-		get
-		{
-			return this._item.Entity;
-		}
-		set
-		{
-			item previousValue = this._item.Entity;
-			if (((previousValue != value) 
-						|| (this._item.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._item.Entity = null;
-					previousValue.Test_Results_Txts.Remove(this);
-				}
-				this._item.Entity = value;
-				if ((value != null))
-				{
-					value.Test_Results_Txts.Add(this);
-					this._item_id = value.id;
-				}
-				else
-				{
-					this._item_id = default(int);
-				}
-				this.SendPropertyChanged("item");
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Test_Results_Txt", Storage="_Test_Subject", ThisKey="subject_id", OtherKey="id", IsForeignKey=true)]
 	public Test_Subject Test_Subject
 	{
@@ -2968,6 +2934,40 @@ public partial class Test_Results_Txt : INotifyPropertyChanging, INotifyProperty
 					this._subject_id = default(int);
 				}
 				this.SendPropertyChanged("Test_Subject");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="item_Test_Results_Txt", Storage="_item", ThisKey="item_id", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+	public item item
+	{
+		get
+		{
+			return this._item.Entity;
+		}
+		set
+		{
+			item previousValue = this._item.Entity;
+			if (((previousValue != value) 
+						|| (this._item.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._item.Entity = null;
+					previousValue.Test_Results_Txts.Remove(this);
+				}
+				this._item.Entity = value;
+				if ((value != null))
+				{
+					value.Test_Results_Txts.Add(this);
+					this._item_id = value.id;
+				}
+				else
+				{
+					this._item_id = default(int);
+				}
+				this.SendPropertyChanged("item");
 			}
 		}
 	}
@@ -5384,9 +5384,9 @@ public partial class ItemScale_Link : INotifyPropertyChanging, INotifyPropertyCh
 	
 	private EntityRef<SubScale> _SubScale;
 	
-	private EntityRef<item> _item;
-	
 	private EntityRef<Scale> _Scale;
+	
+	private EntityRef<item> _item;
 	
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -5409,8 +5409,8 @@ public partial class ItemScale_Link : INotifyPropertyChanging, INotifyPropertyCh
 	public ItemScale_Link()
 	{
 		this._SubScale = default(EntityRef<SubScale>);
-		this._item = default(EntityRef<item>);
 		this._Scale = default(EntityRef<Scale>);
+		this._item = default(EntityRef<item>);
 		OnCreated();
 	}
 	
@@ -5586,6 +5586,40 @@ public partial class ItemScale_Link : INotifyPropertyChanging, INotifyPropertyCh
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Scale_ItemScale_Link", Storage="_Scale", ThisKey="scale_id", OtherKey="id", IsForeignKey=true)]
+	public Scale Scale
+	{
+		get
+		{
+			return this._Scale.Entity;
+		}
+		set
+		{
+			Scale previousValue = this._Scale.Entity;
+			if (((previousValue != value) 
+						|| (this._Scale.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Scale.Entity = null;
+					previousValue.ItemScale_Links.Remove(this);
+				}
+				this._Scale.Entity = value;
+				if ((value != null))
+				{
+					value.ItemScale_Links.Add(this);
+					this._scale_id = value.id;
+				}
+				else
+				{
+					this._scale_id = default(int);
+				}
+				this.SendPropertyChanged("Scale");
+			}
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="item_ItemScale_Link", Storage="_item", ThisKey="item_id,dimension_id", OtherKey="id,dimension_id", IsForeignKey=true)]
 	public item item
 	{
@@ -5622,40 +5656,6 @@ public partial class ItemScale_Link : INotifyPropertyChanging, INotifyPropertyCh
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Scale_ItemScale_Link", Storage="_Scale", ThisKey="scale_id", OtherKey="id", IsForeignKey=true)]
-	public Scale Scale
-	{
-		get
-		{
-			return this._Scale.Entity;
-		}
-		set
-		{
-			Scale previousValue = this._Scale.Entity;
-			if (((previousValue != value) 
-						|| (this._Scale.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._Scale.Entity = null;
-					previousValue.ItemScale_Links.Remove(this);
-				}
-				this._Scale.Entity = value;
-				if ((value != null))
-				{
-					value.ItemScale_Links.Add(this);
-					this._scale_id = value.id;
-				}
-				else
-				{
-					this._scale_id = default(int);
-				}
-				this.SendPropertyChanged("Scale");
-			}
-		}
-	}
-	
 	public event PropertyChangingEventHandler PropertyChanging;
 	
 	public event PropertyChangedEventHandler PropertyChanged;
@@ -5674,395 +5674,6 @@ public partial class ItemScale_Link : INotifyPropertyChanging, INotifyPropertyCh
 		{
 			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 		}
-	}
-}
-
-[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.items")]
-public partial class item : INotifyPropertyChanging, INotifyPropertyChanged
-{
-	
-	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-	
-	private int _id;
-	
-	private string _text;
-	
-	private byte _item_type;
-	
-	private int _group_id;
-	
-	private System.Nullable<short> _number;
-	
-	private System.Nullable<int> _dimension_id;
-	
-	private EntitySet<Test_Results_Txt> _Test_Results_Txts;
-	
-	private EntitySet<ItemScale_Link> _ItemScale_Links;
-	
-	private EntitySet<Test_Result> _Test_Results;
-	
-	private EntityRef<SubScaleDimension> _SubScaleDimension;
-	
-	private EntityRef<Quest_Type> _Quest_Type;
-	
-	private EntityRef<Test_Question> _Test_Question;
-	
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnidChanging(int value);
-    partial void OnidChanged();
-    partial void OntextChanging(string value);
-    partial void OntextChanged();
-    partial void Onitem_typeChanging(byte value);
-    partial void Onitem_typeChanged();
-    partial void Ongroup_idChanging(int value);
-    partial void Ongroup_idChanged();
-    partial void OnnumberChanging(System.Nullable<short> value);
-    partial void OnnumberChanged();
-    partial void Ondimension_idChanging(System.Nullable<int> value);
-    partial void Ondimension_idChanged();
-    #endregion
-	
-	public item()
-	{
-		this._Test_Results_Txts = new EntitySet<Test_Results_Txt>(new Action<Test_Results_Txt>(this.attach_Test_Results_Txts), new Action<Test_Results_Txt>(this.detach_Test_Results_Txts));
-		this._ItemScale_Links = new EntitySet<ItemScale_Link>(new Action<ItemScale_Link>(this.attach_ItemScale_Links), new Action<ItemScale_Link>(this.detach_ItemScale_Links));
-		this._Test_Results = new EntitySet<Test_Result>(new Action<Test_Result>(this.attach_Test_Results), new Action<Test_Result>(this.detach_Test_Results));
-		this._SubScaleDimension = default(EntityRef<SubScaleDimension>);
-		this._Quest_Type = default(EntityRef<Quest_Type>);
-		this._Test_Question = default(EntityRef<Test_Question>);
-		OnCreated();
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-	public int id
-	{
-		get
-		{
-			return this._id;
-		}
-		set
-		{
-			if ((this._id != value))
-			{
-				this.OnidChanging(value);
-				this.SendPropertyChanging();
-				this._id = value;
-				this.SendPropertyChanged("id");
-				this.OnidChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_text", DbType="NVarChar(300)")]
-	public string text
-	{
-		get
-		{
-			return this._text;
-		}
-		set
-		{
-			if ((this._text != value))
-			{
-				this.OntextChanging(value);
-				this.SendPropertyChanging();
-				this._text = value;
-				this.SendPropertyChanged("text");
-				this.OntextChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_item_type", DbType="TinyInt NOT NULL")]
-	public byte item_type
-	{
-		get
-		{
-			return this._item_type;
-		}
-		set
-		{
-			if ((this._item_type != value))
-			{
-				if (this._Quest_Type.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.Onitem_typeChanging(value);
-				this.SendPropertyChanging();
-				this._item_type = value;
-				this.SendPropertyChanged("item_type");
-				this.Onitem_typeChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_group_id", DbType="Int NOT NULL")]
-	public int group_id
-	{
-		get
-		{
-			return this._group_id;
-		}
-		set
-		{
-			if ((this._group_id != value))
-			{
-				if (this._Test_Question.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.Ongroup_idChanging(value);
-				this.SendPropertyChanging();
-				this._group_id = value;
-				this.SendPropertyChanged("group_id");
-				this.Ongroup_idChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_number", DbType="SmallInt")]
-	public System.Nullable<short> number
-	{
-		get
-		{
-			return this._number;
-		}
-		set
-		{
-			if ((this._number != value))
-			{
-				this.OnnumberChanging(value);
-				this.SendPropertyChanging();
-				this._number = value;
-				this.SendPropertyChanged("number");
-				this.OnnumberChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_dimension_id", DbType="Int")]
-	public System.Nullable<int> dimension_id
-	{
-		get
-		{
-			return this._dimension_id;
-		}
-		set
-		{
-			if ((this._dimension_id != value))
-			{
-				if (this._SubScaleDimension.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.Ondimension_idChanging(value);
-				this.SendPropertyChanging();
-				this._dimension_id = value;
-				this.SendPropertyChanged("dimension_id");
-				this.Ondimension_idChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="item_Test_Results_Txt", Storage="_Test_Results_Txts", ThisKey="id", OtherKey="item_id")]
-	public EntitySet<Test_Results_Txt> Test_Results_Txts
-	{
-		get
-		{
-			return this._Test_Results_Txts;
-		}
-		set
-		{
-			this._Test_Results_Txts.Assign(value);
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="item_ItemScale_Link", Storage="_ItemScale_Links", ThisKey="id,dimension_id", OtherKey="item_id,dimension_id")]
-	public EntitySet<ItemScale_Link> ItemScale_Links
-	{
-		get
-		{
-			return this._ItemScale_Links;
-		}
-		set
-		{
-			this._ItemScale_Links.Assign(value);
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="item_Test_Result", Storage="_Test_Results", ThisKey="id", OtherKey="item_id")]
-	public EntitySet<Test_Result> Test_Results
-	{
-		get
-		{
-			return this._Test_Results;
-		}
-		set
-		{
-			this._Test_Results.Assign(value);
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SubScaleDimension_item", Storage="_SubScaleDimension", ThisKey="dimension_id", OtherKey="id", IsForeignKey=true)]
-	public SubScaleDimension SubScaleDimension
-	{
-		get
-		{
-			return this._SubScaleDimension.Entity;
-		}
-		set
-		{
-			SubScaleDimension previousValue = this._SubScaleDimension.Entity;
-			if (((previousValue != value) 
-						|| (this._SubScaleDimension.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._SubScaleDimension.Entity = null;
-					previousValue.items.Remove(this);
-				}
-				this._SubScaleDimension.Entity = value;
-				if ((value != null))
-				{
-					value.items.Add(this);
-					this._dimension_id = value.id;
-				}
-				else
-				{
-					this._dimension_id = default(Nullable<int>);
-				}
-				this.SendPropertyChanged("SubScaleDimension");
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Quest_Type_item", Storage="_Quest_Type", ThisKey="item_type", OtherKey="id", IsForeignKey=true)]
-	public Quest_Type Quest_Type
-	{
-		get
-		{
-			return this._Quest_Type.Entity;
-		}
-		set
-		{
-			Quest_Type previousValue = this._Quest_Type.Entity;
-			if (((previousValue != value) 
-						|| (this._Quest_Type.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._Quest_Type.Entity = null;
-					previousValue.items.Remove(this);
-				}
-				this._Quest_Type.Entity = value;
-				if ((value != null))
-				{
-					value.items.Add(this);
-					this._item_type = value.id;
-				}
-				else
-				{
-					this._item_type = default(byte);
-				}
-				this.SendPropertyChanged("Quest_Type");
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Question_item", Storage="_Test_Question", ThisKey="group_id", OtherKey="id", IsForeignKey=true)]
-	public Test_Question Test_Question
-	{
-		get
-		{
-			return this._Test_Question.Entity;
-		}
-		set
-		{
-			Test_Question previousValue = this._Test_Question.Entity;
-			if (((previousValue != value) 
-						|| (this._Test_Question.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._Test_Question.Entity = null;
-					previousValue.items.Remove(this);
-				}
-				this._Test_Question.Entity = value;
-				if ((value != null))
-				{
-					value.items.Add(this);
-					this._group_id = value.id;
-				}
-				else
-				{
-					this._group_id = default(int);
-				}
-				this.SendPropertyChanged("Test_Question");
-			}
-		}
-	}
-	
-	public event PropertyChangingEventHandler PropertyChanging;
-	
-	public event PropertyChangedEventHandler PropertyChanged;
-	
-	protected virtual void SendPropertyChanging()
-	{
-		if ((this.PropertyChanging != null))
-		{
-			this.PropertyChanging(this, emptyChangingEventArgs);
-		}
-	}
-	
-	protected virtual void SendPropertyChanged(String propertyName)
-	{
-		if ((this.PropertyChanged != null))
-		{
-			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-		}
-	}
-	
-	private void attach_Test_Results_Txts(Test_Results_Txt entity)
-	{
-		this.SendPropertyChanging();
-		entity.item = this;
-	}
-	
-	private void detach_Test_Results_Txts(Test_Results_Txt entity)
-	{
-		this.SendPropertyChanging();
-		entity.item = null;
-	}
-	
-	private void attach_ItemScale_Links(ItemScale_Link entity)
-	{
-		this.SendPropertyChanging();
-		entity.item = this;
-	}
-	
-	private void detach_ItemScale_Links(ItemScale_Link entity)
-	{
-		this.SendPropertyChanging();
-		entity.item = null;
-	}
-	
-	private void attach_Test_Results(Test_Result entity)
-	{
-		this.SendPropertyChanging();
-		entity.item = this;
-	}
-	
-	private void detach_Test_Results(Test_Result entity)
-	{
-		this.SendPropertyChanging();
-		entity.item = null;
 	}
 }
 
@@ -6843,11 +6454,11 @@ public partial class Test_Result : INotifyPropertyChanging, INotifyPropertyChang
 	
 	private System.Nullable<short> _SelectedValue;
 	
-	private EntityRef<item> _item;
-	
 	private EntityRef<SubScale> _SubScale;
 	
 	private EntityRef<Test_Subject> _Test_Subject;
+	
+	private EntityRef<item> _item;
 	
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -6867,9 +6478,9 @@ public partial class Test_Result : INotifyPropertyChanging, INotifyPropertyChang
 	
 	public Test_Result()
 	{
-		this._item = default(EntityRef<item>);
 		this._SubScale = default(EntityRef<SubScale>);
 		this._Test_Subject = default(EntityRef<Test_Subject>);
+		this._item = default(EntityRef<item>);
 		OnCreated();
 	}
 	
@@ -6985,40 +6596,6 @@ public partial class Test_Result : INotifyPropertyChanging, INotifyPropertyChang
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="item_Test_Result", Storage="_item", ThisKey="item_id", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-	public item item
-	{
-		get
-		{
-			return this._item.Entity;
-		}
-		set
-		{
-			item previousValue = this._item.Entity;
-			if (((previousValue != value) 
-						|| (this._item.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._item.Entity = null;
-					previousValue.Test_Results.Remove(this);
-				}
-				this._item.Entity = value;
-				if ((value != null))
-				{
-					value.Test_Results.Add(this);
-					this._item_id = value.id;
-				}
-				else
-				{
-					this._item_id = default(int);
-				}
-				this.SendPropertyChanged("item");
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SubScale_Test_Result", Storage="_SubScale", ThisKey="SubScale_ID", OtherKey="id", IsForeignKey=true, DeleteRule="CASCADE")]
 	public SubScale SubScale
 	{
@@ -7083,6 +6660,40 @@ public partial class Test_Result : INotifyPropertyChanging, INotifyPropertyChang
 					this._Subject_ID = default(int);
 				}
 				this.SendPropertyChanged("Test_Subject");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="item_Test_Result", Storage="_item", ThisKey="item_id", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+	public item item
+	{
+		get
+		{
+			return this._item.Entity;
+		}
+		set
+		{
+			item previousValue = this._item.Entity;
+			if (((previousValue != value) 
+						|| (this._item.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._item.Entity = null;
+					previousValue.Test_Results.Remove(this);
+				}
+				this._item.Entity = value;
+				if ((value != null))
+				{
+					value.Test_Results.Add(this);
+					this._item_id = value.id;
+				}
+				else
+				{
+					this._item_id = default(int);
+				}
+				this.SendPropertyChanged("item");
 			}
 		}
 	}
@@ -16169,6 +15780,419 @@ public partial class indicator : INotifyPropertyChanging, INotifyPropertyChanged
 		{
 			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 		}
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.items")]
+public partial class item : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private int _id;
+	
+	private string _text;
+	
+	private byte _item_type;
+	
+	private int _group_id;
+	
+	private System.Nullable<short> _number;
+	
+	private System.Nullable<int> _dimension_id;
+	
+	private string _description;
+	
+	private EntitySet<Test_Results_Txt> _Test_Results_Txts;
+	
+	private EntitySet<ItemScale_Link> _ItemScale_Links;
+	
+	private EntitySet<Test_Result> _Test_Results;
+	
+	private EntityRef<SubScaleDimension> _SubScaleDimension;
+	
+	private EntityRef<Test_Question> _Test_Question;
+	
+	private EntityRef<Quest_Type> _Quest_Type;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(int value);
+    partial void OnidChanged();
+    partial void OntextChanging(string value);
+    partial void OntextChanged();
+    partial void Onitem_typeChanging(byte value);
+    partial void Onitem_typeChanged();
+    partial void Ongroup_idChanging(int value);
+    partial void Ongroup_idChanged();
+    partial void OnnumberChanging(System.Nullable<short> value);
+    partial void OnnumberChanged();
+    partial void Ondimension_idChanging(System.Nullable<int> value);
+    partial void Ondimension_idChanged();
+    partial void OndescriptionChanging(string value);
+    partial void OndescriptionChanged();
+    #endregion
+	
+	public item()
+	{
+		this._Test_Results_Txts = new EntitySet<Test_Results_Txt>(new Action<Test_Results_Txt>(this.attach_Test_Results_Txts), new Action<Test_Results_Txt>(this.detach_Test_Results_Txts));
+		this._ItemScale_Links = new EntitySet<ItemScale_Link>(new Action<ItemScale_Link>(this.attach_ItemScale_Links), new Action<ItemScale_Link>(this.detach_ItemScale_Links));
+		this._Test_Results = new EntitySet<Test_Result>(new Action<Test_Result>(this.attach_Test_Results), new Action<Test_Result>(this.detach_Test_Results));
+		this._SubScaleDimension = default(EntityRef<SubScaleDimension>);
+		this._Test_Question = default(EntityRef<Test_Question>);
+		this._Quest_Type = default(EntityRef<Quest_Type>);
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+	public int id
+	{
+		get
+		{
+			return this._id;
+		}
+		set
+		{
+			if ((this._id != value))
+			{
+				this.OnidChanging(value);
+				this.SendPropertyChanging();
+				this._id = value;
+				this.SendPropertyChanged("id");
+				this.OnidChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_text", DbType="NVarChar(255)")]
+	public string text
+	{
+		get
+		{
+			return this._text;
+		}
+		set
+		{
+			if ((this._text != value))
+			{
+				this.OntextChanging(value);
+				this.SendPropertyChanging();
+				this._text = value;
+				this.SendPropertyChanged("text");
+				this.OntextChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_item_type", DbType="TinyInt NOT NULL")]
+	public byte item_type
+	{
+		get
+		{
+			return this._item_type;
+		}
+		set
+		{
+			if ((this._item_type != value))
+			{
+				if (this._Quest_Type.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.Onitem_typeChanging(value);
+				this.SendPropertyChanging();
+				this._item_type = value;
+				this.SendPropertyChanged("item_type");
+				this.Onitem_typeChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_group_id", DbType="Int NOT NULL")]
+	public int group_id
+	{
+		get
+		{
+			return this._group_id;
+		}
+		set
+		{
+			if ((this._group_id != value))
+			{
+				if (this._Test_Question.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.Ongroup_idChanging(value);
+				this.SendPropertyChanging();
+				this._group_id = value;
+				this.SendPropertyChanged("group_id");
+				this.Ongroup_idChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_number", DbType="SmallInt")]
+	public System.Nullable<short> number
+	{
+		get
+		{
+			return this._number;
+		}
+		set
+		{
+			if ((this._number != value))
+			{
+				this.OnnumberChanging(value);
+				this.SendPropertyChanging();
+				this._number = value;
+				this.SendPropertyChanged("number");
+				this.OnnumberChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_dimension_id", DbType="Int")]
+	public System.Nullable<int> dimension_id
+	{
+		get
+		{
+			return this._dimension_id;
+		}
+		set
+		{
+			if ((this._dimension_id != value))
+			{
+				if (this._SubScaleDimension.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.Ondimension_idChanging(value);
+				this.SendPropertyChanging();
+				this._dimension_id = value;
+				this.SendPropertyChanged("dimension_id");
+				this.Ondimension_idChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_description", DbType="VarChar(2000)")]
+	public string description
+	{
+		get
+		{
+			return this._description;
+		}
+		set
+		{
+			if ((this._description != value))
+			{
+				this.OndescriptionChanging(value);
+				this.SendPropertyChanging();
+				this._description = value;
+				this.SendPropertyChanged("description");
+				this.OndescriptionChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="item_Test_Results_Txt", Storage="_Test_Results_Txts", ThisKey="id", OtherKey="item_id")]
+	public EntitySet<Test_Results_Txt> Test_Results_Txts
+	{
+		get
+		{
+			return this._Test_Results_Txts;
+		}
+		set
+		{
+			this._Test_Results_Txts.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="item_ItemScale_Link", Storage="_ItemScale_Links", ThisKey="id,dimension_id", OtherKey="item_id,dimension_id")]
+	public EntitySet<ItemScale_Link> ItemScale_Links
+	{
+		get
+		{
+			return this._ItemScale_Links;
+		}
+		set
+		{
+			this._ItemScale_Links.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="item_Test_Result", Storage="_Test_Results", ThisKey="id", OtherKey="item_id")]
+	public EntitySet<Test_Result> Test_Results
+	{
+		get
+		{
+			return this._Test_Results;
+		}
+		set
+		{
+			this._Test_Results.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SubScaleDimension_item", Storage="_SubScaleDimension", ThisKey="dimension_id", OtherKey="id", IsForeignKey=true)]
+	public SubScaleDimension SubScaleDimension
+	{
+		get
+		{
+			return this._SubScaleDimension.Entity;
+		}
+		set
+		{
+			SubScaleDimension previousValue = this._SubScaleDimension.Entity;
+			if (((previousValue != value) 
+						|| (this._SubScaleDimension.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._SubScaleDimension.Entity = null;
+					previousValue.items.Remove(this);
+				}
+				this._SubScaleDimension.Entity = value;
+				if ((value != null))
+				{
+					value.items.Add(this);
+					this._dimension_id = value.id;
+				}
+				else
+				{
+					this._dimension_id = default(Nullable<int>);
+				}
+				this.SendPropertyChanged("SubScaleDimension");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Question_item", Storage="_Test_Question", ThisKey="group_id", OtherKey="id", IsForeignKey=true)]
+	public Test_Question Test_Question
+	{
+		get
+		{
+			return this._Test_Question.Entity;
+		}
+		set
+		{
+			Test_Question previousValue = this._Test_Question.Entity;
+			if (((previousValue != value) 
+						|| (this._Test_Question.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Test_Question.Entity = null;
+					previousValue.items.Remove(this);
+				}
+				this._Test_Question.Entity = value;
+				if ((value != null))
+				{
+					value.items.Add(this);
+					this._group_id = value.id;
+				}
+				else
+				{
+					this._group_id = default(int);
+				}
+				this.SendPropertyChanged("Test_Question");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Quest_Type_item", Storage="_Quest_Type", ThisKey="item_type", OtherKey="id", IsForeignKey=true)]
+	public Quest_Type Quest_Type
+	{
+		get
+		{
+			return this._Quest_Type.Entity;
+		}
+		set
+		{
+			Quest_Type previousValue = this._Quest_Type.Entity;
+			if (((previousValue != value) 
+						|| (this._Quest_Type.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Quest_Type.Entity = null;
+					previousValue.items.Remove(this);
+				}
+				this._Quest_Type.Entity = value;
+				if ((value != null))
+				{
+					value.items.Add(this);
+					this._item_type = value.id;
+				}
+				else
+				{
+					this._item_type = default(byte);
+				}
+				this.SendPropertyChanged("Quest_Type");
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+	
+	private void attach_Test_Results_Txts(Test_Results_Txt entity)
+	{
+		this.SendPropertyChanging();
+		entity.item = this;
+	}
+	
+	private void detach_Test_Results_Txts(Test_Results_Txt entity)
+	{
+		this.SendPropertyChanging();
+		entity.item = null;
+	}
+	
+	private void attach_ItemScale_Links(ItemScale_Link entity)
+	{
+		this.SendPropertyChanging();
+		entity.item = this;
+	}
+	
+	private void detach_ItemScale_Links(ItemScale_Link entity)
+	{
+		this.SendPropertyChanging();
+		entity.item = null;
+	}
+	
+	private void attach_Test_Results(Test_Result entity)
+	{
+		this.SendPropertyChanging();
+		entity.item = this;
+	}
+	
+	private void detach_Test_Results(Test_Result entity)
+	{
+		this.SendPropertyChanging();
+		entity.item = null;
 	}
 }
 #pragma warning restore 1591

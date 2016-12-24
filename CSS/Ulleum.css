@@ -298,3 +298,36 @@ button.rowMenuButton
     font-size: 20px;
     text-decoration: none;
 }
+/*на одностраничной форме опроса*/
+.itemDescript
+{
+    font-style:italic;
+}
+.itemText
+{
+    font-weight:bold;
+}
+/*-----------------------------------------------------------*/
+.workarea {
+	margin-left: 10%;
+	margin-right: 10%;
+	
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.subjInfo
+{
+    background-color:#cef1a7;
+    padding: 10px;
+    
+    border: 1px solid #a1a1a1;
+    border-radius: 5px;
+}
+.saveButton
+{
+    background-color:#cef1a7;
+}
+.datePickText
+{
+    margin-right: 10px;
+}

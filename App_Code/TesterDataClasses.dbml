@@ -118,8 +118,8 @@
       <Column Name="subject_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="item_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="text" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
-      <Association Name="item_Test_Results_Txt" Member="item" ThisKey="item_id" OtherKey="id" Type="item" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="Test_Subject_Test_Results_Txt" Member="Test_Subject" ThisKey="subject_id" OtherKey="id" Type="Test_Subject" IsForeignKey="true" />
+      <Association Name="item_Test_Results_Txt" Member="item" ThisKey="item_id" OtherKey="id" Type="item" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.ConditionRangeType" Member="ConditionRangeTypes">
@@ -249,24 +249,8 @@
       <Column Name="kf" Type="System.Decimal" DbType="Decimal(8,3) NOT NULL" CanBeNull="false" />
       <Column Name="dimension_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="SubScale_ItemScale_Link" Member="SubScale" ThisKey="subscale_id,dimension_id" OtherKey="id,Dimension_ID" Type="SubScale" IsForeignKey="true" />
-      <Association Name="item_ItemScale_Link" Member="item" ThisKey="item_id,dimension_id" OtherKey="id,dimension_id" Type="item" IsForeignKey="true" />
       <Association Name="Scale_ItemScale_Link" Member="Scale" ThisKey="scale_id" OtherKey="id" Type="Scale" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.items" Member="items">
-    <Type Name="item">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="text" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
-      <Column Name="item_type" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
-      <Column Name="group_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="number" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="dimension_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="item_Test_Results_Txt" Member="Test_Results_Txts" ThisKey="id" OtherKey="item_id" Type="Test_Results_Txt" />
-      <Association Name="item_ItemScale_Link" Member="ItemScale_Links" ThisKey="id,dimension_id" OtherKey="item_id,dimension_id" Type="ItemScale_Link" />
-      <Association Name="item_Test_Result" Member="Test_Results" ThisKey="id" OtherKey="item_id" Type="Test_Result" />
-      <Association Name="SubScaleDimension_item" Member="SubScaleDimension" ThisKey="dimension_id" OtherKey="id" Type="SubScaleDimension" IsForeignKey="true" />
-      <Association Name="Quest_Type_item" Member="Quest_Type" ThisKey="item_type" OtherKey="id" Type="Quest_Type" IsForeignKey="true" />
-      <Association Name="Test_Question_item" Member="Test_Question" ThisKey="group_id" OtherKey="id" Type="Test_Question" IsForeignKey="true" />
+      <Association Name="item_ItemScale_Link" Member="item" ThisKey="item_id,dimension_id" OtherKey="id,dimension_id" Type="item" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Param_Results" Member="Param_Results">
@@ -310,9 +294,9 @@
       <Column Name="item_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="SubScale_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="SelectedValue" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Association Name="item_Test_Result" Member="item" ThisKey="item_id" OtherKey="id" Type="item" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="SubScale_Test_Result" Member="SubScale" ThisKey="SubScale_ID" OtherKey="id" Type="SubScale" IsForeignKey="true" DeleteRule="CASCADE" />
       <Association Name="Test_Subject_Test_Result" Member="Test_Subject" ThisKey="Subject_ID" OtherKey="id" Type="Test_Subject" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="item_Test_Result" Member="item" ThisKey="item_id" OtherKey="id" Type="item" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.Test_Question" Member="Test_Questions">
@@ -724,6 +708,23 @@
       <Association Name="test_diagram_indicator" Member="test_diagram" ThisKey="idDiagram" OtherKey="id" Type="test_diagram" IsForeignKey="true" DeleteRule="CASCADE" />
       <Association Name="Scale_indicator" Member="Scale" ThisKey="idScale" OtherKey="id" Type="Scale" IsForeignKey="true" DeleteRule="CASCADE" />
       <Association Name="subject_group_indicator" Member="subject_group" ThisKey="idGroup" OtherKey="id" Type="subject_group" IsForeignKey="true" DeleteRule="CASCADE" />
+    </Type>
+  </Table>
+  <Table Name="dbo.items" Member="items">
+    <Type Name="item">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="text" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="item_type" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="group_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="number" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="dimension_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="description" Type="System.String" DbType="VarChar(2000)" CanBeNull="true" />
+      <Association Name="item_Test_Results_Txt" Member="Test_Results_Txts" ThisKey="id" OtherKey="item_id" Type="Test_Results_Txt" />
+      <Association Name="item_ItemScale_Link" Member="ItemScale_Links" ThisKey="id,dimension_id" OtherKey="item_id,dimension_id" Type="ItemScale_Link" />
+      <Association Name="item_Test_Result" Member="Test_Results" ThisKey="id" OtherKey="item_id" Type="Test_Result" />
+      <Association Name="SubScaleDimension_item" Member="SubScaleDimension" ThisKey="dimension_id" OtherKey="id" Type="SubScaleDimension" IsForeignKey="true" />
+      <Association Name="Test_Question_item" Member="Test_Question" ThisKey="group_id" OtherKey="id" Type="Test_Question" IsForeignKey="true" />
+      <Association Name="Quest_Type_item" Member="Quest_Type" ThisKey="item_type" OtherKey="id" Type="Quest_Type" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.IsInterpretationFor" Method="IsInterpretationFor" IsComposable="true">
