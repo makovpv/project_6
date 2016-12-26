@@ -325,7 +325,15 @@ go
 alter table items add [description] varchar(2000)
 go
 
-
+CREATE TABLE dbo.competence (
+	idCompetence SMALLINT NOT NULL IDENTITY, 
+	idCompany INT NOT NULL,
+	[name] NVARCHAR (255) NOT NULL,
+	[description] NVARCHAR (2000),
+	CONSTRAINT pk_competence PRIMARY KEY (idCompetence),
+	CONSTRAINT fk_competence_company FOREIGN KEY (idCompany) REFERENCES dbo.Company (id) ON DELETE cascade
+)
+go
 --------------insert into idea_generator (idTest, idgeneratortype) values (1220, 2 )
 
 
