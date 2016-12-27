@@ -144,9 +144,6 @@ public partial class Player_AnsAll : System.Web.UI.Page
 
     private void CreateControls()
     {
-
-        
-        
         using (TesterDataClassesDataContext dc = new TesterDataClassesDataContext())
         {
             if (idApprove != null)
@@ -204,15 +201,20 @@ public partial class Player_AnsAll : System.Web.UI.Page
                                         });
                                         break;
                                     case DimensionType.dtSingleChoise:
-
-                                        RadioButtonList rbl = new RadioButtonList()
+                                        
+                                        ListControl lct;
+                                        if (itm.SubScaleDimension.dimension_mode == 3) // dropdownlist
                                         {
-                                            ID = string.Format("spCtr_{0}__{1}", itm.id, MM)
-                                            //ID = string.Format ( "spRBL_{0}", itm.id) 
-                                        };
+                                            lct = new DropDownList() { CssClass = "AnsAllDropList"};
+                                        }
+                                        else // radiobuttons
+                                        {
+                                            lct = new RadioButtonList();
+                                        }
+                                        lct.ID = string.Format("spCtr_{0}__{1}", itm.id, MM);
                                         foreach (SubScale ssc in itm.SubScaleDimension.SubScales)
                                         {
-                                            rbl.Items.Add(new ListItem(
+                                            lct.Items.Add(new ListItem(
                                                 ssc.name,
                                                 ssc.id.ToString()
                                                 //string.Format("spCtr_{0}_{1}_{2}", itm.id, ssc.id, MM)
@@ -220,12 +222,11 @@ public partial class Player_AnsAll : System.Web.UI.Page
                                         }
                                         Test_Result tr = subj.Test_Results.Where(trr => trr.item_id == itm.id).FirstOrDefault();
                                         if (tr != null && tr.SubScale_ID != null)
-                                            rbl.SelectedValue = tr.SubScale_ID.ToString();
-
-                                        divContent.Controls.Add(rbl);
+                                            lct.SelectedValue = tr.SubScale_ID.ToString();
+                                        divContent.Controls.Add(lct);
 
                                         RequiredFieldValidator vld = new RequiredFieldValidator();
-                                        vld.ControlToValidate = rbl.ID;
+                                        vld.ControlToValidate =  lct.ID;
                                         vld.ErrorMessage = "Не выбран ответ";
                                         vld.ForeColor = System.Drawing.Color.Red;
                                         vld.SetFocusOnError = true;

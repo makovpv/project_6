@@ -345,6 +345,7 @@
       <Association Name="Company_user_account" Member="user_accounts" ThisKey="id" OtherKey="idCompany" Type="user_account" />
       <Association Name="Company_subject_group" Member="subject_groups" ThisKey="id" OtherKey="idCompany" Type="subject_group" />
       <Association Name="Company_indicator" Member="indicators" ThisKey="id" OtherKey="idCompany" Type="indicator" />
+      <Association Name="Company_competence" Member="competences" ThisKey="id" OtherKey="idCompany" Type="competence" />
     </Type>
   </Table>
   <Table Name="dbo.Job" Member="Jobs">
@@ -725,6 +726,15 @@
       <Association Name="SubScaleDimension_item" Member="SubScaleDimension" ThisKey="dimension_id" OtherKey="id" Type="SubScaleDimension" IsForeignKey="true" />
       <Association Name="Test_Question_item" Member="Test_Question" ThisKey="group_id" OtherKey="id" Type="Test_Question" IsForeignKey="true" />
       <Association Name="Quest_Type_item" Member="Quest_Type" ThisKey="item_type" OtherKey="id" Type="Quest_Type" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.competence" Member="competences">
+    <Type Name="competence">
+      <Column Name="idCompetence" Type="System.Int16" DbType="SmallInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="idCompany" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="NVarChar(2000)" CanBeNull="true" />
+      <Association Name="Company_competence" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Function Name="dbo.IsInterpretationFor" Method="IsInterpretationFor" IsComposable="true">

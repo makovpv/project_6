@@ -690,6 +690,14 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
 		}
 	}
 	
+	public System.Data.Linq.Table<competence> competences
+	{
+		get
+		{
+			return this.GetTable<competence>();
+		}
+	}
+	
 	private void DeletevItemScaleLink(vItemScaleLink obj)
 	{
 		vItemScaleLink original = ((vItemScaleLink)(vItemScaleLinks.GetOriginalEntityState(obj)));
@@ -7563,6 +7571,8 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 	
 	private EntitySet<indicator> _indicators;
 	
+	private EntitySet<competence> _competences;
+	
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -7579,6 +7589,7 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 		this._user_accounts = new EntitySet<user_account>(new Action<user_account>(this.attach_user_accounts), new Action<user_account>(this.detach_user_accounts));
 		this._subject_groups = new EntitySet<subject_group>(new Action<subject_group>(this.attach_subject_groups), new Action<subject_group>(this.detach_subject_groups));
 		this._indicators = new EntitySet<indicator>(new Action<indicator>(this.attach_indicators), new Action<indicator>(this.detach_indicators));
+		this._competences = new EntitySet<competence>(new Action<competence>(this.attach_competences), new Action<competence>(this.detach_competences));
 		OnCreated();
 	}
 	
@@ -7674,6 +7685,19 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_competence", Storage="_competences", ThisKey="id", OtherKey="idCompany")]
+	public EntitySet<competence> competences
+	{
+		get
+		{
+			return this._competences;
+		}
+		set
+		{
+			this._competences.Assign(value);
+		}
+	}
+	
 	public event PropertyChangingEventHandler PropertyChanging;
 	
 	public event PropertyChangedEventHandler PropertyChanged;
@@ -7737,6 +7761,18 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 	}
 	
 	private void detach_indicators(indicator entity)
+	{
+		this.SendPropertyChanging();
+		entity.Company = null;
+	}
+	
+	private void attach_competences(competence entity)
+	{
+		this.SendPropertyChanging();
+		entity.Company = this;
+	}
+	
+	private void detach_competences(competence entity)
 	{
 		this.SendPropertyChanging();
 		entity.Company = null;
@@ -16193,6 +16229,181 @@ public partial class item : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		this.SendPropertyChanging();
 		entity.item = null;
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.competence")]
+public partial class competence : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private short _idCompetence;
+	
+	private int _idCompany;
+	
+	private string _name;
+	
+	private string _description;
+	
+	private EntityRef<Company> _Company;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidCompetenceChanging(short value);
+    partial void OnidCompetenceChanged();
+    partial void OnidCompanyChanging(int value);
+    partial void OnidCompanyChanged();
+    partial void OnnameChanging(string value);
+    partial void OnnameChanged();
+    partial void OndescriptionChanging(string value);
+    partial void OndescriptionChanged();
+    #endregion
+	
+	public competence()
+	{
+		this._Company = default(EntityRef<Company>);
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idCompetence", AutoSync=AutoSync.OnInsert, DbType="SmallInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+	public short idCompetence
+	{
+		get
+		{
+			return this._idCompetence;
+		}
+		set
+		{
+			if ((this._idCompetence != value))
+			{
+				this.OnidCompetenceChanging(value);
+				this.SendPropertyChanging();
+				this._idCompetence = value;
+				this.SendPropertyChanged("idCompetence");
+				this.OnidCompetenceChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idCompany", DbType="Int NOT NULL")]
+	public int idCompany
+	{
+		get
+		{
+			return this._idCompany;
+		}
+		set
+		{
+			if ((this._idCompany != value))
+			{
+				if (this._Company.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidCompanyChanging(value);
+				this.SendPropertyChanging();
+				this._idCompany = value;
+				this.SendPropertyChanged("idCompany");
+				this.OnidCompanyChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_name", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+	public string name
+	{
+		get
+		{
+			return this._name;
+		}
+		set
+		{
+			if ((this._name != value))
+			{
+				this.OnnameChanging(value);
+				this.SendPropertyChanging();
+				this._name = value;
+				this.SendPropertyChanged("name");
+				this.OnnameChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_description", DbType="NVarChar(2000)")]
+	public string description
+	{
+		get
+		{
+			return this._description;
+		}
+		set
+		{
+			if ((this._description != value))
+			{
+				this.OndescriptionChanging(value);
+				this.SendPropertyChanging();
+				this._description = value;
+				this.SendPropertyChanged("description");
+				this.OndescriptionChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_competence", Storage="_Company", ThisKey="idCompany", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+	public Company Company
+	{
+		get
+		{
+			return this._Company.Entity;
+		}
+		set
+		{
+			Company previousValue = this._Company.Entity;
+			if (((previousValue != value) 
+						|| (this._Company.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Company.Entity = null;
+					previousValue.competences.Remove(this);
+				}
+				this._Company.Entity = value;
+				if ((value != null))
+				{
+					value.competences.Add(this);
+					this._idCompany = value.id;
+				}
+				else
+				{
+					this._idCompany = default(int);
+				}
+				this.SendPropertyChanged("Company");
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
 	}
 }
 #pragma warning restore 1591
