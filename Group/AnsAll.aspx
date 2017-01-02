@@ -6,7 +6,15 @@
     
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-    <ajaxToolkit:ToolkitScriptManager runat="Server" EnablePartialRendering="true" />    
+    <ajaxToolkit:ToolkitScriptManager runat="Server" EnablePartialRendering="true" />
+    <script src="../Scripts/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+        function empClick(ctrID) {
+            var sl;
+            sl = "#" + ctrID;
+            $(sl).toggle();
+        }
+    </script>
 
     <div class="workarea">
 

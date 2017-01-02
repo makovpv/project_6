@@ -260,26 +260,43 @@ public partial class Player_AnsAll : System.Web.UI.Page
                                         CommonData.GenerateAnswerWithEMP(itm.SubScaleDimension, subj.subject_group.Company);
                                         dc.SubmitChanges();
 
+                                        
                                         List<Test_Result> ltr = subj.Test_Results.Where(trr => trr.item_id == itm.id).ToList();
                                         CheckBoxList cbl = new CheckBoxList()
                                         {
-                                            ID = string.Format("spCtr_{0}__{1}", itm.id, MM)
+                                            ID = string.Format("spCtr_{0}__{1}", itm.id, MM),
+                                            //CssClass = "invisible"
                                         };
+                                        cbl.Attributes["style"] = "display: none";
+                                        
+                                        string SelectedNames = "";
                                         foreach (SubScale ssc in itm.SubScaleDimension.SubScales)
                                         {
-                                            cbl.Items.Add(new ListItem(ssc.name, ssc.id.ToString())
-                                            {
+                                            ListItem li = new ListItem(ssc.name, ssc.id.ToString()) {
                                                 Selected = ltr.Where(bb => bb.SubScale_ID == ssc.id).FirstOrDefault() != null
-                                            });
+                                            };
+                                            cbl.Items.Add(li);
+                                            if (li.Selected) {
+                                                SelectedNames= SelectedNames +", " +ssc.name;
+                                            }
                                         }
                                         cbl.RepeatColumns = 3;
+                                        divContent.Controls.Add(new LiteralControl(string.Format (@"<button type='button' onclick='empClick(""ContentPlaceHolder1_{0}"")'>Сотрудники...</button>", cbl.ID)));
+                                        
+                                        if (SelectedNames != "")
+                                        {
+                                            divContent.Controls.Add(new LiteralControl(@"<span style=""margin-left: 25px""></span>"));
+                                            SelectedNames = "Выбраны:" + SelectedNames.Remove(0, 1);
+                                            divContent.Controls.Add(new Literal() { Text = SelectedNames });
+                                        }
                                         divContent.Controls.Add(cbl);
                                         break;
                                     case DimensionType.dtMultiSelect:
                                         List<Test_Result> ltr_ms = subj.Test_Results.Where(trr => trr.item_id == itm.id).ToList();
                                         CheckBoxList cbl_ms = new CheckBoxList()
                                         {
-                                            ID = string.Format("spCtr_{0}__{1}", itm.id, MM)
+                                            ID = string.Format("spCtr_{0}__{1}", itm.id, MM),
+                                            Visible = false
                                         };
                                         foreach (SubScale ssc in itm.SubScaleDimension.SubScales)
                                         {
