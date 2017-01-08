@@ -168,7 +168,12 @@ public class ObjectIndicator
                             IdeaByState.Add(StateName, 1);
                     }
                     p_container.Controls.Add(new LiteralControl("<p>"));
-                    p_container.Controls.Add(new LiteralControl(string.Format("Всего идей за квартал: {0}<br/>", TotalIdeaCount)));
+                    p_container.Controls.Add(new LiteralControl("Всего идей за квартал: "));
+
+                    Label lbl = new Label() { Text = TotalIdeaCount.ToString() + "<br/>", CssClass = "AppreciateLink"};
+                    lbl.Font.Size = 34; // hard
+                    p_container.Controls.Add(lbl);
+
                     foreach (string key in IdeaByState.Keys)
                     {
                         p_container.Controls.Add(new LiteralControl(string.Format("{0}: {1}<br/>", key, IdeaByState[key])));
@@ -257,7 +262,7 @@ public class ObjectIndicator
                             NavigateUrl = string.Format("~\\Analyse\\gratitude.aspx?s={0}", p_ua.fio),
                             CssClass = "AppreciateLink"
                         };
-                        hlnk.Font.Size = 34;
+                        hlnk.Font.Size = 34; //hard
                         p_container.Controls.Add(hlnk);
                         p_container.Controls.Add(new Label() { CssClass = "clsIndexDescr" });
                         p_container.Controls.Add(new Label() { Text = "Вас поблагодарили:" });

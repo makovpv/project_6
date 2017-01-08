@@ -911,17 +911,14 @@
                             </dx:ASPxRoundPanel>
                         </asp:TableCell>
                     </asp:TableRow>
+
                     <%-- Мониторинг персонала --%>
-                    <asp:TableRow HorizontalAlign="Center">
+<%--                    <asp:TableRow HorizontalAlign="Center">
                         <asp:TableCell VerticalAlign="Top">
                             <dx:ASPxRoundPanel ID="ASPxRoundPanel4" runat="server" Width="100%" Theme="Office2010Silver">
                                 <HeaderTemplate>
                                     <asp:Table ID="Table12" runat="server" Width="100%">
                                         <asp:TableRow>
-                                            <%--<asp:TableCell HorizontalAlign="Left" Width="45">
-                                                <asp:Image ID="Image4" ImageUrl="Images/compMonitPanel.png" runat="server" alt=""
-                                                    Width="45" Height="30" Style="padding: 0px; margin: -5px;" />
-                                            </asp:TableCell>--%>
                                             <asp:TableCell HorizontalAlign="Left">
                                                 <asp:Label ID="Label21" runat="server" Text='<%$Resources: GlobalRes, lk_section3%>'
                                                     Font-Size="10pt"/>
@@ -961,7 +958,8 @@
                                 </PanelCollection>
                             </dx:ASPxRoundPanel>
                         </asp:TableCell>
-                    </asp:TableRow>
+                    </asp:TableRow>--%>
+
                     <%-- Индикаторы --%>
                     <asp:TableRow HorizontalAlign="Center">
                         <asp:TableCell VerticalAlign="Top">
@@ -1012,17 +1010,14 @@
                             </dx:ASPxRoundPanel>
                         </asp:TableCell>
                     </asp:TableRow>
+                    
                     <%-- Исследования --%>
-                    <asp:TableRow HorizontalAlign="Center">
+                    <%--<asp:TableRow HorizontalAlign="Center">
                         <asp:TableCell VerticalAlign="Top">
                             <dx:ASPxRoundPanel ID="ASPxRoundPanel6" runat="server" Width="100%" Theme="Office2010Silver">
                                 <HeaderTemplate>
                                     <asp:Table ID="Table16" runat="server" Width="100%">
                                         <asp:TableRow>
-                                            <%--<asp:TableCell HorizontalAlign="Left" Width="45">
-                                                <asp:Image ID="Image1" ImageUrl="Images/compIssledPanel.png" runat="server" alt=""
-                                                    Width="45" Height="30" Style="padding: 0px; margin: -5px;" />
-                                            </asp:TableCell>--%>
                                             <asp:TableCell HorizontalAlign="Left">
                                                 <asp:Label ID="Label23" runat="server" Text='<%$Resources: GlobalRes, lk_section5%>'
                                                     Font-Size="10pt" />
@@ -1051,25 +1046,6 @@
                                                                             Text='<%# Eval("name") + " " +Eval("stop_date") %>' runat="server" />
                                                                     </ItemTemplate>
                                                                 </asp:Repeater>
-                                                                <%--<br>
-                                                                Запланированы исследования:
-                                                                <asp:Repeater ID="Repeater6" runat="server" DataSourceID="SqlPlanExamination">
-                                                                    <ItemTemplate>
-                                                                        <br />
-                                                                        <asp:HyperLink ID="HyperLink4" NavigateUrl='<%# "~\\Analyse\\Common.aspx?g=" +Eval("id") %>'
-                                                                            Text='<%# Eval("name") + " (старт " +Eval("start_date") +")" %>' runat="server"
-                                                                            Enabled="false" />
-                                                                    </ItemTemplate>
-                                                                </asp:Repeater>
-                                                                <br />
-                                                                Завершенные исследования:
-                                                                <asp:Repeater ID="Repeater7" runat="server" DataSourceID="SqlPastExamination">
-                                                                    <ItemTemplate>
-                                                                        <br />
-                                                                        <asp:HyperLink ID="HyperLink4" NavigateUrl='<%# "~\\Analyse\\Common.aspx?g=" +Eval("id") %>'
-                                                                            Text='<%# Eval("name") %>' runat="server" />
-                                                                    </ItemTemplate>
-                                                                </asp:Repeater>--%>
                                                             </asp:TableCell>
                                                         </asp:TableRow>
                                                     </asp:Table>
@@ -1080,7 +1056,7 @@
                                 </PanelCollection>
                             </dx:ASPxRoundPanel>
                         </asp:TableCell>
-                    </asp:TableRow>
+                    </asp:TableRow>--%>
                 </asp:Table>
             </div>
 
