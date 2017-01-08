@@ -331,3 +331,13 @@ button.rowMenuButton
 {
     margin-right: 10px;
 }
+.emp_hint
+{
+    color: Green;
+    font-weight: bold;
+}
+.emp_fired
+{
+    color: Gray;
+    font-style: italic;
+}

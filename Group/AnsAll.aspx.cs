@@ -38,7 +38,7 @@ public partial class Player_AnsAll : System.Web.UI.Page
 
     public enum DimensionType {dtSingleChoise = 1, dtMultiSelect = 2, dtOpenAnswer = 3, 
         dtGender = 8, dtBirthYear = 9, dtRange = 10, dtDate = 11, dtNumber = 12,
-        dtEMP = 13 }
+        dtEMP = 13, dtCompetence = 14 }
 //select 7, 'ранжирование',	1, 0 union all
 //select 5, 'попарное ранжирование',	1, 0 union all
 //select 6, 'шкалирование',	1, 0 union all
@@ -171,9 +171,9 @@ public partial class Player_AnsAll : System.Web.UI.Page
                     Test_SubjectGroup_Link tsg_lnk = subj.subject_group.Test_SubjectGroup_Links.FirstOrDefault();
                     int MM = tsg_lnk == null ? 0 : tsg_lnk.id; // не совсем разобрался. что-то про объекты оценки
 
-                    foreach (Test_Question tq in subj.test.Test_Questions)
+                    foreach (Test_Question tq in subj.test.Test_Questions.OrderBy(ord=> ord.number))
                     {
-                        foreach (item itm in tq.items)
+                        foreach (item itm in tq.items.OrderBy(o=>o.number))
                         {
                             if (itm.SubScaleDimension != null)
                             {
@@ -212,7 +212,7 @@ public partial class Player_AnsAll : System.Web.UI.Page
                                             lct = new RadioButtonList();
                                         }
                                         lct.ID = string.Format("spCtr_{0}__{1}", itm.id, MM);
-                                        foreach (SubScale ssc in itm.SubScaleDimension.SubScales)
+                                        foreach (SubScale ssc in itm.SubScaleDimension.SubScales.OrderBy (q=> q.OrderNumber))
                                         {
                                             lct.Items.Add(new ListItem(
                                                 ssc.name,
@@ -260,6 +260,13 @@ public partial class Player_AnsAll : System.Web.UI.Page
                                         CommonData.GenerateAnswerWithEMP(itm.SubScaleDimension, subj.subject_group.Company);
                                         dc.SubmitChanges();
 
+                                        string[] emp_fired = (
+                                            from ua in dc.user_accounts
+                                            where (ua.idCompany == subj.subject_group.idCompany && (ua.idState == 1 || ua.idState == 3 || ua.idState == 4 || ua.idState == null))
+                                            select ua.fio).ToArray();
+
+                                        //DimensionType.dtCompetence
+
                                         
                                         List<Test_Result> ltr = subj.Test_Results.Where(trr => trr.item_id == itm.id).ToList();
                                         CheckBoxList cbl = new CheckBoxList()
@@ -270,11 +277,17 @@ public partial class Player_AnsAll : System.Web.UI.Page
                                         cbl.Attributes["style"] = "display: none";
                                         
                                         string SelectedNames = "";
-                                        foreach (SubScale ssc in itm.SubScaleDimension.SubScales)
+                                        foreach (SubScale ssc in itm.SubScaleDimension.SubScales.OrderBy(q=> q.name))
                                         {
                                             ListItem li = new ListItem(ssc.name, ssc.id.ToString()) {
                                                 Selected = ltr.Where(bb => bb.SubScale_ID == ssc.id).FirstOrDefault() != null
                                             };
+
+                                            if (emp_fired.Contains (li.Text))
+                                            {
+                                                li.Attributes["class"] = "emp_fired";
+                                            }
+
                                             cbl.Items.Add(li);
                                             if (li.Selected) {
                                                 SelectedNames= SelectedNames +", " +ssc.name;
