@@ -54,6 +54,8 @@ public partial class lk2 : System.Web.UI.Page
 
             if (ua != null)
             {
+                lblCompanyTitle.Text = ua.Company != null ? ua.Company.name : "";
+                
                 Subject_lds.SelectParameters["iduser"].DefaultValue = usr.ProviderUserKey.ToString();
                 SubjectAuto_lds.SelectParameters["iduser"].DefaultValue = usr.ProviderUserKey.ToString();
 

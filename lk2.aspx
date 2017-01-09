@@ -145,7 +145,7 @@
     </script>
     <asp:Table runat="server" Style="width: 100%; height: 100%; margin-top: -2px; background-repeat: repeat;
                 background-image: url(Images/sky.jpg);">
-        <asp:TableRow Height="20px" 
+        <asp:TableRow Height="40px" 
             style="    
             background: #FAF4DC; 
             background: -moz-linear-gradient(top, rgba(250,245,220,1) 0%, rgba(230,160,10,1) 100%); 
@@ -154,28 +154,14 @@
             background: -o-linear-gradient(top, rgba(250,245,220,1)  0%,rgba(230,160,10,1) 100%);
             background: linear-gradient(top, rgba(250,245,220,1) 0%,rgba(230,160,10,1) 100%);">
             <asp:TableCell HorizontalAlign="Left">
-                <%--<asp:Table runat="server" style="height: 20px;">
-                    <asp:TableRow>
-                        <asp:TableCell CssClass="menuButtonBackPanelCell">
-                            <asp:LinkButton ID="LinkButton3" runat="server" Text="Ulleum" CssClass="menuLinkButton"/>
-                        </asp:TableCell>
-                        <asp:TableCell CssClass="menuButtonBackPanelCell">
-                            <asp:LinkButton ID="LinkButton5" runat="server" Text="О программе" CssClass="menuLinkButton" />
-                        </asp:TableCell>
-                        <asp:TableCell CssClass="menuButtonBackPanelCell">
-                            <asp:LinkButton ID="LinkButton6" runat="server" Text="FAQ" CssClass="menuLinkButton" />
-                        </asp:TableCell>
-                        <asp:TableCell CssClass="menuButtonBackPanelCell">
-                            <asp:LinkButton ID="LinkButton7" runat="server" Text="Написать нам" CssClass="menuLinkButton" />
-                        </asp:TableCell>
-                    </asp:TableRow>
-                </asp:Table>--%>
+                <asp:Label runat="server" ID="lblCompanyTitle" Font-Size="Small" Font-Bold="true"/>
             </asp:TableCell>
         </asp:TableRow>
-        <asp:TableRow Height="40px">  
+        <asp:TableRow Height="20px">  
             <asp:TableCell HorizontalAlign="Right">
-                <asp:Table ID="Table20" runat="server" style="height: 20px; margin-top: -40px;">
+                <asp:Table ID="Table20" runat="server" style="height: 20px; margin-top: -50px;">
                     <asp:TableRow>
+
                         <asp:TableCell>
                             <asp:Label runat="server" ID="lblUserNameTitle" Font-Size="Small" />
                         </asp:TableCell>

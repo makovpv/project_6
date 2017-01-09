@@ -384,6 +384,7 @@ public class ObjectIndicator
                 p_container.Controls.Add(new Label() { Text = p_indicator.name, CssClass = "clsIndicatorName" });
                 p_container.Controls.Add(new HyperLink() { Text = "Редактировать", NavigateUrl = "~\\Group\\AnsAll.aspx?id=" + tsubj.id.ToString() });
 
+                string priorItemName = "";
                 foreach (ps1 line in (
                     from txt in p_dc.Test_Results_Txts
                     join i in p_dc.items on txt.item_id equals i.id
@@ -413,10 +414,18 @@ public class ObjectIndicator
                     }
                     ).OrderBy(q => q.OrderNumber))
                 {
-                    p_container.Controls.Add(new LiteralControl("<br/><br/>"));
-                    p_container.Controls.Add(new Label() { Text = line.item_name });
-                    p_container.Controls.Add(new LiteralControl("<br/>"));
+                    if (line.item_name != priorItemName)
+                    {
+                        p_container.Controls.Add(new LiteralControl("<br/><br/>"));
+                        p_container.Controls.Add(new Label() { Text = line.item_name });
+                        p_container.Controls.Add(new LiteralControl("<br/>"));
+                    }
+                    else
+                        p_container.Controls.Add(new LiteralControl("; "));
+                    
                     p_container.Controls.Add(new Label() { Text = line.txt_answer, CssClass = "clsMyPlanAnswer" });
+
+                    priorItemName = line.item_name;
                 }
             }
         }

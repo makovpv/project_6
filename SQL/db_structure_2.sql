@@ -334,6 +334,30 @@ CREATE TABLE dbo.competence (
 	CONSTRAINT fk_competence_company FOREIGN KEY (idCompany) REFERENCES dbo.Company (id) ON DELETE cascade
 )
 go
+
+create table dbo.book (
+	idBook smallint not null identity, 
+	title nvarchar(255) not null, 
+	author nvarchar(255) not null default '', 
+	pages smallint not null default 1,
+	idCompany int not null,
+	CONSTRAINT pk_book PRIMARY KEY (idBook),
+	constraint fk_book_company foreign key (idCompany) REFERENCES dbo.Company (id) 
+	)
+go
+
+create table dbo.book_competence_lnk (
+	idBook smallint not null, 
+	idCompetence smallint not null,
+	constraint pk_book_competence_lnk primary key (idBook, idCompetence),
+	constraint fk_book_competence_book foreign key (idBook) references dbo.book (idbook) on delete cascade,
+	constraint fk_book_competence_competence foreign key (idCompetence) references dbo.competence (idCompetence) 
+)
+go
+
+
+
+
 --------------insert into idea_generator (idTest, idgeneratortype) values (1220, 2 )
 
 
