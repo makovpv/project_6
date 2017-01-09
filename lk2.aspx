@@ -172,7 +172,7 @@
                 </asp:Table>--%>
             </asp:TableCell>
         </asp:TableRow>
-        <asp:TableRow Height="20px">  
+        <asp:TableRow Height="40px">  
             <asp:TableCell HorizontalAlign="Right">
                 <asp:Table ID="Table20" runat="server" style="height: 20px; margin-top: -40px;">
                     <asp:TableRow>
