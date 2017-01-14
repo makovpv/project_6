@@ -346,6 +346,7 @@
       <Association Name="Company_subject_group" Member="subject_groups" ThisKey="id" OtherKey="idCompany" Type="subject_group" />
       <Association Name="Company_indicator" Member="indicators" ThisKey="id" OtherKey="idCompany" Type="indicator" />
       <Association Name="Company_competence" Member="competences" ThisKey="id" OtherKey="idCompany" Type="competence" />
+      <Association Name="Company_book" Member="books" ThisKey="id" OtherKey="idCompany" Type="book" />
     </Type>
   </Table>
   <Table Name="dbo.Job" Member="Jobs">
@@ -734,7 +735,27 @@
       <Column Name="idCompany" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="description" Type="System.String" DbType="NVarChar(2000)" CanBeNull="true" />
+      <Association Name="competence_book_competence_lnk" Member="book_competence_lnks" ThisKey="idCompetence" OtherKey="idCompetence" Type="book_competence_lnk" />
       <Association Name="Company_competence" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.book" Member="books">
+    <Type Name="book">
+      <Column Name="idBook" Type="System.Int16" DbType="SmallInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="author" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="pages" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="idCompany" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="book_book_competence_lnk" Member="book_competence_lnks" ThisKey="idBook" OtherKey="idBook" Type="book_competence_lnk" />
+      <Association Name="Company_book" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.book_competence_lnk" Member="book_competence_lnks">
+    <Type Name="book_competence_lnk">
+      <Column Name="idBook" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="idCompetence" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="book_book_competence_lnk" Member="book" ThisKey="idBook" OtherKey="idBook" Type="book" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="competence_book_competence_lnk" Member="competence" ThisKey="idCompetence" OtherKey="idCompetence" Type="competence" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.IsInterpretationFor" Method="IsInterpretationFor" IsComposable="true">

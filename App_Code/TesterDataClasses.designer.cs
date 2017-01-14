@@ -194,6 +194,15 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
   partial void Insertitem(item instance);
   partial void Updateitem(item instance);
   partial void Deleteitem(item instance);
+  partial void Insertcompetence(competence instance);
+  partial void Updatecompetence(competence instance);
+  partial void Deletecompetence(competence instance);
+  partial void Insertbook(book instance);
+  partial void Updatebook(book instance);
+  partial void Deletebook(book instance);
+  partial void Insertbook_competence_lnk(book_competence_lnk instance);
+  partial void Updatebook_competence_lnk(book_competence_lnk instance);
+  partial void Deletebook_competence_lnk(book_competence_lnk instance);
   #endregion
 	
 	public TesterDataClassesDataContext() : 
@@ -695,6 +704,22 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
 		get
 		{
 			return this.GetTable<competence>();
+		}
+	}
+	
+	public System.Data.Linq.Table<book> books
+	{
+		get
+		{
+			return this.GetTable<book>();
+		}
+	}
+	
+	public System.Data.Linq.Table<book_competence_lnk> book_competence_lnks
+	{
+		get
+		{
+			return this.GetTable<book_competence_lnk>();
 		}
 	}
 	
@@ -7573,6 +7598,8 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 	
 	private EntitySet<competence> _competences;
 	
+	private EntitySet<book> _books;
+	
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -7590,6 +7617,7 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 		this._subject_groups = new EntitySet<subject_group>(new Action<subject_group>(this.attach_subject_groups), new Action<subject_group>(this.detach_subject_groups));
 		this._indicators = new EntitySet<indicator>(new Action<indicator>(this.attach_indicators), new Action<indicator>(this.detach_indicators));
 		this._competences = new EntitySet<competence>(new Action<competence>(this.attach_competences), new Action<competence>(this.detach_competences));
+		this._books = new EntitySet<book>(new Action<book>(this.attach_books), new Action<book>(this.detach_books));
 		OnCreated();
 	}
 	
@@ -7698,6 +7726,19 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_book", Storage="_books", ThisKey="id", OtherKey="idCompany")]
+	public EntitySet<book> books
+	{
+		get
+		{
+			return this._books;
+		}
+		set
+		{
+			this._books.Assign(value);
+		}
+	}
+	
 	public event PropertyChangingEventHandler PropertyChanging;
 	
 	public event PropertyChangedEventHandler PropertyChanged;
@@ -7773,6 +7814,18 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 	}
 	
 	private void detach_competences(competence entity)
+	{
+		this.SendPropertyChanging();
+		entity.Company = null;
+	}
+	
+	private void attach_books(book entity)
+	{
+		this.SendPropertyChanging();
+		entity.Company = this;
+	}
+	
+	private void detach_books(book entity)
 	{
 		this.SendPropertyChanging();
 		entity.Company = null;
@@ -16246,6 +16299,8 @@ public partial class competence : INotifyPropertyChanging, INotifyPropertyChange
 	
 	private string _description;
 	
+	private EntitySet<book_competence_lnk> _book_competence_lnks;
+	
 	private EntityRef<Company> _Company;
 	
     #region Extensibility Method Definitions
@@ -16264,6 +16319,7 @@ public partial class competence : INotifyPropertyChanging, INotifyPropertyChange
 	
 	public competence()
 	{
+		this._book_competence_lnks = new EntitySet<book_competence_lnk>(new Action<book_competence_lnk>(this.attach_book_competence_lnks), new Action<book_competence_lnk>(this.detach_book_competence_lnks));
 		this._Company = default(EntityRef<Company>);
 		OnCreated();
 	}
@@ -16352,6 +16408,19 @@ public partial class competence : INotifyPropertyChanging, INotifyPropertyChange
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="competence_book_competence_lnk", Storage="_book_competence_lnks", ThisKey="idCompetence", OtherKey="idCompetence")]
+	public EntitySet<book_competence_lnk> book_competence_lnks
+	{
+		get
+		{
+			return this._book_competence_lnks;
+		}
+		set
+		{
+			this._book_competence_lnks.Assign(value);
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_competence", Storage="_Company", ThisKey="idCompany", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 	public Company Company
 	{
@@ -16382,6 +16451,413 @@ public partial class competence : INotifyPropertyChanging, INotifyPropertyChange
 					this._idCompany = default(int);
 				}
 				this.SendPropertyChanged("Company");
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+	
+	private void attach_book_competence_lnks(book_competence_lnk entity)
+	{
+		this.SendPropertyChanging();
+		entity.competence = this;
+	}
+	
+	private void detach_book_competence_lnks(book_competence_lnk entity)
+	{
+		this.SendPropertyChanging();
+		entity.competence = null;
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.book")]
+public partial class book : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private short _idBook;
+	
+	private string _title;
+	
+	private string _author;
+	
+	private short _pages;
+	
+	private int _idCompany;
+	
+	private EntitySet<book_competence_lnk> _book_competence_lnks;
+	
+	private EntityRef<Company> _Company;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidBookChanging(short value);
+    partial void OnidBookChanged();
+    partial void OntitleChanging(string value);
+    partial void OntitleChanged();
+    partial void OnauthorChanging(string value);
+    partial void OnauthorChanged();
+    partial void OnpagesChanging(short value);
+    partial void OnpagesChanged();
+    partial void OnidCompanyChanging(int value);
+    partial void OnidCompanyChanged();
+    #endregion
+	
+	public book()
+	{
+		this._book_competence_lnks = new EntitySet<book_competence_lnk>(new Action<book_competence_lnk>(this.attach_book_competence_lnks), new Action<book_competence_lnk>(this.detach_book_competence_lnks));
+		this._Company = default(EntityRef<Company>);
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idBook", AutoSync=AutoSync.OnInsert, DbType="SmallInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+	public short idBook
+	{
+		get
+		{
+			return this._idBook;
+		}
+		set
+		{
+			if ((this._idBook != value))
+			{
+				this.OnidBookChanging(value);
+				this.SendPropertyChanging();
+				this._idBook = value;
+				this.SendPropertyChanged("idBook");
+				this.OnidBookChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_title", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+	public string title
+	{
+		get
+		{
+			return this._title;
+		}
+		set
+		{
+			if ((this._title != value))
+			{
+				this.OntitleChanging(value);
+				this.SendPropertyChanging();
+				this._title = value;
+				this.SendPropertyChanged("title");
+				this.OntitleChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_author", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+	public string author
+	{
+		get
+		{
+			return this._author;
+		}
+		set
+		{
+			if ((this._author != value))
+			{
+				this.OnauthorChanging(value);
+				this.SendPropertyChanging();
+				this._author = value;
+				this.SendPropertyChanged("author");
+				this.OnauthorChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_pages", DbType="SmallInt NOT NULL")]
+	public short pages
+	{
+		get
+		{
+			return this._pages;
+		}
+		set
+		{
+			if ((this._pages != value))
+			{
+				this.OnpagesChanging(value);
+				this.SendPropertyChanging();
+				this._pages = value;
+				this.SendPropertyChanged("pages");
+				this.OnpagesChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idCompany", DbType="Int NOT NULL")]
+	public int idCompany
+	{
+		get
+		{
+			return this._idCompany;
+		}
+		set
+		{
+			if ((this._idCompany != value))
+			{
+				if (this._Company.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidCompanyChanging(value);
+				this.SendPropertyChanging();
+				this._idCompany = value;
+				this.SendPropertyChanged("idCompany");
+				this.OnidCompanyChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="book_book_competence_lnk", Storage="_book_competence_lnks", ThisKey="idBook", OtherKey="idBook")]
+	public EntitySet<book_competence_lnk> book_competence_lnks
+	{
+		get
+		{
+			return this._book_competence_lnks;
+		}
+		set
+		{
+			this._book_competence_lnks.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_book", Storage="_Company", ThisKey="idCompany", OtherKey="id", IsForeignKey=true)]
+	public Company Company
+	{
+		get
+		{
+			return this._Company.Entity;
+		}
+		set
+		{
+			Company previousValue = this._Company.Entity;
+			if (((previousValue != value) 
+						|| (this._Company.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Company.Entity = null;
+					previousValue.books.Remove(this);
+				}
+				this._Company.Entity = value;
+				if ((value != null))
+				{
+					value.books.Add(this);
+					this._idCompany = value.id;
+				}
+				else
+				{
+					this._idCompany = default(int);
+				}
+				this.SendPropertyChanged("Company");
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+	
+	private void attach_book_competence_lnks(book_competence_lnk entity)
+	{
+		this.SendPropertyChanging();
+		entity.book = this;
+	}
+	
+	private void detach_book_competence_lnks(book_competence_lnk entity)
+	{
+		this.SendPropertyChanging();
+		entity.book = null;
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.book_competence_lnk")]
+public partial class book_competence_lnk : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private short _idBook;
+	
+	private short _idCompetence;
+	
+	private EntityRef<book> _book;
+	
+	private EntityRef<competence> _competence;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidBookChanging(short value);
+    partial void OnidBookChanged();
+    partial void OnidCompetenceChanging(short value);
+    partial void OnidCompetenceChanged();
+    #endregion
+	
+	public book_competence_lnk()
+	{
+		this._book = default(EntityRef<book>);
+		this._competence = default(EntityRef<competence>);
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idBook", DbType="SmallInt NOT NULL", IsPrimaryKey=true)]
+	public short idBook
+	{
+		get
+		{
+			return this._idBook;
+		}
+		set
+		{
+			if ((this._idBook != value))
+			{
+				if (this._book.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidBookChanging(value);
+				this.SendPropertyChanging();
+				this._idBook = value;
+				this.SendPropertyChanged("idBook");
+				this.OnidBookChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idCompetence", DbType="SmallInt NOT NULL", IsPrimaryKey=true)]
+	public short idCompetence
+	{
+		get
+		{
+			return this._idCompetence;
+		}
+		set
+		{
+			if ((this._idCompetence != value))
+			{
+				if (this._competence.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidCompetenceChanging(value);
+				this.SendPropertyChanging();
+				this._idCompetence = value;
+				this.SendPropertyChanged("idCompetence");
+				this.OnidCompetenceChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="book_book_competence_lnk", Storage="_book", ThisKey="idBook", OtherKey="idBook", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+	public book book
+	{
+		get
+		{
+			return this._book.Entity;
+		}
+		set
+		{
+			book previousValue = this._book.Entity;
+			if (((previousValue != value) 
+						|| (this._book.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._book.Entity = null;
+					previousValue.book_competence_lnks.Remove(this);
+				}
+				this._book.Entity = value;
+				if ((value != null))
+				{
+					value.book_competence_lnks.Add(this);
+					this._idBook = value.idBook;
+				}
+				else
+				{
+					this._idBook = default(short);
+				}
+				this.SendPropertyChanged("book");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="competence_book_competence_lnk", Storage="_competence", ThisKey="idCompetence", OtherKey="idCompetence", IsForeignKey=true)]
+	public competence competence
+	{
+		get
+		{
+			return this._competence.Entity;
+		}
+		set
+		{
+			competence previousValue = this._competence.Entity;
+			if (((previousValue != value) 
+						|| (this._competence.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._competence.Entity = null;
+					previousValue.book_competence_lnks.Remove(this);
+				}
+				this._competence.Entity = value;
+				if ((value != null))
+				{
+					value.book_competence_lnks.Add(this);
+					this._idCompetence = value.idCompetence;
+				}
+				else
+				{
+					this._idCompetence = default(short);
+				}
+				this.SendPropertyChanged("competence");
 			}
 		}
 	}
