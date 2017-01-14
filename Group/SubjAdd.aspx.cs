@@ -53,7 +53,7 @@ public partial class Group_SubjAdd : System.Web.UI.Page
                         group_id = GroupID,
                         Test_Id = FirstTestID,
                         Nick_Name = GridView1.Rows[i].Cells[1].Text,
-                        fio = GridView1.Rows[i].Cells[2].Text,
+                        fio = GridView1.Rows[i].Cells[1].Text, ////// !! 
                         idUser = Guid.Parse(GridView1.DataKeys[i].Value.ToString())
                     });
 
