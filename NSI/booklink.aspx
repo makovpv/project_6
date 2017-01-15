@@ -1,10 +1,12 @@
 ﻿<%@ Page Title="Компетенции" Language="C#" MasterPageFile="~/MainBusinessMasterPage.master" AutoEventWireup="true" CodeFile="booklink.aspx.cs" Inherits="NSI_booklink" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
-    <h3 runat="server" id="lblBook"/>
-    <p>
-    <asp:HyperLink runat="server" Text="вернуться к списку книг" NavigateUrl="~/nsi/books.aspx"/>
-    </p>
+    
+        <h3 runat="server" id="lblBook" class="nsi"/>
+        <p>
+        <asp:HyperLink runat="server" Text="вернуться к списку книг" NavigateUrl="~/nsi/books.aspx" class="nsi"/>
+        </p>
+    
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     
@@ -14,26 +16,27 @@
         ondatabound="ItemsCheckBoxList_DataBound" >
     </asp:CheckBoxList>--%>
 
+    <div class="nsi">
+        <asp:GridView runat="server" DataSourceID="sqlBooks" AutoGenerateColumns="false" DataKeyNames="idcompetence" ID="gvLink" >
+            <Columns>
+                <asp:TemplateField HeaderText="Выбор">
+                    <ItemTemplate>
+                        <asp:CheckBox runat="server" ID="cbox" Checked='<%# Eval("ischecked") %>' />
+                    </ItemTemplate>
+                </asp:TemplateField>
 
-    <asp:GridView runat="server" DataSourceID="sqlBooks" AutoGenerateColumns="false" DataKeyNames="idcompetence" ID="gvLink">
-        <Columns>
-            <asp:TemplateField HeaderText="Выбор">
-                <ItemTemplate>
-                    <asp:CheckBox runat="server" ID="cbox" Checked='<%# Eval("ischecked") %>' />
-                </ItemTemplate>
-            </asp:TemplateField>
+                <asp:BoundField DataField="name" HeaderText="Наименование компетенции"/>
+                <asp:BoundField DataField="description" HeaderText="Пояснение"/>
+                <asp:BoundField DataField="idcompetence" HeaderText="Код" ItemStyle-HorizontalAlign="Center" />
+            </Columns>
 
-            <asp:BoundField DataField="name" HeaderText="Наименование компетенции"/>
-            <asp:BoundField DataField="description" HeaderText="Пояснение"/>
-            <asp:BoundField DataField="idcompetence" HeaderText="Код" ItemStyle-HorizontalAlign="Center" />
-        </Columns>
+            <AlternatingRowStyle BackColor="#ccffcc"/>
 
-        <AlternatingRowStyle BackColor="#ccffcc"/>
+        </asp:GridView>
 
-    </asp:GridView>
-
-    <br/>
-    <asp:Button ID="Button1" runat="server" Text="Сохранить" OnClick="onClick" />
+        <br/>
+        <asp:Button ID="Button1" runat="server" Text="Сохранить" OnClick="onClick" />
+    </div>
 
     <asp:SqlDataSource runat="server" ID="sqlBooks"
         ConnectionString="<%$ ConnectionStrings:tester_dataConnectionString %>"
