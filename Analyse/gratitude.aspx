@@ -27,7 +27,7 @@
     <br/>
     период с: 
     <asp:TextBox ID="tboxBeginDate" runat="server" Width="100px" style="margin: 2px 0px 2px 0px;"
-        Text="01.01.2016"/>
+        Text="01.01.2017"/>
     <asp:Button runat="server" ID="btnBeginDate" Text="..."/>
     <ajaxToolkit:CalendarExtender runat="server" Enabled="true" ID="calendar1"
             TargetControlID="tboxBeginDate" PopupButtonID="btnBeginDate" Format="dd.MM.yyyy">

@@ -203,13 +203,10 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
   partial void Insertbook_competence_lnk(book_competence_lnk instance);
   partial void Updatebook_competence_lnk(book_competence_lnk instance);
   partial void Deletebook_competence_lnk(book_competence_lnk instance);
+  partial void InsertRaw_Data(Raw_Data instance);
+  partial void UpdateRaw_Data(Raw_Data instance);
+  partial void DeleteRaw_Data(Raw_Data instance);
   #endregion
-	
-	public TesterDataClassesDataContext() : 
-			base(global::System.Configuration.ConfigurationManager.ConnectionStrings["tester_dataConnectionString"].ConnectionString, mappingSource)
-	{
-		OnCreated();
-	}
 	
 	public TesterDataClassesDataContext(string connection) : 
 			base(connection, mappingSource)
@@ -720,6 +717,14 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
 		get
 		{
 			return this.GetTable<book_competence_lnk>();
+		}
+	}
+	
+	public System.Data.Linq.Table<Raw_Data> Raw_Datas
+	{
+		get
+		{
+			return this.GetTable<Raw_Data>();
 		}
 	}
 	
@@ -8124,6 +8129,8 @@ public partial class Scale : INotifyPropertyChanging, INotifyPropertyChanged
 	
 	private EntitySet<indicator> _indicators;
 	
+	private EntitySet<Raw_Data> _Raw_Datas;
+	
 	private EntityRef<Param> _Param;
 	
 	private EntityRef<ScoreCalcType> _ScoreCalcType1;
@@ -8190,6 +8197,7 @@ public partial class Scale : INotifyPropertyChanging, INotifyPropertyChanged
 		this._Scale_Ranges = new EntitySet<Scale_Range>(new Action<Scale_Range>(this.attach_Scale_Ranges), new Action<Scale_Range>(this.detach_Scale_Ranges));
 		this._Scale_Norms = new EntitySet<Scale_Norm>(new Action<Scale_Norm>(this.attach_Scale_Norms), new Action<Scale_Norm>(this.detach_Scale_Norms));
 		this._indicators = new EntitySet<indicator>(new Action<indicator>(this.attach_indicators), new Action<indicator>(this.detach_indicators));
+		this._Raw_Datas = new EntitySet<Raw_Data>(new Action<Raw_Data>(this.attach_Raw_Datas), new Action<Raw_Data>(this.detach_Raw_Datas));
 		this._Param = default(EntityRef<Param>);
 		this._ScoreCalcType1 = default(EntityRef<ScoreCalcType>);
 		this._Param1 = default(EntityRef<Param>);
@@ -8737,6 +8745,19 @@ public partial class Scale : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Scale_Raw_Data", Storage="_Raw_Datas", ThisKey="id", OtherKey="Scale_ID")]
+	public EntitySet<Raw_Data> Raw_Datas
+	{
+		get
+		{
+			return this._Raw_Datas;
+		}
+		set
+		{
+			this._Raw_Datas.Assign(value);
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Param_Scale", Storage="_Param", ThisKey="Param2_ID", OtherKey="id", IsForeignKey=true)]
 	public Param Param
 	{
@@ -8988,6 +9009,18 @@ public partial class Scale : INotifyPropertyChanging, INotifyPropertyChanged
 		this.SendPropertyChanging();
 		entity.Scale = null;
 	}
+	
+	private void attach_Raw_Datas(Raw_Data entity)
+	{
+		this.SendPropertyChanging();
+		entity.Scale = this;
+	}
+	
+	private void detach_Raw_Datas(Raw_Data entity)
+	{
+		this.SendPropertyChanging();
+		entity.Scale = null;
+	}
 }
 
 [global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.report")]
@@ -9178,6 +9211,8 @@ public partial class Test_Subject : INotifyPropertyChanging, INotifyPropertyChan
 	
 	private EntitySet<test_subject_approved> _test_subject_approveds;
 	
+	private EntitySet<Raw_Data> _Raw_Datas;
+	
 	private EntityRef<Test_Subject> _Test_Subject1;
 	
 	private EntityRef<project> _project;
@@ -9235,6 +9270,7 @@ public partial class Test_Subject : INotifyPropertyChanging, INotifyPropertyChan
 		this._Test_Subjects = new EntitySet<Test_Subject>(new Action<Test_Subject>(this.attach_Test_Subjects), new Action<Test_Subject>(this.detach_Test_Subjects));
 		this._ideas = new EntitySet<idea>(new Action<idea>(this.attach_ideas), new Action<idea>(this.detach_ideas));
 		this._test_subject_approveds = new EntitySet<test_subject_approved>(new Action<test_subject_approved>(this.attach_test_subject_approveds), new Action<test_subject_approved>(this.detach_test_subject_approveds));
+		this._Raw_Datas = new EntitySet<Raw_Data>(new Action<Raw_Data>(this.attach_Raw_Datas), new Action<Raw_Data>(this.detach_Raw_Datas));
 		this._Test_Subject1 = default(EntityRef<Test_Subject>);
 		this._project = default(EntityRef<project>);
 		this._user_account = default(EntityRef<user_account>);
@@ -9659,6 +9695,19 @@ public partial class Test_Subject : INotifyPropertyChanging, INotifyPropertyChan
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Raw_Data", Storage="_Raw_Datas", ThisKey="id", OtherKey="Subject_ID")]
+	public EntitySet<Raw_Data> Raw_Datas
+	{
+		get
+		{
+			return this._Raw_Datas;
+		}
+		set
+		{
+			this._Raw_Datas.Assign(value);
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Test_Subject", Storage="_Test_Subject1", ThisKey="BaseSubject_id", OtherKey="id", IsForeignKey=true)]
 	public Test_Subject Test_Subject1
 	{
@@ -9962,6 +10011,18 @@ public partial class Test_Subject : INotifyPropertyChanging, INotifyPropertyChan
 	}
 	
 	private void detach_test_subject_approveds(test_subject_approved entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject = null;
+	}
+	
+	private void attach_Raw_Datas(Raw_Data entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject = this;
+	}
+	
+	private void detach_Raw_Datas(Raw_Data entity)
 	{
 		this.SendPropertyChanging();
 		entity.Test_Subject = null;
@@ -16858,6 +16919,198 @@ public partial class book_competence_lnk : INotifyPropertyChanging, INotifyPrope
 					this._idCompetence = default(short);
 				}
 				this.SendPropertyChanged("competence");
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Raw_Data")]
+public partial class Raw_Data : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private int _Subject_ID;
+	
+	private int _Scale_ID;
+	
+	private decimal _Raw_Value;
+	
+	private EntityRef<Scale> _Scale;
+	
+	private EntityRef<Test_Subject> _Test_Subject;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnSubject_IDChanging(int value);
+    partial void OnSubject_IDChanged();
+    partial void OnScale_IDChanging(int value);
+    partial void OnScale_IDChanged();
+    partial void OnRaw_ValueChanging(decimal value);
+    partial void OnRaw_ValueChanged();
+    #endregion
+	
+	public Raw_Data()
+	{
+		this._Scale = default(EntityRef<Scale>);
+		this._Test_Subject = default(EntityRef<Test_Subject>);
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Subject_ID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+	public int Subject_ID
+	{
+		get
+		{
+			return this._Subject_ID;
+		}
+		set
+		{
+			if ((this._Subject_ID != value))
+			{
+				if (this._Test_Subject.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnSubject_IDChanging(value);
+				this.SendPropertyChanging();
+				this._Subject_ID = value;
+				this.SendPropertyChanged("Subject_ID");
+				this.OnSubject_IDChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Scale_ID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+	public int Scale_ID
+	{
+		get
+		{
+			return this._Scale_ID;
+		}
+		set
+		{
+			if ((this._Scale_ID != value))
+			{
+				if (this._Scale.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnScale_IDChanging(value);
+				this.SendPropertyChanging();
+				this._Scale_ID = value;
+				this.SendPropertyChanged("Scale_ID");
+				this.OnScale_IDChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Raw_Value", DbType="Decimal(8,3) NOT NULL")]
+	public decimal Raw_Value
+	{
+		get
+		{
+			return this._Raw_Value;
+		}
+		set
+		{
+			if ((this._Raw_Value != value))
+			{
+				this.OnRaw_ValueChanging(value);
+				this.SendPropertyChanging();
+				this._Raw_Value = value;
+				this.SendPropertyChanged("Raw_Value");
+				this.OnRaw_ValueChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Scale_Raw_Data", Storage="_Scale", ThisKey="Scale_ID", OtherKey="id", IsForeignKey=true)]
+	public Scale Scale
+	{
+		get
+		{
+			return this._Scale.Entity;
+		}
+		set
+		{
+			Scale previousValue = this._Scale.Entity;
+			if (((previousValue != value) 
+						|| (this._Scale.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Scale.Entity = null;
+					previousValue.Raw_Datas.Remove(this);
+				}
+				this._Scale.Entity = value;
+				if ((value != null))
+				{
+					value.Raw_Datas.Add(this);
+					this._Scale_ID = value.id;
+				}
+				else
+				{
+					this._Scale_ID = default(int);
+				}
+				this.SendPropertyChanged("Scale");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Raw_Data", Storage="_Test_Subject", ThisKey="Subject_ID", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+	public Test_Subject Test_Subject
+	{
+		get
+		{
+			return this._Test_Subject.Entity;
+		}
+		set
+		{
+			Test_Subject previousValue = this._Test_Subject.Entity;
+			if (((previousValue != value) 
+						|| (this._Test_Subject.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Test_Subject.Entity = null;
+					previousValue.Raw_Datas.Remove(this);
+				}
+				this._Test_Subject.Entity = value;
+				if ((value != null))
+				{
+					value.Raw_Datas.Add(this);
+					this._Subject_ID = value.id;
+				}
+				else
+				{
+					this._Subject_ID = default(int);
+				}
+				this.SendPropertyChanged("Test_Subject");
 			}
 		}
 	}

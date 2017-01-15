@@ -394,6 +394,7 @@
       <Association Name="Scale_Scale_Range" Member="Scale_Ranges" ThisKey="id" OtherKey="Scale_ID" Type="Scale_Range" />
       <Association Name="Scale_Scale_Norm" Member="Scale_Norms" ThisKey="id" OtherKey="Scale_ID" Type="Scale_Norm" />
       <Association Name="Scale_indicator" Member="indicators" ThisKey="id" OtherKey="idScale" Type="indicator" />
+      <Association Name="Scale_Raw_Data" Member="Raw_Datas" ThisKey="id" OtherKey="Scale_ID" Type="Raw_Data" />
       <Association Name="Param_Scale" Member="Param" ThisKey="Param2_ID" OtherKey="id" Type="Param" IsForeignKey="true" />
       <Association Name="ScoreCalcType_Scale" Member="ScoreCalcType1" ThisKey="ScoreCalcType" OtherKey="id" Type="ScoreCalcType" IsForeignKey="true" />
       <Association Name="Param_Scale1" Member="Param1" ThisKey="Param_ID" OtherKey="id" Type="Param" IsForeignKey="true" />
@@ -432,6 +433,7 @@
       <Association Name="Test_Subject_Test_Subject" Member="Test_Subjects" ThisKey="id" OtherKey="BaseSubject_id" Type="Test_Subject" />
       <Association Name="Test_Subject_idea" Member="ideas" ThisKey="id" OtherKey="idSubject" Type="idea" />
       <Association Name="Test_Subject_test_subject_approved" Member="test_subject_approveds" ThisKey="id" OtherKey="idSubject" Type="test_subject_approved" />
+      <Association Name="Test_Subject_Raw_Data" Member="Raw_Datas" ThisKey="id" OtherKey="Subject_ID" Type="Raw_Data" />
       <Association Name="Test_Subject_Test_Subject" Member="Test_Subject1" ThisKey="BaseSubject_id" OtherKey="id" Type="Test_Subject" IsForeignKey="true" />
       <Association Name="project_Test_Subject" Member="project" ThisKey="project_id" OtherKey="id" Type="project" IsForeignKey="true" />
       <Association Name="user_account_Test_Subject" Member="user_account" ThisKey="idUser" OtherKey="idUser" Type="user_account" IsForeignKey="true" />
@@ -756,6 +758,15 @@
       <Column Name="idCompetence" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Association Name="book_book_competence_lnk" Member="book" ThisKey="idBook" OtherKey="idBook" Type="book" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="competence_book_competence_lnk" Member="competence" ThisKey="idCompetence" OtherKey="idCompetence" Type="competence" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Raw_Data" Member="Raw_Datas">
+    <Type Name="Raw_Data">
+      <Column Name="Subject_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Scale_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Raw_Value" Type="System.Decimal" DbType="Decimal(8,3) NOT NULL" CanBeNull="false" />
+      <Association Name="Scale_Raw_Data" Member="Scale" ThisKey="Scale_ID" OtherKey="id" Type="Scale" IsForeignKey="true" />
+      <Association Name="Test_Subject_Raw_Data" Member="Test_Subject" ThisKey="Subject_ID" OtherKey="id" Type="Test_Subject" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Function Name="dbo.IsInterpretationFor" Method="IsInterpretationFor" IsComposable="true">

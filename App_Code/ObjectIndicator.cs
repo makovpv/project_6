@@ -441,8 +441,6 @@ public class ObjectIndicator
                     CompleteNumber++;
                 }
             }
-
-
             //по каждой компетенции - лидер и кол-во выбравших эту компетенцию
             var n =
                 from ss in p_dc.SubScales
@@ -473,7 +471,14 @@ public class ObjectIndicator
                 string LeaderName = ldc.kk == null ? "" : p_dc.SubScales.Where(ww => ww.id == ldc.kk).FirstOrDefault().name;
                 p_container.Controls.Add(new Label() { Text = string.Format ("<br/>{0} <b>развивают {1} сотр.</b> (лидер {2})", smr.name, smr.Number, LeaderName) });
             }
+            
+            var k = (
+                from ts in p_dc.Test_Subjects
+                join rd in p_dc.Raw_Datas on ts.id equals rd.Subject_ID
+                where ts.group_id == 1115 && ts.Test_Date != null && rd.Scale_ID == 1999 // hard x hard
+                select rd.Raw_Value).Average();
 
+            p_container.Controls.Add(new Label() { Text = string.Format("средний показатель ???? {0})", k) });
                 
         }
     }
