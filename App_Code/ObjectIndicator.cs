@@ -25,6 +25,7 @@ public class ObjectIndicator
         public int ssID;
         public int? subjID;
         public int? LeaderCode;
+        public decimal? CompletePercent;
     }
     struct dpSummary
     {
@@ -34,6 +35,7 @@ public class ObjectIndicator
         public int? Number;
         public int? LeaderCode;
         public string LeaderName;
+        public decimal? PercentIPR;
     }
     struct InfoByDept
     {
@@ -145,7 +147,9 @@ public class ObjectIndicator
                     break;
                 case 130: // идеи
                     //p_container.Controls.Add(new LiteralControl("<hr/>"));
-                    p_container.Controls.Add(new Label() { Text = p_indicator.name, CssClass = "clsIndicatorName" });
+                    p_container.Controls.Add(new Label() { 
+                        Text = string.Format("{0} за {1} квартал {2} года", p_indicator.name, QuartNumber, DateTime.Today.Year), 
+                        CssClass = "clsIndicatorName" });
 
                     Dictionary<string, int> IdeaByState = new Dictionary<string, int>();
                     int TotalIdeaCount = 0;
@@ -168,7 +172,7 @@ public class ObjectIndicator
                             IdeaByState.Add(StateName, 1);
                     }
                     p_container.Controls.Add(new LiteralControl("<p>"));
-                    p_container.Controls.Add(new LiteralControl("Всего идей за квартал: "));
+                    p_container.Controls.Add(new LiteralControl(string.Format ("Всего идей за {0} квартал {1} г.: ", QuartNumber, DateTime.Today.Year)));
 
                     Label lbl = new Label() { Text = TotalIdeaCount.ToString() + "<br/>", CssClass = "AppreciateLink"};
                     lbl.Font.Size = 34; // hard
@@ -201,7 +205,6 @@ public class ObjectIndicator
                     }
                     else
                     {// в разрезе отделов
-
                         foreach (InfoByDept ibd in (
                             from ii in p_dc.ideas
                             join ts in p_dc.Test_Subjects on ii.idSubject equals ts.id
@@ -281,7 +284,9 @@ public class ObjectIndicator
                     }
                     else // групповой индикатор
                     {
-                        p_container.Controls.Add(new Label() { Text = p_indicator.name, CssClass = "clsIndicatorName" });
+                        p_container.Controls.Add(new Label() {
+                            Text = string.Format("{0} за {1} квартал {2} года", p_indicator.name, QuartNumber, DateTime.Today.Year), 
+                            CssClass = "clsIndicatorName" });
 
                         int QuartGratitudeNumber = (
                             from lnk in p_dc.Test_SubjectGroup_Links
@@ -322,7 +327,9 @@ public class ObjectIndicator
                     where ts.group_id == 2126 && ts.Test_Date >= QuartBegin
                     select ts.id).Count();
 
-                    p_container.Controls.Add(new Label() { Text = p_indicator.name, CssClass = "clsIndicatorName" });
+                    p_container.Controls.Add(new Label() {
+                        Text = string.Format("{0} за {1} квартал {2} года", p_indicator.name, QuartNumber, DateTime.Today.Year), 
+                        CssClass = "clsIndicatorName" });
                     p_container.Controls.Add(new LiteralControl("<p>"));
                     p_container.Controls.Add(new LiteralControl("Рисков и происшествий за квартал: " + RiskCount.ToString()));
                     p_container.Controls.Add(new LiteralControl("</p>"));
@@ -433,10 +440,32 @@ public class ObjectIndicator
         {
             // общее кол-во, полностью заполнивших
             int CompleteNumber = 0;
-            foreach (Test_Subject ts in p_dc.Test_Subjects.Where(w => w.group_id == 1115/*hard*/ && w.Test_Date != null))
+            const int IPR = 1115; /*hard*/
+            const int idItemForPercentage = 13559; /*hard. исключаем процент реализации ИПР*/
+            
+            int TextItemCount = (
+                from sg in p_dc.subject_groups
+                join lnk in p_dc.Test_SubjectGroup_Links on sg.id equals lnk.idGroup
+                join blk in p_dc.Test_Questions on lnk.idTest equals blk.test_id
+                join itm in p_dc.items on blk.id equals itm.group_id
+                join dm in p_dc.SubScaleDimensions on itm.dimension_id equals dm.id
+                where sg.id == IPR && (dm.dimension_type == 3 || dm.dimension_type == 11) // открытый вопрос или дата
+                select 1
+            ).Count();
+            int NonTextItemCount = (
+                from sg in p_dc.subject_groups
+                join lnk in p_dc.Test_SubjectGroup_Links on sg.id equals lnk.idGroup
+                join blk in p_dc.Test_Questions on lnk.idTest equals blk.test_id
+                join itm in p_dc.items on blk.id equals itm.group_id
+                join dm in p_dc.SubScaleDimensions on itm.dimension_id equals dm.id
+                where sg.id == IPR && dm.dimension_type != 3 && dm.dimension_type != 11 && itm.id != idItemForPercentage 
+                select 1
+            ).Count();
+
+            foreach (Test_Subject ts in p_dc.Test_Subjects.Where(w => w.group_id == IPR && w.Test_Date != null))
             {
-                if ((p_dc.Test_Results_Txts.Where(ww => ww.subject_id == ts.id && ww.text != "").Count() == 4) &&
-                   (p_dc.Test_Results.Where(ww => ww.Subject_ID == ts.id).Select(s => s.item_id).Distinct().Count() == 3))
+                if ((p_dc.Test_Results_Txts.Where(ww => ww.subject_id == ts.id && ww.text != "").Count() >= TextItemCount) &&
+                   (p_dc.Test_Results.Where(ww => ww.Subject_ID == ts.id && ww.item_id != idItemForPercentage).Select(s => s.item_id).Distinct().Count() >= NonTextItemCount))
                 {
                     CompleteNumber++;
                 }
@@ -445,40 +474,46 @@ public class ObjectIndicator
             var n =
                 from ss in p_dc.SubScales
                 join i in p_dc.items on ss.Dimension_ID equals i.dimension_id
-                join tr in p_dc.Test_Results on new { jpItemID = i.id, jpDimID = (int?)ss.id } equals new { jpItemID = tr.item_id, jpDimID = tr.SubScale_ID } into outer
+                join tr in p_dc.Test_Results on new { jpItemID = i.id, jpDimID = (int?)ss.id } equals new { jpItemID = tr.item_id, jpDimID = tr.SubScale_ID }
+                join rd in p_dc.Raw_Datas on new { tr.Subject_ID, scl = (int)1999} equals new { rd.Subject_ID, scl = rd.Scale_ID } into outer
                 where i.id == 13346 /*hard*/
                 from ou in outer.DefaultIfEmpty()
 
-                join trr in p_dc.Test_Results on new {jpSubjID = ou.Subject_ID, jpFixItemID = 13348/*hard*/} equals new {jpSubjID = trr.Subject_ID, jpFixItemID = trr.item_id} into outer2
+                join trr in p_dc.Test_Results on new { jpSubjID = ou.Subject_ID, jpFixItemID = 13348/*hard*/} equals new { jpSubjID = trr.Subject_ID, jpFixItemID = trr.item_id } into outer2
                 from ou2 in outer2.DefaultIfEmpty()
-                select new dp() { name = ss.name, subjID = ou.Subject_ID, OrdNumber = ss.OrderNumber, ssID = ss.id, LeaderCode = ou2.SubScale_ID };
+                select new dp() { name = ss.name, subjID = ou.Subject_ID, OrdNumber = ss.OrderNumber, ssID = ss.id, LeaderCode = ou2.SubScale_ID, CompletePercent = ou.Raw_Value };
 
             List<dpSummary> qq = n.GroupBy (gg=> new { gg.ssID, gg.name } ).Select (
                 dd=> new dpSummary {
                     ssID = dd.Key.ssID, 
                     name = dd.Key.name,
-                    Number = dd.Select(x=> x.subjID).Distinct().Count(cn=> cn.Value!=null)
+                    Number = dd.Select(x=> x.subjID).Distinct().Count(cn=> cn.Value!=null),
+                    PercentIPR = dd.Average(y => y.CompletePercent),
                 }).ToList();
             
 
             p_container.Controls.Add(new Label() { Text = p_indicator.name, CssClass = "clsIndicatorName" });
             p_container.Controls.Add(new Label() { Text = string.Format("<br/><br/>полностью заполнили {0} человек<br/>", CompleteNumber) });
+
+            int k = Convert.ToInt16(Math.Round((
+                from ts in p_dc.Test_Subjects
+                join rd in p_dc.Raw_Datas on ts.id equals rd.Subject_ID
+                where ts.group_id == IPR && ts.Test_Date != null && rd.Scale_ID == 1999 // hard x hard
+                select rd.Raw_Value).Average()));
+            p_container.Controls.Add(new Label() { Text = string.Format("средний показатель реализации ИПР - {0}%<br/>", k) });
+
             foreach (dpSummary smr in qq)
             {
                 var ldc =
                     n.Where(w => w.ssID == smr.ssID).GroupBy(g => g.LeaderCode).Select(s => new { kk = s.Key, cnt = s.Count() }).OrderByDescending(ob => ob.cnt).FirstOrDefault();
                 
                 string LeaderName = ldc.kk == null ? "" : p_dc.SubScales.Where(ww => ww.id == ldc.kk).FirstOrDefault().name;
-                p_container.Controls.Add(new Label() { Text = string.Format ("<br/>{0} <b>развивают {1} сотр.</b> (лидер {2})", smr.name, smr.Number, LeaderName) });
+
+                p_container.Controls.Add(new Label() { Text = string.Format ("<br/>{0} <b>развивают {1} сотр.</b> (лидер {2}). Реализация ИПР - {3}%", 
+                    smr.name, smr.Number, LeaderName, Convert.ToInt16 (Math.Round( Convert.ToDecimal (smr.PercentIPR)))) });
             }
             
-            var k = (
-                from ts in p_dc.Test_Subjects
-                join rd in p_dc.Raw_Datas on ts.id equals rd.Subject_ID
-                where ts.group_id == 1115 && ts.Test_Date != null && rd.Scale_ID == 1999 // hard x hard
-                select rd.Raw_Value).Average();
 
-            p_container.Controls.Add(new Label() { Text = string.Format("средний показатель ???? {0})", k) });
                 
         }
     }
@@ -491,8 +526,8 @@ public class ObjectIndicator
     {
         p_container.Controls.Add(new Label()
         {
-            //Text = string.Format("{0} ({1} квартал {2} года)", p_indicator.name, QuartNumber + 1, DateTime.Today.Year),
-            Text = p_indicator.name,
+            //Text = p_indicator.name,
+            Text = string.Format("{0} за {1} квартал {2} года", p_indicator.name, QuartNumber, DateTime.Today.Year), 
             CssClass = "clsIndicatorName"
         });
         

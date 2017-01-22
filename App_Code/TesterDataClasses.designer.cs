@@ -208,6 +208,12 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
   partial void DeleteRaw_Data(Raw_Data instance);
   #endregion
 	
+	public TesterDataClassesDataContext() : 
+			base(global::System.Configuration.ConfigurationManager.ConnectionStrings["tester_dataConnectionString"].ConnectionString, mappingSource)
+	{
+		OnCreated();
+	}
+	
 	public TesterDataClassesDataContext(string connection) : 
 			base(connection, mappingSource)
 	{

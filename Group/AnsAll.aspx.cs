@@ -38,7 +38,7 @@ public partial class Player_AnsAll : System.Web.UI.Page
 
     public enum DimensionType {dtSingleChoise = 1, dtMultiSelect = 2, dtOpenAnswer = 3, 
         dtGender = 8, dtBirthYear = 9, dtRange = 10, dtDate = 11, dtNumber = 12,
-        dtEMP = 13, dtCompetence = 14 }
+        dtEMP = 13, dtCompetence = 14, dtBook = 15 }
 //select 7, 'ранжирование',	1, 0 union all
 //select 5, 'попарное ранжирование',	1, 0 union all
 //select 6, 'шкалирование',	1, 0 union all
@@ -201,38 +201,7 @@ public partial class Player_AnsAll : System.Web.UI.Page
                                         });
                                         break;
                                     case DimensionType.dtSingleChoise:
-                                        
-                                        ListControl lct;
-                                        if (itm.SubScaleDimension.dimension_mode == 3) // dropdownlist
-                                        {
-                                            lct = new DropDownList() { CssClass = "AnsAllDropList"};
-                                        }
-                                        else // radiobuttons
-                                        {
-                                            lct = new RadioButtonList();
-                                        }
-                                        lct.ID = string.Format("spCtr_{0}__{1}", itm.id, MM);
-                                        foreach (SubScale ssc in itm.SubScaleDimension.SubScales.OrderBy (q=> q.OrderNumber))
-                                        {
-                                            lct.Items.Add(new ListItem(
-                                                ssc.name,
-                                                ssc.id.ToString()
-                                                //string.Format("spCtr_{0}_{1}_{2}", itm.id, ssc.id, MM)
-                                                ));
-                                        }
-                                        Test_Result tr = subj.Test_Results.Where(trr => trr.item_id == itm.id).FirstOrDefault();
-                                        if (tr != null && tr.SubScale_ID != null)
-                                            lct.SelectedValue = tr.SubScale_ID.ToString();
-                                        divContent.Controls.Add(lct);
-
-                                        RequiredFieldValidator vld = new RequiredFieldValidator();
-                                        vld.ControlToValidate =  lct.ID;
-                                        vld.ErrorMessage = "Не выбран ответ";
-                                        vld.ForeColor = System.Drawing.Color.Red;
-                                        vld.SetFocusOnError = true;
-                                        //vld.ValidationGroup = "ValidGroup";
-                                        divContent.Controls.Add(vld);
-
+                                        CreateSingleChoiseControl(subj, MM, itm);
                                         break;
                                     case DimensionType.dtDate:
                                         Test_Results_Txt dt_answer = subj.Test_Results_Txts.Where(trt => trt.item_id == itm.id).FirstOrDefault();
@@ -255,6 +224,11 @@ public partial class Player_AnsAll : System.Web.UI.Page
                                         divContent.Controls.Add(btn);
                                         divContent.Controls.Add(ce);
 
+                                        break;
+                                    case DimensionType.dtCompetence:
+                                        CreateSingleChoiseControl(subj, MM, itm);
+                                        string ScriptText = "var nn = 1";
+                                        Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "DataScript", "<script language=javascript>" + ScriptText + "</script>");
                                         break;
                                     case DimensionType.dtEMP:
                                         CommonData.GenerateAnswerWithEMP(itm.SubScaleDimension, subj.subject_group.Company);
@@ -338,5 +312,39 @@ public partial class Player_AnsAll : System.Web.UI.Page
             else
                 throw new Exception("субъект не определен");
         }
+    }
+
+    private void CreateSingleChoiseControl(Test_Subject subj, int MM, item itm)
+    {
+        ListControl lct;
+        if (itm.SubScaleDimension.dimension_mode == 3) // dropdownlist
+        {
+            lct = new DropDownList() { CssClass = "AnsAllDropList" };
+        }
+        else // radiobuttons
+        {
+            lct = new RadioButtonList();
+        }
+        lct.ID = string.Format("spCtr_{0}__{1}", itm.id, MM);
+        foreach (SubScale ssc in itm.SubScaleDimension.SubScales.OrderBy(q => q.OrderNumber))
+        {
+            lct.Items.Add(new ListItem(
+                ssc.name,
+                ssc.id.ToString()
+                //string.Format("spCtr_{0}_{1}_{2}", itm.id, ssc.id, MM)
+                ));
+        }
+        Test_Result tr = subj.Test_Results.Where(trr => trr.item_id == itm.id).FirstOrDefault();
+        if (tr != null && tr.SubScale_ID != null)
+            lct.SelectedValue = tr.SubScale_ID.ToString();
+        divContent.Controls.Add(lct);
+
+        RequiredFieldValidator vld = new RequiredFieldValidator();
+        vld.ControlToValidate = lct.ID;
+        vld.ErrorMessage = "Не выбран ответ";
+        vld.ForeColor = System.Drawing.Color.Red;
+        vld.SetFocusOnError = true;
+        //vld.ValidationGroup = "ValidGroup";
+        divContent.Controls.Add(vld);
     }
 }
