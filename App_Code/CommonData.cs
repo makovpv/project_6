@@ -9,6 +9,18 @@ using System.IO;
 using System.Drawing;
 using System.Net;
 
+
+
+public enum DimensionType
+{
+    dtSingleChoise = 1, dtMultiSelect = 2, dtOpenAnswer = 3,
+    dtGender = 8, dtBirthYear = 9, dtRange = 10, dtDate = 11, dtNumber = 12,
+    dtEMP = 13, dtCompetence = 14, dtBook = 15
+}
+//select 7, 'ранжирование',	1, 0 union all
+//select 5, 'попарное ранжирование',	1, 0 union all
+//select 6, 'шкалирование',	1, 0 union all
+
 /// <summary>
 /// Summary description for CommonData
 /// </summary>
@@ -298,7 +310,6 @@ public class CommonData
         return imgType;
     }
 
-    #region test design
     /// <summary>
     /// добавление произвольного диапазона для расчета Т-балла
     /// </summary>
@@ -312,7 +323,7 @@ public class CommonData
     /// </summary>
     public static void GenerateAnswerWithEMP(SubScaleDimension ssd, Company cmp)
     { 
-        if (ssd.dimension_type == 13) // "действующие сотрудники"
+        if (ssd.dimension_type == (byte)DimensionType.dtEMP) // "действующие сотрудники"
         {
             var qqs = (from ua in cmp.user_accounts
                         select ua).Where(q => q.idState != 1 && q.idState != 3 && q.idState != 4 && q.idState!= null).OrderBy(o=> o.fio);
@@ -331,7 +342,48 @@ public class CommonData
             }
         }
     }
-    #endregion test design
+    public static void GenerateAnswerWithBook(SubScaleDimension ssd, Company cmp)
+    {
+        if (ssd.dimension_type == (byte)DimensionType.dtBook) 
+        {
+            var qqs = (from bk in cmp.books
+                       select bk).OrderBy(o => o.title);
+            byte OrderNum = 0; 
+            foreach (book bk in qqs)
+            {
+                OrderNum++;
+                if (ssd.SubScales.FirstOrDefault(f => f.name == bk.title) == null)
+                {
+                    ssd.SubScales.Add(new SubScale()
+                    {
+                        name = bk.title,
+                        OrderNumber = OrderNum
+                    });
+                }
+            }
+        }
+    }
+    public static void GenerateAnswerWithCompetence(SubScaleDimension ssd, Company cmp)
+    {
+        if (ssd.dimension_type == (byte)DimensionType.dtCompetence)
+        {
+            var qqs = (from c in cmp.competences
+                       select c).OrderBy(o => o.name);
+            byte OrderNum = 0;
+            foreach (competence c in qqs)
+            {
+                OrderNum++;
+                if (ssd.SubScales.FirstOrDefault(f => f.name == c.name) == null)
+                {
+                    ssd.SubScales.Add(new SubScale()
+                    {
+                        name = c.name,
+                        OrderNumber = OrderNum
+                    });
+                }
+            }
+        }
+    }
 
     #region Dynamic Text
     public static void SetPassportTemplate(string TemplateText, short p_TemplateID)

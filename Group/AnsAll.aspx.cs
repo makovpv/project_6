@@ -36,12 +36,7 @@ public partial class Player_AnsAll : System.Web.UI.Page
         }
     }
 
-    public enum DimensionType {dtSingleChoise = 1, dtMultiSelect = 2, dtOpenAnswer = 3, 
-        dtGender = 8, dtBirthYear = 9, dtRange = 10, dtDate = 11, dtNumber = 12,
-        dtEMP = 13, dtCompetence = 14, dtBook = 15 }
-//select 7, 'ранжирование',	1, 0 union all
-//select 5, 'попарное ранжирование',	1, 0 union all
-//select 6, 'шкалирование',	1, 0 union all
+
     
     protected void Page_Load(object sender, EventArgs e)
     {

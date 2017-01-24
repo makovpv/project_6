@@ -356,7 +356,10 @@ create table dbo.book_competence_lnk (
 go
 
 
-
+insert into dimension_type (id,name, foritem)
+values (14,'компетенция', 1)
+insert into dimension_type (id,name, foritem)
+values (15,'книга', 1)
 
 --------------insert into idea_generator (idTest, idgeneratortype) values (1220, 2 )
 

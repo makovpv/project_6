@@ -229,9 +229,17 @@ public class ResearchData
     { 
         foreach (Test_SubjectGroup_Link sgl in sg.Test_SubjectGroup_Links)
         {
-            foreach (SubScaleDimension ssd in sgl.test.SubScaleDimensions.Where (p=> p.dimension_type == 13))
+            foreach (SubScaleDimension ssd in sgl.test.SubScaleDimensions.Where (p=> p.dimension_type == (byte)DimensionType.dtEMP))
             {
                 CommonData.GenerateAnswerWithEMP(ssd, sg.Company);
+            }
+            foreach (SubScaleDimension ssd in sgl.test.SubScaleDimensions.Where(p => p.dimension_type == (byte)DimensionType.dtCompetence))
+            {
+                CommonData.GenerateAnswerWithCompetence(ssd, sg.Company);
+            }
+            foreach (SubScaleDimension ssd in sgl.test.SubScaleDimensions.Where(p => p.dimension_type == (byte)DimensionType.dtBook))
+            {
+                CommonData.GenerateAnswerWithBook(ssd, sg.Company);
             }
         }
         
