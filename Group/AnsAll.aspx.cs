@@ -225,6 +225,13 @@ public partial class Player_AnsAll : System.Web.UI.Page
                                         string ScriptText = "var nn = 1";
                                         Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "DataScript", "<script language=javascript>" + ScriptText + "</script>");
                                         break;
+                                    case DimensionType.dtBook:
+                                        CommonData.GenerateAnswerWithBook(itm.SubScaleDimension, subj.subject_group.Company);
+                                        dc.SubmitChanges();
+
+                                        CreateSingleChoiseControl(subj, MM, itm);
+
+                                        break;
                                     case DimensionType.dtEMP:
                                         CommonData.GenerateAnswerWithEMP(itm.SubScaleDimension, subj.subject_group.Company);
                                         dc.SubmitChanges();
