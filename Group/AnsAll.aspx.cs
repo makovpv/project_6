@@ -221,7 +221,9 @@ public partial class Player_AnsAll : System.Web.UI.Page
 
                                         break;
                                     case DimensionType.dtCompetence:
-                                        CreateSingleChoiseControl(subj, MM, itm);
+                                        //CreateSingleChoiseControl(subj, MM, itm);
+                                        CreateCompetenceControl(subj, MM, itm, dc);
+                                        
                                         string ScriptText = "var nn = 1";
                                         Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "DataScript", "<script language=javascript>" + ScriptText + "</script>");
                                         break;
@@ -351,6 +353,57 @@ public partial class Player_AnsAll : System.Web.UI.Page
         vld.ForeColor = System.Drawing.Color.Red;
         vld.SetFocusOnError = true;
         //vld.ValidationGroup = "ValidGroup";
+        divContent.Controls.Add(vld);
+    }
+
+    private void CreateCompetenceControl(Test_Subject subj, int MM, item itm, TesterDataClassesDataContext p_dc)
+    {
+        ListControl lct;
+        if (itm.SubScaleDimension.dimension_mode == 3) // dropdownlist
+        {
+            lct = new DropDownList() { CssClass = "AnsAllDropList" };
+        }
+        else // radiobuttons
+        {
+            lct = new RadioButtonList();
+        }
+        lct.ID = string.Format("spCtr_{0}__{1}", itm.id, MM);
+        foreach (SubScale ssc in itm.SubScaleDimension.SubScales.OrderBy(q => q.OrderNumber))
+        {
+            string Partners = "";
+
+            foreach (string s in (
+                from ts in subj.subject_group.Test_Subjects
+                join trr in p_dc.Test_Results on ts.id equals trr.Subject_ID
+                select new {ts.fio, trr.SubScale} ).Where (e=> 
+                    e.SubScale.SubScaleDimension.dimension_type == (byte)DimensionType.dtCompetence && 
+                    e.SubScale.name == ssc.name).Select (s=> s.fio)
+                )
+            {
+                Partners += "," + s;
+            }
+
+            if (Partners.Length > 0)
+            {
+                
+                Partners = string.Format("<i> (выбрали {0})</i>", Partners.Remove(0, 1));
+            }
+            
+            lct.Items.Add(new ListItem(
+                ssc.name + Partners,
+                ssc.id.ToString()
+                ));
+        }
+        Test_Result tr = subj.Test_Results.Where(trr => trr.item_id == itm.id).FirstOrDefault();
+        if (tr != null && tr.SubScale_ID != null)
+            lct.SelectedValue = tr.SubScale_ID.ToString();
+        divContent.Controls.Add(lct);
+
+        RequiredFieldValidator vld = new RequiredFieldValidator();
+        vld.ControlToValidate = lct.ID;
+        vld.ErrorMessage = "Не выбран ответ";
+        vld.ForeColor = System.Drawing.Color.Red;
+        vld.SetFocusOnError = true;
         divContent.Controls.Add(vld);
     }
 }
