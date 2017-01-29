@@ -255,19 +255,23 @@ public partial class Player_AnsAll : System.Web.UI.Page
                                         string SelectedNames = "";
                                         foreach (SubScale ssc in itm.SubScaleDimension.SubScales.OrderBy(q=> q.name))
                                         {
-                                            ListItem li = new ListItem(ssc.name, ssc.id.ToString()) {
-                                                Selected = ltr.Where(bb => bb.SubScale_ID == ssc.id).FirstOrDefault() != null
-                                            };
 
-                                            if (emp_fired.Contains (li.Text))
+                                            //li.Attributes["class"] = "emp_fired";
+                                            if (!emp_fired.Contains(ssc.name))
                                             {
-                                                li.Attributes["class"] = "emp_fired";
-                                            }
+                                                ListItem li = new ListItem(ssc.name, ssc.id.ToString())
+                                                {
+                                                    Selected = ltr.Where(bb => bb.SubScale_ID == ssc.id).FirstOrDefault() != null
+                                                };
 
-                                            cbl.Items.Add(li);
-                                            if (li.Selected) {
-                                                SelectedNames= SelectedNames +", " +ssc.name;
+                                                cbl.Items.Add(li);
+                                                if (li.Selected)
+                                                {
+                                                    SelectedNames = SelectedNames + ", " + ssc.name;
+                                                }
+
                                             }
+                                            
                                         }
                                         cbl.RepeatColumns = 3;
                                         divContent.Controls.Add(new LiteralControl(string.Format (@"<button type='button' onclick='empClick(""ContentPlaceHolder1_{0}"")'>Сотрудники...</button>", cbl.ID)));
