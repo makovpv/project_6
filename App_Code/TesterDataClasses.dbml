@@ -347,6 +347,7 @@
       <Association Name="Company_indicator" Member="indicators" ThisKey="id" OtherKey="idCompany" Type="indicator" />
       <Association Name="Company_competence" Member="competences" ThisKey="id" OtherKey="idCompany" Type="competence" />
       <Association Name="Company_book" Member="books" ThisKey="id" OtherKey="idCompany" Type="book" />
+      <Association Name="Company_metric" Member="metrics" ThisKey="id" OtherKey="idCompany" Type="metric" />
     </Type>
   </Table>
   <Table Name="dbo.Job" Member="Jobs">
@@ -354,6 +355,7 @@
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Association Name="Job_user_account" Member="user_accounts" ThisKey="id" OtherKey="idJob" Type="user_account" />
+      <Association Name="Job_metric_subj_filter" Member="metric_subj_filters" ThisKey="id" OtherKey="idJob" Type="metric_subj_filter" />
     </Type>
   </Table>
   <Table Name="dbo.user_state" Member="user_states">
@@ -361,6 +363,7 @@
       <Column Name="id" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Association Name="user_state_user_account" Member="user_accounts" ThisKey="id" OtherKey="idState" Type="user_account" />
+      <Association Name="user_state_metric_subj_filter" Member="metric_subj_filters" ThisKey="id" OtherKey="idState" Type="metric_subj_filter" />
     </Type>
   </Table>
   <Table Name="dbo.Scales" Member="Scales">
@@ -395,6 +398,7 @@
       <Association Name="Scale_Scale_Norm" Member="Scale_Norms" ThisKey="id" OtherKey="Scale_ID" Type="Scale_Norm" />
       <Association Name="Scale_indicator" Member="indicators" ThisKey="id" OtherKey="idScale" Type="indicator" />
       <Association Name="Scale_Raw_Data" Member="Raw_Datas" ThisKey="id" OtherKey="Scale_ID" Type="Raw_Data" />
+      <Association Name="Scale_metric" Member="metrics" ThisKey="id" OtherKey="idScale" Type="metric" />
       <Association Name="Param_Scale" Member="Param" ThisKey="Param2_ID" OtherKey="id" Type="Param" IsForeignKey="true" />
       <Association Name="ScoreCalcType_Scale" Member="ScoreCalcType1" ThisKey="ScoreCalcType" OtherKey="id" Type="ScoreCalcType" IsForeignKey="true" />
       <Association Name="Param_Scale1" Member="Param1" ThisKey="Param_ID" OtherKey="id" Type="Param" IsForeignKey="true" />
@@ -620,6 +624,7 @@
       <Association Name="test_interpretation" Member="interpretations" ThisKey="id" OtherKey="test_id" Type="interpretation" />
       <Association Name="test_rep_test_link" Member="rep_test_links" ThisKey="id" OtherKey="idTest" Type="rep_test_link" />
       <Association Name="test_idea_generator" Member="idea_generators" ThisKey="id" OtherKey="idTest" Type="idea_generator" />
+      <Association Name="test_metric" Member="metrics" ThisKey="id" OtherKey="idTest" Type="metric" />
       <Association Name="test_category_test" Member="test_category" ThisKey="category_id" OtherKey="id" Type="test_category" IsForeignKey="true" />
       <Association Name="DiagnosticFieldType_test" Member="DiagnosticFieldType" ThisKey="diagnostic_field" OtherKey="id" Type="DiagnosticFieldType" IsForeignKey="true" />
       <Association Name="language_test" Member="language" ThisKey="language_type" OtherKey="id" Type="language" IsForeignKey="true" />
@@ -687,6 +692,7 @@
       <Association Name="subject_group_rep_item_link" Member="rep_item_links" ThisKey="id" OtherKey="idGroup" Type="rep_item_link" />
       <Association Name="subject_group_schedule" Member="schedules" ThisKey="id" OtherKey="idBaseGroup" Type="schedule" />
       <Association Name="subject_group_indicator" Member="indicators" ThisKey="id" OtherKey="idGroup" Type="indicator" />
+      <Association Name="subject_group_metric" Member="metrics" ThisKey="id" OtherKey="idSubjectGroup" Type="metric" />
       <Association Name="project_subject_group" Member="project" ThisKey="project_id" OtherKey="id" Type="project" IsForeignKey="true" />
       <Association Name="report_subject_group" Member="report" ThisKey="idReport" OtherKey="idReport" Type="report" IsForeignKey="true" />
       <Association Name="Company_subject_group" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" />
@@ -767,6 +773,36 @@
       <Column Name="Raw_Value" Type="System.Decimal" DbType="Decimal(8,3) NOT NULL" CanBeNull="false" />
       <Association Name="Scale_Raw_Data" Member="Scale" ThisKey="Scale_ID" OtherKey="id" Type="Scale" IsForeignKey="true" />
       <Association Name="Test_Subject_Raw_Data" Member="Test_Subject" ThisKey="Subject_ID" OtherKey="id" Type="Test_Subject" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.metric_subj_filter" Member="metric_subj_filters">
+    <Type Name="metric_subj_filter">
+      <Column Name="idFilter" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="idMetric" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idJob" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="idState" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Association Name="Job_metric_subj_filter" Member="Job" ThisKey="idJob" OtherKey="id" Type="Job" IsForeignKey="true" />
+      <Association Name="user_state_metric_subj_filter" Member="user_state" ThisKey="idState" OtherKey="id" Type="user_state" IsForeignKey="true" />
+      <Association Name="metric_metric_subj_filter" Member="metric" ThisKey="idMetric" OtherKey="idMetric" Type="metric" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.metric" Member="metrics">
+    <Type Name="metric">
+      <Column Name="idMetric" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DateCreate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="idSubjectGroup" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="idTest" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="idScale" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="index_value" Type="System.Decimal" DbType="Decimal(8,0)" CanBeNull="true" />
+      <Column Name="condition" Type="System.String" DbType="Char(2)" CanBeNull="true" />
+      <Column Name="idCompany" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="metric_metric_subj_filter" Member="metric_subj_filters" ThisKey="idMetric" OtherKey="idMetric" Type="metric_subj_filter" />
+      <Association Name="Company_metric" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" />
+      <Association Name="Scale_metric" Member="Scale" ThisKey="idScale" OtherKey="id" Type="Scale" IsForeignKey="true" />
+      <Association Name="subject_group_metric" Member="subject_group" ThisKey="idSubjectGroup" OtherKey="id" Type="subject_group" IsForeignKey="true" />
+      <Association Name="test_metric" Member="test" ThisKey="idTest" OtherKey="id" Type="test" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.IsInterpretationFor" Method="IsInterpretationFor" IsComposable="true">

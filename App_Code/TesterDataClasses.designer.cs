@@ -206,6 +206,12 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
   partial void InsertRaw_Data(Raw_Data instance);
   partial void UpdateRaw_Data(Raw_Data instance);
   partial void DeleteRaw_Data(Raw_Data instance);
+  partial void Insertmetric_subj_filter(metric_subj_filter instance);
+  partial void Updatemetric_subj_filter(metric_subj_filter instance);
+  partial void Deletemetric_subj_filter(metric_subj_filter instance);
+  partial void Insertmetric(metric instance);
+  partial void Updatemetric(metric instance);
+  partial void Deletemetric(metric instance);
   #endregion
 	
 	public TesterDataClassesDataContext() : 
@@ -731,6 +737,22 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
 		get
 		{
 			return this.GetTable<Raw_Data>();
+		}
+	}
+	
+	public System.Data.Linq.Table<metric_subj_filter> metric_subj_filters
+	{
+		get
+		{
+			return this.GetTable<metric_subj_filter>();
+		}
+	}
+	
+	public System.Data.Linq.Table<metric> metrics
+	{
+		get
+		{
+			return this.GetTable<metric>();
 		}
 	}
 	
@@ -7611,6 +7633,8 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 	
 	private EntitySet<book> _books;
 	
+	private EntitySet<metric> _metrics;
+	
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -7629,6 +7653,7 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 		this._indicators = new EntitySet<indicator>(new Action<indicator>(this.attach_indicators), new Action<indicator>(this.detach_indicators));
 		this._competences = new EntitySet<competence>(new Action<competence>(this.attach_competences), new Action<competence>(this.detach_competences));
 		this._books = new EntitySet<book>(new Action<book>(this.attach_books), new Action<book>(this.detach_books));
+		this._metrics = new EntitySet<metric>(new Action<metric>(this.attach_metrics), new Action<metric>(this.detach_metrics));
 		OnCreated();
 	}
 	
@@ -7750,6 +7775,19 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_metric", Storage="_metrics", ThisKey="id", OtherKey="idCompany")]
+	public EntitySet<metric> metrics
+	{
+		get
+		{
+			return this._metrics;
+		}
+		set
+		{
+			this._metrics.Assign(value);
+		}
+	}
+	
 	public event PropertyChangingEventHandler PropertyChanging;
 	
 	public event PropertyChangedEventHandler PropertyChanged;
@@ -7841,6 +7879,18 @@ public partial class Company : INotifyPropertyChanging, INotifyPropertyChanged
 		this.SendPropertyChanging();
 		entity.Company = null;
 	}
+	
+	private void attach_metrics(metric entity)
+	{
+		this.SendPropertyChanging();
+		entity.Company = this;
+	}
+	
+	private void detach_metrics(metric entity)
+	{
+		this.SendPropertyChanging();
+		entity.Company = null;
+	}
 }
 
 [global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Job")]
@@ -7855,6 +7905,8 @@ public partial class Job : INotifyPropertyChanging, INotifyPropertyChanged
 	
 	private EntitySet<user_account> _user_accounts;
 	
+	private EntitySet<metric_subj_filter> _metric_subj_filters;
+	
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -7868,6 +7920,7 @@ public partial class Job : INotifyPropertyChanging, INotifyPropertyChanged
 	public Job()
 	{
 		this._user_accounts = new EntitySet<user_account>(new Action<user_account>(this.attach_user_accounts), new Action<user_account>(this.detach_user_accounts));
+		this._metric_subj_filters = new EntitySet<metric_subj_filter>(new Action<metric_subj_filter>(this.attach_metric_subj_filters), new Action<metric_subj_filter>(this.detach_metric_subj_filters));
 		OnCreated();
 	}
 	
@@ -7924,6 +7977,19 @@ public partial class Job : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Job_metric_subj_filter", Storage="_metric_subj_filters", ThisKey="id", OtherKey="idJob")]
+	public EntitySet<metric_subj_filter> metric_subj_filters
+	{
+		get
+		{
+			return this._metric_subj_filters;
+		}
+		set
+		{
+			this._metric_subj_filters.Assign(value);
+		}
+	}
+	
 	public event PropertyChangingEventHandler PropertyChanging;
 	
 	public event PropertyChangedEventHandler PropertyChanged;
@@ -7955,6 +8021,18 @@ public partial class Job : INotifyPropertyChanging, INotifyPropertyChanged
 		this.SendPropertyChanging();
 		entity.Job = null;
 	}
+	
+	private void attach_metric_subj_filters(metric_subj_filter entity)
+	{
+		this.SendPropertyChanging();
+		entity.Job = this;
+	}
+	
+	private void detach_metric_subj_filters(metric_subj_filter entity)
+	{
+		this.SendPropertyChanging();
+		entity.Job = null;
+	}
 }
 
 [global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.user_state")]
@@ -7969,6 +8047,8 @@ public partial class user_state : INotifyPropertyChanging, INotifyPropertyChange
 	
 	private EntitySet<user_account> _user_accounts;
 	
+	private EntitySet<metric_subj_filter> _metric_subj_filters;
+	
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -7982,6 +8062,7 @@ public partial class user_state : INotifyPropertyChanging, INotifyPropertyChange
 	public user_state()
 	{
 		this._user_accounts = new EntitySet<user_account>(new Action<user_account>(this.attach_user_accounts), new Action<user_account>(this.detach_user_accounts));
+		this._metric_subj_filters = new EntitySet<metric_subj_filter>(new Action<metric_subj_filter>(this.attach_metric_subj_filters), new Action<metric_subj_filter>(this.detach_metric_subj_filters));
 		OnCreated();
 	}
 	
@@ -8038,6 +8119,19 @@ public partial class user_state : INotifyPropertyChanging, INotifyPropertyChange
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="user_state_metric_subj_filter", Storage="_metric_subj_filters", ThisKey="id", OtherKey="idState")]
+	public EntitySet<metric_subj_filter> metric_subj_filters
+	{
+		get
+		{
+			return this._metric_subj_filters;
+		}
+		set
+		{
+			this._metric_subj_filters.Assign(value);
+		}
+	}
+	
 	public event PropertyChangingEventHandler PropertyChanging;
 	
 	public event PropertyChangedEventHandler PropertyChanged;
@@ -8065,6 +8159,18 @@ public partial class user_state : INotifyPropertyChanging, INotifyPropertyChange
 	}
 	
 	private void detach_user_accounts(user_account entity)
+	{
+		this.SendPropertyChanging();
+		entity.user_state = null;
+	}
+	
+	private void attach_metric_subj_filters(metric_subj_filter entity)
+	{
+		this.SendPropertyChanging();
+		entity.user_state = this;
+	}
+	
+	private void detach_metric_subj_filters(metric_subj_filter entity)
 	{
 		this.SendPropertyChanging();
 		entity.user_state = null;
@@ -8137,6 +8243,8 @@ public partial class Scale : INotifyPropertyChanging, INotifyPropertyChanged
 	
 	private EntitySet<Raw_Data> _Raw_Datas;
 	
+	private EntitySet<metric> _metrics;
+	
 	private EntityRef<Param> _Param;
 	
 	private EntityRef<ScoreCalcType> _ScoreCalcType1;
@@ -8204,6 +8312,7 @@ public partial class Scale : INotifyPropertyChanging, INotifyPropertyChanged
 		this._Scale_Norms = new EntitySet<Scale_Norm>(new Action<Scale_Norm>(this.attach_Scale_Norms), new Action<Scale_Norm>(this.detach_Scale_Norms));
 		this._indicators = new EntitySet<indicator>(new Action<indicator>(this.attach_indicators), new Action<indicator>(this.detach_indicators));
 		this._Raw_Datas = new EntitySet<Raw_Data>(new Action<Raw_Data>(this.attach_Raw_Datas), new Action<Raw_Data>(this.detach_Raw_Datas));
+		this._metrics = new EntitySet<metric>(new Action<metric>(this.attach_metrics), new Action<metric>(this.detach_metrics));
 		this._Param = default(EntityRef<Param>);
 		this._ScoreCalcType1 = default(EntityRef<ScoreCalcType>);
 		this._Param1 = default(EntityRef<Param>);
@@ -8764,6 +8873,19 @@ public partial class Scale : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Scale_metric", Storage="_metrics", ThisKey="id", OtherKey="idScale")]
+	public EntitySet<metric> metrics
+	{
+		get
+		{
+			return this._metrics;
+		}
+		set
+		{
+			this._metrics.Assign(value);
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Param_Scale", Storage="_Param", ThisKey="Param2_ID", OtherKey="id", IsForeignKey=true)]
 	public Param Param
 	{
@@ -9023,6 +9145,18 @@ public partial class Scale : INotifyPropertyChanging, INotifyPropertyChanged
 	}
 	
 	private void detach_Raw_Datas(Raw_Data entity)
+	{
+		this.SendPropertyChanging();
+		entity.Scale = null;
+	}
+	
+	private void attach_metrics(metric entity)
+	{
+		this.SendPropertyChanging();
+		entity.Scale = this;
+	}
+	
+	private void detach_metrics(metric entity)
 	{
 		this.SendPropertyChanging();
 		entity.Scale = null;
@@ -12741,6 +12875,8 @@ public partial class test : INotifyPropertyChanging, INotifyPropertyChanged
 	
 	private EntitySet<rep_test_link> _rep_test_links;
 	
+	private EntitySet<metric> _metrics;
+	
 	private EntityRef<test_category> _test_category;
 	
 	private EntityRef<DiagnosticFieldType> _DiagnosticFieldType;
@@ -12847,6 +12983,7 @@ public partial class test : INotifyPropertyChanging, INotifyPropertyChanged
 		this._Test_SubjectGroup_Links = new EntitySet<Test_SubjectGroup_Link>(new Action<Test_SubjectGroup_Link>(this.attach_Test_SubjectGroup_Links), new Action<Test_SubjectGroup_Link>(this.detach_Test_SubjectGroup_Links));
 		this._interpretations = new EntitySet<interpretation>(new Action<interpretation>(this.attach_interpretations), new Action<interpretation>(this.detach_interpretations));
 		this._rep_test_links = new EntitySet<rep_test_link>(new Action<rep_test_link>(this.attach_rep_test_links), new Action<rep_test_link>(this.detach_rep_test_links));
+		this._metrics = new EntitySet<metric>(new Action<metric>(this.attach_metrics), new Action<metric>(this.detach_metrics));
 		this._test_category = default(EntityRef<test_category>);
 		this._DiagnosticFieldType = default(EntityRef<DiagnosticFieldType>);
 		this._language = default(EntityRef<language>);
@@ -13800,6 +13937,19 @@ public partial class test : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="test_metric", Storage="_metrics", ThisKey="id", OtherKey="idTest")]
+	public EntitySet<metric> metrics
+	{
+		get
+		{
+			return this._metrics;
+		}
+		set
+		{
+			this._metrics.Assign(value);
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="test_category_test", Storage="_test_category", ThisKey="category_id", OtherKey="id", IsForeignKey=true)]
 	public test_category test_category
 	{
@@ -14071,6 +14221,18 @@ public partial class test : INotifyPropertyChanging, INotifyPropertyChanged
 	}
 	
 	private void detach_rep_test_links(rep_test_link entity)
+	{
+		this.SendPropertyChanging();
+		entity.test = null;
+	}
+	
+	private void attach_metrics(metric entity)
+	{
+		this.SendPropertyChanging();
+		entity.test = this;
+	}
+	
+	private void detach_metrics(metric entity)
 	{
 		this.SendPropertyChanging();
 		entity.test = null;
@@ -14760,6 +14922,8 @@ public partial class subject_group : INotifyPropertyChanging, INotifyPropertyCha
 	
 	private EntitySet<indicator> _indicators;
 	
+	private EntitySet<metric> _metrics;
+	
 	private EntityRef<project> _project;
 	
 	private EntityRef<report> _report;
@@ -14810,6 +14974,7 @@ public partial class subject_group : INotifyPropertyChanging, INotifyPropertyCha
 		this._rep_item_links = new EntitySet<rep_item_link>(new Action<rep_item_link>(this.attach_rep_item_links), new Action<rep_item_link>(this.detach_rep_item_links));
 		this._schedules = new EntitySet<schedule>(new Action<schedule>(this.attach_schedules), new Action<schedule>(this.detach_schedules));
 		this._indicators = new EntitySet<indicator>(new Action<indicator>(this.attach_indicators), new Action<indicator>(this.detach_indicators));
+		this._metrics = new EntitySet<metric>(new Action<metric>(this.attach_metrics), new Action<metric>(this.detach_metrics));
 		this._project = default(EntityRef<project>);
 		this._report = default(EntityRef<report>);
 		this._Company = default(EntityRef<Company>);
@@ -15206,6 +15371,19 @@ public partial class subject_group : INotifyPropertyChanging, INotifyPropertyCha
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="subject_group_metric", Storage="_metrics", ThisKey="id", OtherKey="idSubjectGroup")]
+	public EntitySet<metric> metrics
+	{
+		get
+		{
+			return this._metrics;
+		}
+		set
+		{
+			this._metrics.Assign(value);
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="project_subject_group", Storage="_project", ThisKey="project_id", OtherKey="id", IsForeignKey=true)]
 	public project project
 	{
@@ -15395,6 +15573,18 @@ public partial class subject_group : INotifyPropertyChanging, INotifyPropertyCha
 	}
 	
 	private void detach_indicators(indicator entity)
+	{
+		this.SendPropertyChanging();
+		entity.subject_group = null;
+	}
+	
+	private void attach_metrics(metric entity)
+	{
+		this.SendPropertyChanging();
+		entity.subject_group = this;
+	}
+	
+	private void detach_metrics(metric entity)
 	{
 		this.SendPropertyChanging();
 		entity.subject_group = null;
@@ -17139,6 +17329,733 @@ public partial class Raw_Data : INotifyPropertyChanging, INotifyPropertyChanged
 		{
 			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 		}
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.metric_subj_filter")]
+public partial class metric_subj_filter : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private int _idFilter;
+	
+	private int _idMetric;
+	
+	private System.Nullable<int> _idJob;
+	
+	private System.Nullable<byte> _idState;
+	
+	private EntityRef<Job> _Job;
+	
+	private EntityRef<user_state> _user_state;
+	
+	private EntityRef<metric> _metric;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidFilterChanging(int value);
+    partial void OnidFilterChanged();
+    partial void OnidMetricChanging(int value);
+    partial void OnidMetricChanged();
+    partial void OnidJobChanging(System.Nullable<int> value);
+    partial void OnidJobChanged();
+    partial void OnidStateChanging(System.Nullable<byte> value);
+    partial void OnidStateChanged();
+    #endregion
+	
+	public metric_subj_filter()
+	{
+		this._Job = default(EntityRef<Job>);
+		this._user_state = default(EntityRef<user_state>);
+		this._metric = default(EntityRef<metric>);
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idFilter", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+	public int idFilter
+	{
+		get
+		{
+			return this._idFilter;
+		}
+		set
+		{
+			if ((this._idFilter != value))
+			{
+				this.OnidFilterChanging(value);
+				this.SendPropertyChanging();
+				this._idFilter = value;
+				this.SendPropertyChanged("idFilter");
+				this.OnidFilterChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idMetric", DbType="Int NOT NULL")]
+	public int idMetric
+	{
+		get
+		{
+			return this._idMetric;
+		}
+		set
+		{
+			if ((this._idMetric != value))
+			{
+				if (this._metric.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidMetricChanging(value);
+				this.SendPropertyChanging();
+				this._idMetric = value;
+				this.SendPropertyChanged("idMetric");
+				this.OnidMetricChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idJob", DbType="Int")]
+	public System.Nullable<int> idJob
+	{
+		get
+		{
+			return this._idJob;
+		}
+		set
+		{
+			if ((this._idJob != value))
+			{
+				if (this._Job.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidJobChanging(value);
+				this.SendPropertyChanging();
+				this._idJob = value;
+				this.SendPropertyChanged("idJob");
+				this.OnidJobChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idState", DbType="TinyInt")]
+	public System.Nullable<byte> idState
+	{
+		get
+		{
+			return this._idState;
+		}
+		set
+		{
+			if ((this._idState != value))
+			{
+				if (this._user_state.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidStateChanging(value);
+				this.SendPropertyChanging();
+				this._idState = value;
+				this.SendPropertyChanged("idState");
+				this.OnidStateChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Job_metric_subj_filter", Storage="_Job", ThisKey="idJob", OtherKey="id", IsForeignKey=true)]
+	public Job Job
+	{
+		get
+		{
+			return this._Job.Entity;
+		}
+		set
+		{
+			Job previousValue = this._Job.Entity;
+			if (((previousValue != value) 
+						|| (this._Job.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Job.Entity = null;
+					previousValue.metric_subj_filters.Remove(this);
+				}
+				this._Job.Entity = value;
+				if ((value != null))
+				{
+					value.metric_subj_filters.Add(this);
+					this._idJob = value.id;
+				}
+				else
+				{
+					this._idJob = default(Nullable<int>);
+				}
+				this.SendPropertyChanged("Job");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="user_state_metric_subj_filter", Storage="_user_state", ThisKey="idState", OtherKey="id", IsForeignKey=true)]
+	public user_state user_state
+	{
+		get
+		{
+			return this._user_state.Entity;
+		}
+		set
+		{
+			user_state previousValue = this._user_state.Entity;
+			if (((previousValue != value) 
+						|| (this._user_state.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._user_state.Entity = null;
+					previousValue.metric_subj_filters.Remove(this);
+				}
+				this._user_state.Entity = value;
+				if ((value != null))
+				{
+					value.metric_subj_filters.Add(this);
+					this._idState = value.id;
+				}
+				else
+				{
+					this._idState = default(Nullable<byte>);
+				}
+				this.SendPropertyChanged("user_state");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="metric_metric_subj_filter", Storage="_metric", ThisKey="idMetric", OtherKey="idMetric", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+	public metric metric
+	{
+		get
+		{
+			return this._metric.Entity;
+		}
+		set
+		{
+			metric previousValue = this._metric.Entity;
+			if (((previousValue != value) 
+						|| (this._metric.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._metric.Entity = null;
+					previousValue.metric_subj_filters.Remove(this);
+				}
+				this._metric.Entity = value;
+				if ((value != null))
+				{
+					value.metric_subj_filters.Add(this);
+					this._idMetric = value.idMetric;
+				}
+				else
+				{
+					this._idMetric = default(int);
+				}
+				this.SendPropertyChanged("metric");
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.metric")]
+public partial class metric : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private int _idMetric;
+	
+	private string _name;
+	
+	private string _description;
+	
+	private System.DateTime _DateCreate;
+	
+	private System.Nullable<int> _idSubjectGroup;
+	
+	private System.Nullable<int> _idTest;
+	
+	private System.Nullable<int> _idScale;
+	
+	private System.Nullable<decimal> _index_value;
+	
+	private string _condition;
+	
+	private int _idCompany;
+	
+	private EntitySet<metric_subj_filter> _metric_subj_filters;
+	
+	private EntityRef<Company> _Company;
+	
+	private EntityRef<Scale> _Scale;
+	
+	private EntityRef<subject_group> _subject_group;
+	
+	private EntityRef<test> _test;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidMetricChanging(int value);
+    partial void OnidMetricChanged();
+    partial void OnnameChanging(string value);
+    partial void OnnameChanged();
+    partial void OndescriptionChanging(string value);
+    partial void OndescriptionChanged();
+    partial void OnDateCreateChanging(System.DateTime value);
+    partial void OnDateCreateChanged();
+    partial void OnidSubjectGroupChanging(System.Nullable<int> value);
+    partial void OnidSubjectGroupChanged();
+    partial void OnidTestChanging(System.Nullable<int> value);
+    partial void OnidTestChanged();
+    partial void OnidScaleChanging(System.Nullable<int> value);
+    partial void OnidScaleChanged();
+    partial void Onindex_valueChanging(System.Nullable<decimal> value);
+    partial void Onindex_valueChanged();
+    partial void OnconditionChanging(string value);
+    partial void OnconditionChanged();
+    partial void OnidCompanyChanging(int value);
+    partial void OnidCompanyChanged();
+    #endregion
+	
+	public metric()
+	{
+		this._metric_subj_filters = new EntitySet<metric_subj_filter>(new Action<metric_subj_filter>(this.attach_metric_subj_filters), new Action<metric_subj_filter>(this.detach_metric_subj_filters));
+		this._Company = default(EntityRef<Company>);
+		this._Scale = default(EntityRef<Scale>);
+		this._subject_group = default(EntityRef<subject_group>);
+		this._test = default(EntityRef<test>);
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idMetric", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+	public int idMetric
+	{
+		get
+		{
+			return this._idMetric;
+		}
+		set
+		{
+			if ((this._idMetric != value))
+			{
+				this.OnidMetricChanging(value);
+				this.SendPropertyChanging();
+				this._idMetric = value;
+				this.SendPropertyChanged("idMetric");
+				this.OnidMetricChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_name", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+	public string name
+	{
+		get
+		{
+			return this._name;
+		}
+		set
+		{
+			if ((this._name != value))
+			{
+				this.OnnameChanging(value);
+				this.SendPropertyChanging();
+				this._name = value;
+				this.SendPropertyChanged("name");
+				this.OnnameChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_description", DbType="NVarChar(MAX)")]
+	public string description
+	{
+		get
+		{
+			return this._description;
+		}
+		set
+		{
+			if ((this._description != value))
+			{
+				this.OndescriptionChanging(value);
+				this.SendPropertyChanging();
+				this._description = value;
+				this.SendPropertyChanged("description");
+				this.OndescriptionChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreate", DbType="DateTime NOT NULL")]
+	public System.DateTime DateCreate
+	{
+		get
+		{
+			return this._DateCreate;
+		}
+		set
+		{
+			if ((this._DateCreate != value))
+			{
+				this.OnDateCreateChanging(value);
+				this.SendPropertyChanging();
+				this._DateCreate = value;
+				this.SendPropertyChanged("DateCreate");
+				this.OnDateCreateChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idSubjectGroup", DbType="Int")]
+	public System.Nullable<int> idSubjectGroup
+	{
+		get
+		{
+			return this._idSubjectGroup;
+		}
+		set
+		{
+			if ((this._idSubjectGroup != value))
+			{
+				if (this._subject_group.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidSubjectGroupChanging(value);
+				this.SendPropertyChanging();
+				this._idSubjectGroup = value;
+				this.SendPropertyChanged("idSubjectGroup");
+				this.OnidSubjectGroupChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idTest", DbType="Int")]
+	public System.Nullable<int> idTest
+	{
+		get
+		{
+			return this._idTest;
+		}
+		set
+		{
+			if ((this._idTest != value))
+			{
+				if (this._test.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidTestChanging(value);
+				this.SendPropertyChanging();
+				this._idTest = value;
+				this.SendPropertyChanged("idTest");
+				this.OnidTestChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idScale", DbType="Int")]
+	public System.Nullable<int> idScale
+	{
+		get
+		{
+			return this._idScale;
+		}
+		set
+		{
+			if ((this._idScale != value))
+			{
+				if (this._Scale.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidScaleChanging(value);
+				this.SendPropertyChanging();
+				this._idScale = value;
+				this.SendPropertyChanged("idScale");
+				this.OnidScaleChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_index_value", DbType="Decimal(8,0)")]
+	public System.Nullable<decimal> index_value
+	{
+		get
+		{
+			return this._index_value;
+		}
+		set
+		{
+			if ((this._index_value != value))
+			{
+				this.Onindex_valueChanging(value);
+				this.SendPropertyChanging();
+				this._index_value = value;
+				this.SendPropertyChanged("index_value");
+				this.Onindex_valueChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_condition", DbType="Char(2)")]
+	public string condition
+	{
+		get
+		{
+			return this._condition;
+		}
+		set
+		{
+			if ((this._condition != value))
+			{
+				this.OnconditionChanging(value);
+				this.SendPropertyChanging();
+				this._condition = value;
+				this.SendPropertyChanged("condition");
+				this.OnconditionChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idCompany", DbType="Int NOT NULL")]
+	public int idCompany
+	{
+		get
+		{
+			return this._idCompany;
+		}
+		set
+		{
+			if ((this._idCompany != value))
+			{
+				if (this._Company.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidCompanyChanging(value);
+				this.SendPropertyChanging();
+				this._idCompany = value;
+				this.SendPropertyChanged("idCompany");
+				this.OnidCompanyChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="metric_metric_subj_filter", Storage="_metric_subj_filters", ThisKey="idMetric", OtherKey="idMetric")]
+	public EntitySet<metric_subj_filter> metric_subj_filters
+	{
+		get
+		{
+			return this._metric_subj_filters;
+		}
+		set
+		{
+			this._metric_subj_filters.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_metric", Storage="_Company", ThisKey="idCompany", OtherKey="id", IsForeignKey=true)]
+	public Company Company
+	{
+		get
+		{
+			return this._Company.Entity;
+		}
+		set
+		{
+			Company previousValue = this._Company.Entity;
+			if (((previousValue != value) 
+						|| (this._Company.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Company.Entity = null;
+					previousValue.metrics.Remove(this);
+				}
+				this._Company.Entity = value;
+				if ((value != null))
+				{
+					value.metrics.Add(this);
+					this._idCompany = value.id;
+				}
+				else
+				{
+					this._idCompany = default(int);
+				}
+				this.SendPropertyChanged("Company");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Scale_metric", Storage="_Scale", ThisKey="idScale", OtherKey="id", IsForeignKey=true)]
+	public Scale Scale
+	{
+		get
+		{
+			return this._Scale.Entity;
+		}
+		set
+		{
+			Scale previousValue = this._Scale.Entity;
+			if (((previousValue != value) 
+						|| (this._Scale.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Scale.Entity = null;
+					previousValue.metrics.Remove(this);
+				}
+				this._Scale.Entity = value;
+				if ((value != null))
+				{
+					value.metrics.Add(this);
+					this._idScale = value.id;
+				}
+				else
+				{
+					this._idScale = default(Nullable<int>);
+				}
+				this.SendPropertyChanged("Scale");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="subject_group_metric", Storage="_subject_group", ThisKey="idSubjectGroup", OtherKey="id", IsForeignKey=true)]
+	public subject_group subject_group
+	{
+		get
+		{
+			return this._subject_group.Entity;
+		}
+		set
+		{
+			subject_group previousValue = this._subject_group.Entity;
+			if (((previousValue != value) 
+						|| (this._subject_group.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._subject_group.Entity = null;
+					previousValue.metrics.Remove(this);
+				}
+				this._subject_group.Entity = value;
+				if ((value != null))
+				{
+					value.metrics.Add(this);
+					this._idSubjectGroup = value.id;
+				}
+				else
+				{
+					this._idSubjectGroup = default(Nullable<int>);
+				}
+				this.SendPropertyChanged("subject_group");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="test_metric", Storage="_test", ThisKey="idTest", OtherKey="id", IsForeignKey=true)]
+	public test test
+	{
+		get
+		{
+			return this._test.Entity;
+		}
+		set
+		{
+			test previousValue = this._test.Entity;
+			if (((previousValue != value) 
+						|| (this._test.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._test.Entity = null;
+					previousValue.metrics.Remove(this);
+				}
+				this._test.Entity = value;
+				if ((value != null))
+				{
+					value.metrics.Add(this);
+					this._idTest = value.id;
+				}
+				else
+				{
+					this._idTest = default(Nullable<int>);
+				}
+				this.SendPropertyChanged("test");
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+	
+	private void attach_metric_subj_filters(metric_subj_filter entity)
+	{
+		this.SendPropertyChanging();
+		entity.metric = this;
+	}
+	
+	private void detach_metric_subj_filters(metric_subj_filter entity)
+	{
+		this.SendPropertyChanging();
+		entity.metric = null;
 	}
 }
 #pragma warning restore 1591

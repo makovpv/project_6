@@ -360,7 +360,42 @@ insert into dimension_type (id,name, foritem)
 values (14,'компетенция', 1)
 insert into dimension_type (id,name, foritem)
 values (15,'книга', 1)
+go
+-------------------------------------------------------------
+create table dbo.metric (
+	idMetric int not null identity,
+	name nvarchar(255) not null,
+	[description] nvarchar(max),
+	DateCreate datetime not null default getdate(),
 
+	idSubjectGroup int,
+	idTest int,
+	idScale int,
+
+	index_value decimal (8,0),
+	condition char(2),
+	idCompany int not null,
+
+	constraint pk_metric primary key (idMetric),
+	constraint fk_metric_subjgroup foreign key (idSubjectGroup) references subject_group (id),
+	constraint fk_metric_test foreign key (idTest) references test (id),
+	constraint fk_metric_scale foreign key (idScale) references Scales (id),
+	constraint fk_metric_company foreign key (idCompany) REFERENCES dbo.Company (id) 
+)
+go
+
+create table dbo.metric_subj_filter (
+	idFilter int not null identity,
+	idMetric int not null,
+	--idFilterType int not null default 1, 
+	idJob int,
+	idState tinyint,
+	constraint pk_ms_filter primary key (idfilter),
+	constraint fk_ms_filter foreign key (idMetric) references metric (idMetric) on delete cascade,
+	constraint fk_ms_filter_job foreign key (idjob) references job (id),
+	constraint fk_ms_filter_state foreign key (idState) references user_state (id)
+)
+go
 --------------insert into idea_generator (idTest, idgeneratortype) values (1220, 2 )
 
 
