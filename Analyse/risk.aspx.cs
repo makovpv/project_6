@@ -12,7 +12,8 @@ public partial class Analyse_risk : System.Web.UI.Page
         if (!IsPostBack)
         {
             System.Web.Security.MembershipUser usr = System.Web.Security.Membership.GetUser();
-            if (usr != null)
+
+            if (usr != null && Page.User.IsInRole("HR"))
             {
                 tboxEndDate.Text = DateTime.Today.AddDays(1).ToString("dd.MM.yyyy");
             }
