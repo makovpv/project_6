@@ -94,6 +94,7 @@ public partial class lk2 : System.Web.UI.Page
                     sqlPotential.SelectParameters["idcompany"].DefaultValue = ua.idCompany.ToString();
                     sqlPotential.SelectParameters["iddept"].DefaultValue = ua.idDept.ToString();
                     sqlMonitoring.SelectParameters["idcompany"].DefaultValue = ua.idCompany.ToString();
+                    SqlMetrics.SelectParameters["idcompany"].DefaultValue = ua.idCompany.ToString();
 
                     CommonData.CompanyEmpCountInfo EmpCount = CommonData.GetEmpCount(dc, (int)ua.idCompany);
                     lblStaffCount.Text = EmpCount.StaffCount.ToString();
@@ -127,24 +128,22 @@ public partial class lk2 : System.Web.UI.Page
                 DrawEmpDiagrams(dc, ua.idCompany); // рисуем диаграммы по сотрудникам
             }
 
-            //((GridViewDataColumn)dxgEmp.Columns["dept_name"]).Settings.HeaderFilterMode = HeaderFilterMode.CheckedList;
-            //((GridViewDataColumn)dxgEmp.Columns["job_name"]).Settings.HeaderFilterMode = HeaderFilterMode.CheckedList;
-            //((GridViewDataColumn)dxgEmp.Columns["state_name"]).Settings.HeaderFilterMode = HeaderFilterMode.CheckedList;
-            //((GridViewDataHyperLinkColumn)dxgEmp.Columns["fio"]).Settings.
-            //    ShowInFilterControl = DevExpress.Utils.DefaultBoolean.False;
-
             GetHRMonthData(DateTime.Now.Year.ToString());
             HRLabelYear.Text = DateTime.Now.Year.ToString() + " год";
 
         }
 
-        DataView rez = (DataView)sqlActiveTreats.Select(new DataSourceSelectArguments());
-        if (rez != null)
-            DrawCompanySubTable(rez, companyActiveTable, "blue", "red");
+        //DataView rez = (DataView)sqlActiveTreats.Select(new DataSourceSelectArguments());
+        //if (rez != null)
+        //    DrawCompanySubTable(rez, companyActiveTable, "blue", "red");
 
-        rez = (DataView)sqlPotential.Select(new DataSourceSelectArguments());
+        //rez = (DataView)sqlPotential.Select(new DataSourceSelectArguments());
+        //if (rez != null)
+        //    DrawCompanySubTable(rez, companyPotencTable, "brown", "green");
+
+        DataView rez = (DataView)SqlMetrics.Select(new DataSourceSelectArguments());
         if (rez != null)
-            DrawCompanySubTable(rez, companyPotencTable, "brown", "green");
+            DrawCompanySubTable(rez, companyMetricTable, "magenta", "red");
 
         DrawIndicators(dc, ua, canViewAllDept); // indicators
 
@@ -612,7 +611,7 @@ public partial class lk2 : System.Web.UI.Page
                 " where idcompany = @idCompany" +
                 " group by ts.iduser, ts.test_id" +
             " )" +
-                " select q.id, emp_count, ii.[text], t.name as test_name, case when q.diff<=1 then 1 else 0 end as isnew " +
+                " select q.id, emp_count, ii.[text], t.name as test_name, case when q.diff<=1 then 1 else 0 end as isnew, 0 as ismetric " +
                 " from (" +
                 " select itp.id, count(*) emp_count, min (datediff(dd,ts.test_date,getdate())) diff " +
                 " from test_subject ts" +
@@ -635,7 +634,7 @@ public partial class lk2 : System.Web.UI.Page
                 " where idcompany = @idCompany" +
                 " group by ts.iduser, ts.test_id" +
             " )" +
-            " select q.id, emp_count, ii.[text], t.name as test_name, case when q.diff<=1 then 1 else 0 end as isnew " +
+            " select q.id, emp_count, ii.[text], t.name as test_name, case when q.diff<=1 then 1 else 0 end as isnew, 0 as ismetric " +
             " from (" +
                 " select itp.id, count(*) emp_count, min (datediff(dd,ts.test_date,getdate())) diff " +
                 " from test_subject ts" +
@@ -648,6 +647,17 @@ public partial class lk2 : System.Web.UI.Page
             " inner join interpretation ii on q.id=ii.id " +
             " inner join test t on t.id=ii.test_id " +
             " order by 4";
+        
+        SqlMetrics.SelectCommand = 
+            "select m.idMetric as id, m.name test_name, count (*) as emp_count, m.description as text, 1 as ismetric " +
+            "from metric m "+
+            "join Test_Data td on m.idScale = td.Scale_ID "+
+            "join test_subject ts on ts.id = td.subject_id "+
+            "join user_account ua on ua.iduser = ts.iduser " +
+            "where m.idCompany = @idcompany and td.Test_Value < m.index_value and m.condition = '<' " +
+            " and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null) "+
+            " and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null) "+
+            "group by m.idMetric, m.name, m.description";
 
     }
 
@@ -923,7 +933,10 @@ public partial class lk2 : System.Web.UI.Page
             Image ico = new Image() { ImageUrl = "Images/people_ico_" + icoColor + ".png" };
             table.Rows[i].Cells[0].Controls.Add(ico);
 
-            HyperLink link = new HyperLink() { CssClass = "companySubTableLink", NavigateUrl = "~/Analyse/ThreatDetail.aspx?i=" + dataRow["id"].ToString() };
+            HyperLink link = new HyperLink() { 
+                CssClass = "companySubTableLink",
+                NavigateUrl = (dataRow["ismetric"] == null || dataRow["ismetric"].ToString() == "0") ? "~/Analyse/ThreatDetail.aspx?i=" + dataRow["id"].ToString() : "~/Metric/Detail.aspx?id=" + dataRow["id"].ToString()
+            };
             table.Rows[i].Cells[0].Controls.Add(link);
 
             Label linkLabelN = new Label() { Text = dataRow["emp_count"].ToString(), CssClass = "companySubTableLinkLabel" };

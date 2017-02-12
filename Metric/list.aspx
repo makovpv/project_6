@@ -17,7 +17,7 @@
                 <asp:BoundField DataField="name" HeaderText="Наименование" ItemStyle-Width="50%" ControlStyle-Width="90%"/>
                 <asp:BoundField DataField="description" HeaderText="Описание" ItemStyle-Width="30%" ControlStyle-Width="90%"/>
                 <asp:BoundField DataField="datecreate" HeaderText="Дата" ReadOnly="true"/>
-                <asp:BoundField DataField="index_value" HeaderText="Условие" ReadOnly="true"/>
+                <asp:BoundField DataField="condition" HeaderText="Условие" ReadOnly="true"/>
                 <asp:BoundField DataField="index_value" HeaderText="Показатель" ReadOnly="true"/>
 
                 <asp:TemplateField HeaderText="Фильтр">

@@ -48,21 +48,33 @@ begin
 	set nocount on
 	delete from Raw_Data where Subject_ID = @SubjectID
 
-	-- обычная шкала
+	declare @HasKeys bit = 0
+
+	-- обычная шкала (ключи)
 	insert into dbo.Raw_Data (Subject_ID, Scale_ID,  Raw_Value)
-	--values (@SubjectID, @ScaleID, isnull(@RawScore,0))
 	select @SubjectID, isl.scale_id, isnull(sum(isl.kf*tr.SelectedValue),0)
 	from Test_Results tr 
 	INNER join ItemScale_Link isl on isl.subscale_id = tr.SubScale_ID and isl.item_id = tr.item_id
 	INNER join scales s on s.id=isl.scale_id
-	where tr.Subject_ID = @SubjectID --and isnull(s.formula,'')=''
+	where tr.Subject_ID = @SubjectID and s.RawCalcType = 1
 	group by isl.scale_id
 
-	if @@rowcount > 0 begin
-		-- индексы
-		declare @ScaleID int, @Formula nvarchar(255), @TestID int
-		select @TestID = test_id from test_subject where id=@SubjectID
+	if @@rowcount > 0 set @HasKeys = 1
+	
+	-- учет по наличию ответов
+	declare @ans_count int, @anstext_count int, @TestID int
+	select @ans_count = count(distinct tr.item_id) from Test_Results tr where tr.Subject_ID = @SubjectID and isnull(tr.SelectedValue,0) <> 0
+	select @anstext_count = count(distinct trx.item_id) from Test_Results_txt trx where trx.Subject_ID = @SubjectID and isnull(trx.text,'') <> ''
+	select @TestID = test_id from test_subject where id=@SubjectID
+	
+	insert into dbo.Raw_Data (Subject_ID, Scale_ID,  Raw_Value)
+	select @SubjectID, s.id, isnull(@ans_count,0)+isnull(@anstext_count,0)
+	from scales s
+	where s.test_id = @TestID and s.RawCalcType = 2 
 
+	if @HasKeys > 0 begin
+		-- индексы
+		declare @ScaleID int, @Formula nvarchar(255)
 		declare c_idx_scl cursor fast_forward for
 		select s.id, s.Formula
 		from dbo.Scales s
@@ -71,12 +83,7 @@ begin
 		open c_idx_scl
 		fetch next from c_idx_scl into @scaleID, @Formula
 		while @@FETCH_STATUS = 0 begin
-			--print @scaleID
-			--print @Formula
-			--print @TestID
-			--print @SubjectID
 			exec dbo.CalcScaleIndexValue @scaleID, @Formula, @TestID, @SubjectID
-			--print '--'
 			fetch next from c_idx_scl into @scaleID, @Formula
 		end
 		close c_idx_scl

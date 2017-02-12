@@ -822,17 +822,46 @@
             <%--Компания--%>
             <div id="companyPage" class="tab-content clearfix" style="display: none;">
                 <asp:Table ID="Table1" runat="server" Style="width: 100%;">
-                    <%-- Активные угрозы --%>
+                    <%-- Метрики --%>
                     <asp:TableRow HorizontalAlign="Center">
+                        <asp:TableCell VerticalAlign="Top">
+                            <dx:ASPxRoundPanel runat="server" Width="100%" Theme="Office2010Silver">
+                                <HeaderTemplate>
+                                    <asp:Table runat="server" Width="100%">
+                                        <asp:TableRow>
+                                            <asp:TableCell HorizontalAlign="Left">
+                                                <asp:Label runat="server" Text='Метрики' Font-Size="10pt"/>
+                                            </asp:TableCell>
+                                            <asp:TableCell HorizontalAlign="Right">
+                                                <asp:ImageButton runat="server" BackColor="Transparent" BorderStyle="None"
+                                                    Style="padding: 0px; margin: 0px; background: none; border: none;" ImageUrl="~/Images/collapse.png"
+                                                    Width="20px" Height="20px" ToolTip="Свернуть/Развернуть" OnClientClick="compMetricPanel.SetVisible(!compMetricPanel.GetVisible()); return false;" />
+                                            </asp:TableCell>
+                                        </asp:TableRow>
+                                    </asp:Table>
+                                </HeaderTemplate>
+                                <PanelCollection>
+                                    <dx:PanelContent runat="server">
+                                        <dx:ASPxPanel CssClass="companyPanelContent" runat="server" ClientInstanceName="compMetricPanel">
+                                            <PanelCollection>
+                                                <dx:PanelContent runat="server">
+                                                    <%-- тут динамическое создание в табличку --%>
+                                                    <asp:Table runat="server" Width="100%" ID="companyMetricTable" />
+                                                </dx:PanelContent>
+                                            </PanelCollection>
+                                        </dx:ASPxPanel>
+                                    </dx:PanelContent>
+                                </PanelCollection>
+                            </dx:ASPxRoundPanel>
+                        </asp:TableCell>
+                    </asp:TableRow>
+					<%-- Активные угрозы --%>
+<%--                    <asp:TableRow HorizontalAlign="Center">
                         <asp:TableCell VerticalAlign="Top">
                             <dx:ASPxRoundPanel ID="ASPxRoundPanel2" runat="server" Width="100%" Theme="Office2010Silver">
                                 <HeaderTemplate>
                                     <asp:Table ID="Table10" runat="server" Width="100%">
                                         <asp:TableRow>
-                                            <%--<asp:TableCell HorizontalAlign="Left" Width="45">
-                                                <asp:Image ID="Image1" ImageUrl="Images/compActivePanel.png" runat="server" alt=""
-                                                    Width="45" Height="30" Style="padding: 0px; margin: -5px;" />
-                                            </asp:TableCell>--%>
                                             <asp:TableCell HorizontalAlign="Left">
                                                 <asp:Label ID="Label19" runat="server" Text='<%$Resources: GlobalRes, lk_section1%>' Font-Size="10pt"/>
                                             </asp:TableCell>
@@ -849,7 +878,6 @@
                                         <dx:ASPxPanel CssClass="companyPanelContent" ID="ASPxPanel2" runat="server" ClientInstanceName="compActivePanel">
                                             <PanelCollection>
                                                 <dx:PanelContent ID="PanelContent4" runat="server">
-                                                    <%-- тут динамическое создание в табличку --%>
                                                     <asp:Table runat="server" Width="100%" ID="companyActiveTable" />
                                                 </dx:PanelContent>
                                             </PanelCollection>
@@ -858,18 +886,14 @@
                                 </PanelCollection>
                             </dx:ASPxRoundPanel>
                         </asp:TableCell>
-                    </asp:TableRow>
+                    </asp:TableRow>--%>
                     <%-- Потенциалы --%>
-                    <asp:TableRow HorizontalAlign="Center">
+<%--                    <asp:TableRow HorizontalAlign="Center">
                         <asp:TableCell VerticalAlign="Top">
                             <dx:ASPxRoundPanel ID="ASPxRoundPanel3" runat="server" Width="100%" Theme="Office2010Silver">
                                 <HeaderTemplate>
                                     <asp:Table ID="Table11" runat="server" Width="100%">
                                         <asp:TableRow>
-                                            <%--<asp:TableCell HorizontalAlign="Left" Width="45">
-                                                <asp:Image ID="Image3" ImageUrl="Images/compPotencPanel.png" runat="server" alt=""
-                                                    Width="45" Height="30" Style="padding: 0px; margin: -5px;" />
-                                            </asp:TableCell>--%>
                                             <asp:TableCell HorizontalAlign="Left">
                                                 <asp:Label ID="Label20" runat="server" Text='<%$Resources: GlobalRes, lk_section2%>'
                                                     Font-Size="10pt"/>
@@ -887,56 +911,7 @@
                                         <dx:ASPxPanel CssClass="companyPanelContent" ID="ASPxPanel3" runat="server" Width="100%" ClientInstanceName="compPotencPanel">
                                             <PanelCollection>
                                                 <dx:PanelContent ID="PanelContent6" runat="server">
-                                                    <%-- тут динамическое создание в табличку --%>
                                                     <asp:Table runat="server" Width="100%" ID="companyPotencTable" />
-                                                </dx:PanelContent>
-                                            </PanelCollection>
-                                        </dx:ASPxPanel>
-                                    </dx:PanelContent>
-                                </PanelCollection>
-                            </dx:ASPxRoundPanel>
-                        </asp:TableCell>
-                    </asp:TableRow>
-
-                    <%-- Мониторинг персонала --%>
-<%--                    <asp:TableRow HorizontalAlign="Center">
-                        <asp:TableCell VerticalAlign="Top">
-                            <dx:ASPxRoundPanel ID="ASPxRoundPanel4" runat="server" Width="100%" Theme="Office2010Silver">
-                                <HeaderTemplate>
-                                    <asp:Table ID="Table12" runat="server" Width="100%">
-                                        <asp:TableRow>
-                                            <asp:TableCell HorizontalAlign="Left">
-                                                <asp:Label ID="Label21" runat="server" Text='<%$Resources: GlobalRes, lk_section3%>'
-                                                    Font-Size="10pt"/>
-                                            </asp:TableCell>
-                                            <asp:TableCell HorizontalAlign="Right">
-                                                <asp:ImageButton ID="ImageButton19" runat="server" BackColor="Transparent" BorderStyle="None"
-                                                    Style="padding: 0px; margin: 0px; background: none; border: none;" ImageUrl="~/Images/collapse.png"
-                                                    Width="20px" Height="20px" ToolTip="Свернуть/Развернуть" OnClientClick="compMonitPanel.SetVisible(!compMonitPanel.GetVisible()); return false;" />
-                                            </asp:TableCell>
-                                        </asp:TableRow>
-                                    </asp:Table>
-                                </HeaderTemplate>
-                                <PanelCollection>
-                                    <dx:PanelContent ID="PanelContent7" runat="server">
-                                        <dx:ASPxPanel CssClass="companyPanelContent" ID="ASPxPanel4" runat="server" Width="100%" ClientInstanceName="compMonitPanel">
-                                            <PanelCollection>
-                                                <dx:PanelContent ID="PanelContent8" runat="server">
-                                                    <asp:Table ID="Table13" runat="server" Width="100%">
-                                                        <asp:TableRow>
-                                                            <asp:TableCell>
-                                                                <asp:Repeater ID="Repeater9" runat="server" DataSourceID="sqlMonitoring">
-                                                                    <ItemTemplate>
-                                                                        <img src="Images/rep_ico.png" alt="" width="20" height="21" style="margin-top: 8px;
-                                                                            margin-bottom: -8px;" />
-                                                                        <asp:HyperLink ID="HyperLink6" runat="server" Text='<%# Eval("monitoring_area") %>'
-                                                                            NavigateUrl='<%# "~/Analyse/Common.aspx?ma=" +Eval("monitoring_area") %>' Style="margin: 0px 15px 10px 0px;" />
-                                                                        <br />
-                                                                    </ItemTemplate>
-                                                                </asp:Repeater>
-                                                            </asp:TableCell>
-                                                        </asp:TableRow>
-                                                    </asp:Table>
                                                 </dx:PanelContent>
                                             </PanelCollection>
                                         </dx:ASPxPanel>
@@ -996,53 +971,6 @@
                             </dx:ASPxRoundPanel>
                         </asp:TableCell>
                     </asp:TableRow>
-                    
-                    <%-- Исследования --%>
-                    <%--<asp:TableRow HorizontalAlign="Center">
-                        <asp:TableCell VerticalAlign="Top">
-                            <dx:ASPxRoundPanel ID="ASPxRoundPanel6" runat="server" Width="100%" Theme="Office2010Silver">
-                                <HeaderTemplate>
-                                    <asp:Table ID="Table16" runat="server" Width="100%">
-                                        <asp:TableRow>
-                                            <asp:TableCell HorizontalAlign="Left">
-                                                <asp:Label ID="Label23" runat="server" Text='<%$Resources: GlobalRes, lk_section5%>'
-                                                    Font-Size="10pt" />
-                                            </asp:TableCell>
-                                            <asp:TableCell HorizontalAlign="Right">
-                                                <asp:ImageButton ID="ImageButton21" runat="server" BackColor="Transparent" BorderStyle="None"
-                                                    Style="padding: 0px; margin: 0px; background: none; border: none;" ImageUrl="~/Images/collapse.png"
-                                                    Width="20px" Height="20px" ToolTip="Свернуть/Развернуть" OnClientClick="compIssledPanel.SetVisible(!compIssledPanel.GetVisible()); return false;" />
-                                            </asp:TableCell>
-                                        </asp:TableRow>
-                                    </asp:Table>
-                                </HeaderTemplate>
-                                <PanelCollection>
-                                    <dx:PanelContent ID="PanelContent11" runat="server">
-                                        <dx:ASPxPanel CssClass="companyPanelContent" ID="ASPxPanel6" runat="server" Width="100%" ClientInstanceName="compIssledPanel">
-                                            <PanelCollection>
-                                                <dx:PanelContent ID="PanelContent12" runat="server">
-                                                    <asp:Table ID="Table17" runat="server" Width="100%">
-                                                        <asp:TableRow>
-                                                            <asp:TableCell>
-                                                                <asp:Label ID="Label24" runat="server" Text='<%$Resources: GlobalRes, lk_section5_1%>' />
-                                                                <asp:Repeater ID="Repeater5" runat="server" DataSourceID="SqlCurrExamination">
-                                                                    <ItemTemplate>
-                                                                        <br />
-                                                                        <asp:HyperLink ID="HyperLink4" NavigateUrl='<%# "~\\Analyse\\Common.aspx?g=" +Eval("id") %>'
-                                                                            Text='<%# Eval("name") + " " +Eval("stop_date") %>' runat="server" />
-                                                                    </ItemTemplate>
-                                                                </asp:Repeater>
-                                                            </asp:TableCell>
-                                                        </asp:TableRow>
-                                                    </asp:Table>
-                                                </dx:PanelContent>
-                                            </PanelCollection>
-                                        </dx:ASPxPanel>
-                                    </dx:PanelContent>
-                                </PanelCollection>
-                            </dx:ASPxRoundPanel>
-                        </asp:TableCell>
-                    </asp:TableRow>--%>
                 </asp:Table>
             </div>
 
@@ -1171,6 +1099,11 @@
                         <asp:Parameter Name="idcompany" DbType="Int32" />
                         <asp:Parameter Name="iddept" DbType="Int32" />
                         <asp:Parameter Name="isHR" DbType="Boolean" />
+                    </SelectParameters>
+                </asp:SqlDataSource>
+                <asp:SqlDataSource ID="SqlMetrics" runat="server" ConnectionString="<%$ ConnectionStrings:tester_dataConnectionString %>">
+                    <SelectParameters>
+                        <asp:Parameter Name="idcompany" DbType="Int32" />
                     </SelectParameters>
                 </asp:SqlDataSource>
                 <asp:SqlDataSource ID="sqlCompanyDept" runat="server" ConnectionString="<%$ ConnectionStrings:tester_dataConnectionString %>">

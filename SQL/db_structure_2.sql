@@ -396,6 +396,13 @@ create table dbo.metric_subj_filter (
 	constraint fk_ms_filter_state foreign key (idState) references user_state (id)
 )
 go
+
+alter table scales add RawCalcType tinyint not null default 1
+-- 1- calculation by keys
+-- 2- just number of answered questions
+go
+
+
 --------------insert into idea_generator (idTest, idgeneratortype) values (1220, 2 )
 
 
