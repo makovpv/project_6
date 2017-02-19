@@ -17615,6 +17615,10 @@ public partial class metric : INotifyPropertyChanging, INotifyPropertyChanged
 	
 	private int _idCompany;
 	
+	private string _eliminate_scheme;
+	
+	private string _calc_description;
+	
 	private EntitySet<metric_subj_filter> _metric_subj_filters;
 	
 	private EntityRef<Company> _Company;
@@ -17649,6 +17653,10 @@ public partial class metric : INotifyPropertyChanging, INotifyPropertyChanged
     partial void OnconditionChanged();
     partial void OnidCompanyChanging(int value);
     partial void OnidCompanyChanged();
+    partial void Oneliminate_schemeChanging(string value);
+    partial void Oneliminate_schemeChanged();
+    partial void Oncalc_descriptionChanging(string value);
+    partial void Oncalc_descriptionChanged();
     #endregion
 	
 	public metric()
@@ -17873,6 +17881,46 @@ public partial class metric : INotifyPropertyChanging, INotifyPropertyChanged
 				this._idCompany = value;
 				this.SendPropertyChanged("idCompany");
 				this.OnidCompanyChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_eliminate_scheme", DbType="NVarChar(MAX)")]
+	public string eliminate_scheme
+	{
+		get
+		{
+			return this._eliminate_scheme;
+		}
+		set
+		{
+			if ((this._eliminate_scheme != value))
+			{
+				this.Oneliminate_schemeChanging(value);
+				this.SendPropertyChanging();
+				this._eliminate_scheme = value;
+				this.SendPropertyChanged("eliminate_scheme");
+				this.Oneliminate_schemeChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_calc_description", DbType="NVarChar(MAX)")]
+	public string calc_description
+	{
+		get
+		{
+			return this._calc_description;
+		}
+		set
+		{
+			if ((this._calc_description != value))
+			{
+				this.Oncalc_descriptionChanging(value);
+				this.SendPropertyChanging();
+				this._calc_description = value;
+				this.SendPropertyChanged("calc_description");
+				this.Oncalc_descriptionChanged();
 			}
 		}
 	}

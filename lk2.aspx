@@ -822,7 +822,7 @@
             <%--Компания--%>
             <div id="companyPage" class="tab-content clearfix" style="display: none;">
                 <asp:Table ID="Table1" runat="server" Style="width: 100%;">
-                    <%-- Метрики --%>
+                    <%-- Отклонения --%>
                     <asp:TableRow HorizontalAlign="Center">
                         <asp:TableCell VerticalAlign="Top">
                             <dx:ASPxRoundPanel runat="server" Width="100%" Theme="Office2010Silver">
@@ -830,7 +830,7 @@
                                     <asp:Table runat="server" Width="100%">
                                         <asp:TableRow>
                                             <asp:TableCell HorizontalAlign="Left">
-                                                <asp:Label runat="server" Text='Метрики' Font-Size="10pt"/>
+                                                <asp:Label runat="server" Text='Отклонения' Font-Size="10pt"/>
                                             </asp:TableCell>
                                             <asp:TableCell HorizontalAlign="Right">
                                                 <asp:ImageButton runat="server" BackColor="Transparent" BorderStyle="None"

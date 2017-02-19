@@ -18,8 +18,17 @@ public partial class Metric_Detail : System.Web.UI.Page
             {
                 using (TesterDataClassesDataContext dc = new TesterDataClassesDataContext())
                 {
-                    lblMetric.InnerText = string.Format("Список респондентов для метрики '{0}'", dc.metrics.Where(p => p.idMetric == idMetric).FirstOrDefault().name);
-                    sqlDetail.SelectParameters["idmetric"].DefaultValue = idMetric.ToString();
+                    metric mm = dc.metrics.Where(p => p.idMetric == idMetric).FirstOrDefault();
+                    if (mm != null)
+                    {
+                        lblMetric.InnerText = string.Format("Список респондентов для метрики '{0}'", mm.name);
+                        lDescription.Text = mm.description; 
+                        lCalcDescription.Text = mm.calc_description;
+                        lEliminate_Schema.Text = mm.eliminate_scheme;
+                        
+                        
+                        sqlDetail.SelectParameters["idmetric"].DefaultValue = idMetric.ToString();
+                    }
                 }
             }
             else

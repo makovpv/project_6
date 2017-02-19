@@ -14,8 +14,10 @@
     <div class="nsi">
         <asp:GridView ID="GridView1" runat="server" DataSourceID="sqlMetrics" AutoGenerateColumns="false" DataKeyNames="idMetric">
             <Columns>
-                <asp:BoundField DataField="name" HeaderText="Наименование" ItemStyle-Width="50%" ControlStyle-Width="90%"/>
-                <asp:BoundField DataField="description" HeaderText="Описание" ItemStyle-Width="30%" ControlStyle-Width="90%"/>
+                <asp:BoundField DataField="name" HeaderText="Наименование" ItemStyle-Width="20%" ControlStyle-Width="90%"/>
+                <asp:BoundField DataField="description" HeaderText="Описание" ItemStyle-Width="20%" ControlStyle-Width="90%"/>
+                <asp:BoundField DataField="calc_description" HeaderText="Описание расчета"  ItemStyle-Width="25%" ControlStyle-Width="90%"/>
+                <asp:BoundField DataField="eliminate_scheme" HeaderText="Схема устранения отклонения" ItemStyle-Width="25%" ControlStyle-Width="90%"/>
                 <asp:BoundField DataField="datecreate" HeaderText="Дата" ReadOnly="true"/>
                 <asp:BoundField DataField="condition" HeaderText="Условие" ReadOnly="true"/>
                 <asp:BoundField DataField="index_value" HeaderText="Показатель" ReadOnly="true"/>
@@ -55,7 +57,8 @@
         ConnectionString="<%$ ConnectionStrings:tester_dataConnectionString %>"
         SelectCommand="select * from dbo.metric where idCompany = @idcompany"
         DeleteCommand="delete from dbo.metric where idMetric = @idMetric"
-        UpdateCommand="update dbo.metric set name=@name, description=isnull(@description,'') where idMetric = @idMetric">
+        UpdateCommand="update dbo.metric set name=@name, description=isnull(@description,''), 
+        calc_description=isnull(@calc_description,''), eliminate_scheme=isnull(@eliminate_scheme,'') where idMetric = @idMetric">
 
         <SelectParameters>
             <asp:Parameter Name="idcompany" DbType="Int32"/>

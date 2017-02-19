@@ -403,6 +403,9 @@ alter table scales add RawCalcType tinyint not null default 1
 go
 
 
+alter table dbo.metric add eliminate_scheme nvarchar(max), calc_description nvarchar(max)
+go
+
 --------------insert into idea_generator (idTest, idgeneratortype) values (1220, 2 )
 
 

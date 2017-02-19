@@ -798,6 +798,8 @@
       <Column Name="index_value" Type="System.Decimal" DbType="Decimal(8,0)" CanBeNull="true" />
       <Column Name="condition" Type="System.String" DbType="Char(2)" CanBeNull="true" />
       <Column Name="idCompany" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="eliminate_scheme" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="calc_description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Association Name="metric_metric_subj_filter" Member="metric_subj_filters" ThisKey="idMetric" OtherKey="idMetric" Type="metric_subj_filter" />
       <Association Name="Company_metric" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" />
       <Association Name="Scale_metric" Member="Scale" ThisKey="idScale" OtherKey="id" Type="Scale" IsForeignKey="true" />

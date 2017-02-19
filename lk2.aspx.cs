@@ -912,12 +912,8 @@ public partial class lk2 : System.Web.UI.Page
             table.Rows.Add(row);
         }
 
-        // ленточка
-        //Image img = new Image() { ImageUrl = "Images/lineActive_" + labelColor + ".png", AlternateText = "", Width = 300, CssClass = "companySubTableImg" };
-        //table.Rows[0].Cells[0].Controls.Add(img);
-
-        Label label = new Label() { Text = headerShort, CssClass = "companySubTableLabel", ToolTip = header };
-        table.Rows[1].Cells[0].Controls.Add(label);
+        //Label label = new Label() { Text = headerShort, CssClass = "companySubTableLabel", ToolTip = header };
+        //table.Rows[1].Cells[0].Controls.Add(label);
 
         // данные
         int i = 2;

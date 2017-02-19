@@ -1,10 +1,28 @@
 ﻿<%@ Page Title="Анализ метрики" Language="C#" AutoEventWireup="true" CodeFile="Detail.aspx.cs" Inherits="Metric_Detail" MasterPageFile="~/MainBusinessMasterPage.master" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
-        <h3 runat="server" id="lblMetric" class="nsi"/>
+        <div class="nsi">
+        <h3 runat="server" id="lblMetric"/>
+        
         <p>
-        <asp:HyperLink runat="server" Text="вернуться в личный кабинет" NavigateUrl="~/lk2.aspx" class="nsi"/>
+        <b>Описание метрики:</b><br/>
+        <asp:Literal runat="server" ID="lDescription" />
         </p>
+
+        <p>
+        <b>Описание расчета:</b><br/>
+        <asp:Literal runat="server" ID="lCalcDescription" />
+        </p>
+
+        <p>
+        <b>Схема устранения отклонений:</b><br/>
+        <asp:Literal runat="server" ID="lEliminate_Schema" />
+        </p>
+        
+        <p>
+        <asp:HyperLink runat="server" Text="вернуться в личный кабинет" NavigateUrl="~/lk2.aspx#companyPage"/>
+        </p>
+        </div>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
@@ -30,7 +48,7 @@
         inner join Test_Data td on m.idScale = td.Scale_ID 
         inner join test_subject ts on ts.id = td.subject_id
         inner join user_account ua on ua.iduser = ts.iduser
-        where m.idMetric = 1 and td.Test_Value < m.index_value and m.condition = '<' 
+        where m.idMetric = @idMetric and td.Test_Value < m.index_value and m.condition = '<' 
             and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null) 
             and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null)
         order by ts.fio">
