@@ -657,7 +657,19 @@ public partial class lk2 : System.Web.UI.Page
             "where m.idCompany = @idcompany and td.Test_Value < m.index_value and m.condition = '<' " +
             " and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null) "+
             " and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null) "+
-            "group by m.idMetric, m.name, m.description";
+            "group by m.idMetric, m.name, m.description "+
+	    // not exists
+	    "SELECT m.idMetric as id, m.name test_name, "+
+	    "SUM (CASE WHEN ts.Test_Date IS NULL AND m.index_value = 1 THEN 1 ELSE 0 end)  as emp_count, "+
+	    "m.description as text, 1 as ismetric "+
+	    "FROM metric m "+
+	    "inner JOIN Test_Subject ts ON ts.test_id = m.idtest "+
+	    "inner join user_account ua on ua.iduser = ts.iduser "+
+	    "WHERE m.condition = 'NE'  "+
+	    "and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null)  "+
+    	    "and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null) "+
+	    "GROUP BY m.idMetric, m.name, m.description";
+	       
 
     }
 
