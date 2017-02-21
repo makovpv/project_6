@@ -649,7 +649,7 @@ public partial class lk2 : System.Web.UI.Page
             " order by 4";
         
         SqlMetrics.SelectCommand = 
-            "select m.idMetric as id, m.name test_name, count (*) as emp_count, m.description as text, 1 as ismetric " +
+            "select m.idMetric as id, m.name test_name, m.description as text, 1 as ismetric, count (*) as emp_count " +
             "from metric m "+
             "join Test_Data td on m.idScale = td.Scale_ID "+
             "join test_subject ts on ts.id = td.subject_id "+
@@ -658,18 +658,19 @@ public partial class lk2 : System.Web.UI.Page
             " and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null) "+
             " and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null) "+
             "group by m.idMetric, m.name, m.description "+
-	    // not exists
-	    "SELECT m.idMetric as id, m.name test_name, "+
-	    "SUM (CASE WHEN ts.Test_Date IS NULL AND m.index_value = 1 THEN 1 ELSE 0 end)  as emp_count, "+
-	    "m.description as text, 1 as ismetric "+
-	    "FROM metric m "+
-	    "inner JOIN Test_Subject ts ON ts.test_id = m.idtest "+
-	    "inner join user_account ua on ua.iduser = ts.iduser "+
-	    "WHERE m.condition = 'NE'  "+
-	    "and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null)  "+
-    	    "and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null) "+
-	    "GROUP BY m.idMetric, m.name, m.description";
-	       
+            "UNION ALL " + // not exists
+            "select q.id, q.test_name, q.text, 1 as ismetric, count(*) as emp_count "+
+            "from ( "+
+            "SELECT m.idMetric as id, m.name test_name, m.description as text, 1 as ismetric "+
+            "FROM metric m  "+
+            "inner JOIN Test_Subject ts ON ts.test_id = m.idtest  "+
+            "inner join user_account ua on ua.iduser = ts.iduser and ua.idcompany = m.idcompany "+
+            "WHERE m.idcompany = @idCompany and m.condition = 'NE'  and m.index_value = 1 "+
+            "and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null)   "+
+            "and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null)  "+
+            "GROUP BY m.idMetric, m.name, m.description, ts.fio "+
+            "having count (ts.test_date) = 0) q "+
+            "group by q.id, q.test_name, q.text";
 
     }
 
@@ -1018,45 +1019,4 @@ public partial class lk2 : System.Web.UI.Page
             }
         }
     }
-
-    //#region 
-
-    //protected void WebChartControlYear_CustomCallback(object sender, DevExpress.XtraCharts.Web.CustomCallbackEventArgs e)
-    //{
-    //    WebChartControl chart = sender as WebChartControl;
-    //    if (chart != null)
-    //    {
-    //        chart.ToolTipController.OpenMode = ToolTipOpenMode.OnHover;
-    //        chart.ToolTipOptions.ToolTipPosition = new ToolTipMousePosition();
-    //    }
-    //}
-
-    //protected void WebChartControlYear_BoundDataChanged(object sender, EventArgs e)
-    //{
-    //    //WebChartControl chart = sender as WebChartControl;
-    //    //if (chart != null)
-    //    //    foreach (Series series in chart.Series)
-    //    //        series.ToolTipImage.ImageUrl = @"ToolTips.aspx?" + queryName + "=" + series.Name;
-    //}
-    //#endregion
-
-    //protected void WebChartControl2_CustomCallback(object sender, CustomCallbackEventArgs e)
-    //{
-    //    WebChartControl chart = sender as WebChartControl;
-    //    if (chart == null)
-    //        return;
-
-    //}
-    //protected void WebChartControl2_BoundDataChanged(object sender, EventArgs e)
-    //{
-    //    WebChartControl chart = sender as WebChartControl;
-    //    if (chart == null)
-    //        return;
-    //}
-    //protected void WebChartControl2_ObjectSelected(object sender, HotTrackEventArgs e)
-    //{
-    //    //WebChartControl chart = sender as WebChartControl;
-    //    //if (chart == null)
-    //    //    return;
-    //}
 }
