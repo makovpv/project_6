@@ -51,6 +51,16 @@
         where m.idMetric = @idMetric and td.Test_Value < m.index_value and m.condition = '<' 
             and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null) 
             and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null)
+                       
+        union all
+        SELECT NULL AS test_value, ts.fio, NULL AS text_date FROM metric m
+        inner JOIN Test_Subject ts ON ts.test_id = m.idtest
+        inner join user_account ua on ua.iduser = ts.iduser
+        WHERE m.idmetric = @idMetric
+        AND m.condition = 'NE' and ts.test_date is not null and m.index_value = 1
+        and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null) 
+        and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null)
+                       
         order by ts.fio">
 
         <SelectParameters>
