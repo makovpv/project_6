@@ -16,11 +16,27 @@
             <Columns>
                 <asp:BoundField DataField="name" HeaderText="Наименование" ItemStyle-Width="20%" ControlStyle-Width="90%"/>
                 <asp:BoundField DataField="description" HeaderText="Описание" ItemStyle-Width="20%" ControlStyle-Width="90%"/>
+                
+<%--                <asp:TemplateField HeaderText="Условие" >
+                    <EditItemTemplate>
+                        <asp:DropDownList runat="server" ID="ddlCondition" 
+                            SelectedValue='<%# Bind("Condition") %>'>
+                            <asp:ListItem Text="<" Value="<" />
+                            <asp:ListItem Text="NE" Value="NE"/>
+                        </asp:DropDownList>
+                    </EditItemTemplate>
+
+                    <ItemTemplate>    
+                        <asp:Label runat="server" ID="lblCondition" Text='<%# Bind("condition") %>' />
+                    </ItemTemplate>
+                </asp:TemplateField> --%>
+                <asp:BoundField DataField="condition" HeaderText="Условие" ItemStyle-Width="40px"/>
+                <asp:BoundField DataField="index_value" HeaderText="Показатель" ItemStyle-Width="40px"/>
+
                 <asp:BoundField DataField="calc_description" HeaderText="Описание расчета"  ItemStyle-Width="25%" ControlStyle-Width="90%"/>
                 <asp:BoundField DataField="eliminate_scheme" HeaderText="Схема устранения отклонения" ItemStyle-Width="25%" ControlStyle-Width="90%"/>
+                
                 <asp:BoundField DataField="datecreate" HeaderText="Дата" ReadOnly="true"/>
-                <asp:BoundField DataField="condition" HeaderText="Условие" ReadOnly="true"/>
-                <asp:BoundField DataField="index_value" HeaderText="Показатель" ReadOnly="true"/>
 
                 <asp:TemplateField HeaderText="Фильтр">
                     <ItemTemplate>
@@ -28,7 +44,7 @@
                     </ItemTemplate>
                 </asp:TemplateField>
 
-                <asp:TemplateField>
+                <asp:TemplateField ItemStyle-Wrap="false">
                     <EditItemTemplate>
                         <asp:ImageButton ID="ImageButton3" runat="server" ImageUrl="~/Images/yes_small.ico"
                             CommandName="Update" ToolTip="Принять" />
@@ -57,12 +73,15 @@
         ConnectionString="<%$ ConnectionStrings:tester_dataConnectionString %>"
         SelectCommand="select * from dbo.metric where idCompany = @idcompany"
         DeleteCommand="delete from dbo.metric where idMetric = @idMetric"
-        UpdateCommand="update dbo.metric set name=@name, description=isnull(@description,''), 
+        UpdateCommand="update dbo.metric set name=@name, description=isnull(@description,''), index_value=@index_value, condition=@Condition,
         calc_description=isnull(@calc_description,''), eliminate_scheme=isnull(@eliminate_scheme,'') where idMetric = @idMetric">
 
         <SelectParameters>
             <asp:Parameter Name="idcompany" DbType="Int32"/>
         </SelectParameters>
+<%--        <UpdateParameters>
+            <asp:ControlParameter Name="condition" DbType="String" ControlID="ddlCondition" PropertyName="SelectedValue"/>
+        </UpdateParameters>--%>
     </asp:SqlDataSource>
 </asp:Content>
 
