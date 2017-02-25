@@ -134,9 +134,6 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
   partial void Insertreport(report instance);
   partial void Updatereport(report instance);
   partial void Deletereport(report instance);
-  partial void InsertTest_Subject(Test_Subject instance);
-  partial void UpdateTest_Subject(Test_Subject instance);
-  partial void DeleteTest_Subject(Test_Subject instance);
   partial void Insertuser_account(user_account instance);
   partial void Updateuser_account(user_account instance);
   partial void Deleteuser_account(user_account instance);
@@ -209,6 +206,9 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
   partial void Insertmetric_subj_filter(metric_subj_filter instance);
   partial void Updatemetric_subj_filter(metric_subj_filter instance);
   partial void Deletemetric_subj_filter(metric_subj_filter instance);
+  partial void InsertTest_Subject(Test_Subject instance);
+  partial void UpdateTest_Subject(Test_Subject instance);
+  partial void DeleteTest_Subject(Test_Subject instance);
   partial void Insertmetric(metric instance);
   partial void Updatemetric(metric instance);
   partial void Deletemetric(metric instance);
@@ -540,14 +540,6 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
 		}
 	}
 	
-	public System.Data.Linq.Table<Test_Subject> Test_Subjects
-	{
-		get
-		{
-			return this.GetTable<Test_Subject>();
-		}
-	}
-	
 	public System.Data.Linq.Table<user_account> user_accounts
 	{
 		get
@@ -748,6 +740,14 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
 		}
 	}
 	
+	public System.Data.Linq.Table<Test_Subject> Test_Subjects
+	{
+		get
+		{
+			return this.GetTable<Test_Subject>();
+		}
+	}
+	
 	public System.Data.Linq.Table<metric> metrics
 	{
 		get
@@ -869,9 +869,9 @@ public partial class project : INotifyPropertyChanging, INotifyPropertyChanged
 	
 	private string _FinalMessage;
 	
-	private EntitySet<Test_Subject> _Test_Subjects;
-	
 	private EntitySet<subject_group> _subject_groups;
+	
+	private EntitySet<Test_Subject> _Test_Subjects;
 	
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -891,8 +891,8 @@ public partial class project : INotifyPropertyChanging, INotifyPropertyChanged
 	
 	public project()
 	{
-		this._Test_Subjects = new EntitySet<Test_Subject>(new Action<Test_Subject>(this.attach_Test_Subjects), new Action<Test_Subject>(this.detach_Test_Subjects));
 		this._subject_groups = new EntitySet<subject_group>(new Action<subject_group>(this.attach_subject_groups), new Action<subject_group>(this.detach_subject_groups));
+		this._Test_Subjects = new EntitySet<Test_Subject>(new Action<Test_Subject>(this.attach_Test_Subjects), new Action<Test_Subject>(this.detach_Test_Subjects));
 		OnCreated();
 	}
 	
@@ -996,19 +996,6 @@ public partial class project : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="project_Test_Subject", Storage="_Test_Subjects", ThisKey="id", OtherKey="project_id")]
-	public EntitySet<Test_Subject> Test_Subjects
-	{
-		get
-		{
-			return this._Test_Subjects;
-		}
-		set
-		{
-			this._Test_Subjects.Assign(value);
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="project_subject_group", Storage="_subject_groups", ThisKey="id", OtherKey="project_id")]
 	public EntitySet<subject_group> subject_groups
 	{
@@ -1019,6 +1006,19 @@ public partial class project : INotifyPropertyChanging, INotifyPropertyChanged
 		set
 		{
 			this._subject_groups.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="project_Test_Subject", Storage="_Test_Subjects", ThisKey="id", OtherKey="project_id")]
+	public EntitySet<Test_Subject> Test_Subjects
+	{
+		get
+		{
+			return this._Test_Subjects;
+		}
+		set
+		{
+			this._Test_Subjects.Assign(value);
 		}
 	}
 	
@@ -1042,18 +1042,6 @@ public partial class project : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
-	private void attach_Test_Subjects(Test_Subject entity)
-	{
-		this.SendPropertyChanging();
-		entity.project = this;
-	}
-	
-	private void detach_Test_Subjects(Test_Subject entity)
-	{
-		this.SendPropertyChanging();
-		entity.project = null;
-	}
-	
 	private void attach_subject_groups(subject_group entity)
 	{
 		this.SendPropertyChanging();
@@ -1061,6 +1049,18 @@ public partial class project : INotifyPropertyChanging, INotifyPropertyChanged
 	}
 	
 	private void detach_subject_groups(subject_group entity)
+	{
+		this.SendPropertyChanging();
+		entity.project = null;
+	}
+	
+	private void attach_Test_Subjects(Test_Subject entity)
+	{
+		this.SendPropertyChanging();
+		entity.project = this;
+	}
+	
+	private void detach_Test_Subjects(Test_Subject entity)
 	{
 		this.SendPropertyChanging();
 		entity.project = null;
@@ -2857,9 +2857,9 @@ public partial class Test_Results_Txt : INotifyPropertyChanging, INotifyProperty
 	
 	private string _text;
 	
-	private EntityRef<Test_Subject> _Test_Subject;
-	
 	private EntityRef<item> _item;
+	
+	private EntityRef<Test_Subject> _Test_Subject;
 	
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2877,8 +2877,8 @@ public partial class Test_Results_Txt : INotifyPropertyChanging, INotifyProperty
 	
 	public Test_Results_Txt()
 	{
-		this._Test_Subject = default(EntityRef<Test_Subject>);
 		this._item = default(EntityRef<item>);
+		this._Test_Subject = default(EntityRef<Test_Subject>);
 		OnCreated();
 	}
 	
@@ -2970,40 +2970,6 @@ public partial class Test_Results_Txt : INotifyPropertyChanging, INotifyProperty
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Test_Results_Txt", Storage="_Test_Subject", ThisKey="subject_id", OtherKey="id", IsForeignKey=true)]
-	public Test_Subject Test_Subject
-	{
-		get
-		{
-			return this._Test_Subject.Entity;
-		}
-		set
-		{
-			Test_Subject previousValue = this._Test_Subject.Entity;
-			if (((previousValue != value) 
-						|| (this._Test_Subject.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._Test_Subject.Entity = null;
-					previousValue.Test_Results_Txts.Remove(this);
-				}
-				this._Test_Subject.Entity = value;
-				if ((value != null))
-				{
-					value.Test_Results_Txts.Add(this);
-					this._subject_id = value.id;
-				}
-				else
-				{
-					this._subject_id = default(int);
-				}
-				this.SendPropertyChanged("Test_Subject");
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="item_Test_Results_Txt", Storage="_item", ThisKey="item_id", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 	public item item
 	{
@@ -3034,6 +3000,40 @@ public partial class Test_Results_Txt : INotifyPropertyChanging, INotifyProperty
 					this._item_id = default(int);
 				}
 				this.SendPropertyChanged("item");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Test_Results_Txt", Storage="_Test_Subject", ThisKey="subject_id", OtherKey="id", IsForeignKey=true)]
+	public Test_Subject Test_Subject
+	{
+		get
+		{
+			return this._Test_Subject.Entity;
+		}
+		set
+		{
+			Test_Subject previousValue = this._Test_Subject.Entity;
+			if (((previousValue != value) 
+						|| (this._Test_Subject.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Test_Subject.Entity = null;
+					previousValue.Test_Results_Txts.Remove(this);
+				}
+				this._Test_Subject.Entity = value;
+				if ((value != null))
+				{
+					value.Test_Results_Txts.Add(this);
+					this._subject_id = value.id;
+				}
+				else
+				{
+					this._subject_id = default(int);
+				}
+				this.SendPropertyChanged("Test_Subject");
 			}
 		}
 	}
@@ -3535,7 +3535,7 @@ public partial class Resume_Item : INotifyPropertyChanging, INotifyPropertyChang
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resume_image", DbType="Image", UpdateCheck=UpdateCheck.Never)]
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resume_image", DbType="Image", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
 	public System.Data.Linq.Binary resume_image
 	{
 		get
@@ -6522,9 +6522,9 @@ public partial class Test_Result : INotifyPropertyChanging, INotifyPropertyChang
 	
 	private EntityRef<SubScale> _SubScale;
 	
-	private EntityRef<Test_Subject> _Test_Subject;
-	
 	private EntityRef<item> _item;
+	
+	private EntityRef<Test_Subject> _Test_Subject;
 	
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -6545,8 +6545,8 @@ public partial class Test_Result : INotifyPropertyChanging, INotifyPropertyChang
 	public Test_Result()
 	{
 		this._SubScale = default(EntityRef<SubScale>);
-		this._Test_Subject = default(EntityRef<Test_Subject>);
 		this._item = default(EntityRef<item>);
+		this._Test_Subject = default(EntityRef<Test_Subject>);
 		OnCreated();
 	}
 	
@@ -6696,40 +6696,6 @@ public partial class Test_Result : INotifyPropertyChanging, INotifyPropertyChang
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Test_Result", Storage="_Test_Subject", ThisKey="Subject_ID", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-	public Test_Subject Test_Subject
-	{
-		get
-		{
-			return this._Test_Subject.Entity;
-		}
-		set
-		{
-			Test_Subject previousValue = this._Test_Subject.Entity;
-			if (((previousValue != value) 
-						|| (this._Test_Subject.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._Test_Subject.Entity = null;
-					previousValue.Test_Results.Remove(this);
-				}
-				this._Test_Subject.Entity = value;
-				if ((value != null))
-				{
-					value.Test_Results.Add(this);
-					this._Subject_ID = value.id;
-				}
-				else
-				{
-					this._Subject_ID = default(int);
-				}
-				this.SendPropertyChanged("Test_Subject");
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="item_Test_Result", Storage="_item", ThisKey="item_id", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 	public item item
 	{
@@ -6760,6 +6726,40 @@ public partial class Test_Result : INotifyPropertyChanging, INotifyPropertyChang
 					this._item_id = default(int);
 				}
 				this.SendPropertyChanged("item");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Test_Result", Storage="_Test_Subject", ThisKey="Subject_ID", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+	public Test_Subject Test_Subject
+	{
+		get
+		{
+			return this._Test_Subject.Entity;
+		}
+		set
+		{
+			Test_Subject previousValue = this._Test_Subject.Entity;
+			if (((previousValue != value) 
+						|| (this._Test_Subject.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Test_Subject.Entity = null;
+					previousValue.Test_Results.Remove(this);
+				}
+				this._Test_Subject.Entity = value;
+				if ((value != null))
+				{
+					value.Test_Results.Add(this);
+					this._Subject_ID = value.id;
+				}
+				else
+				{
+					this._Subject_ID = default(int);
+				}
+				this.SendPropertyChanged("Test_Subject");
 			}
 		}
 	}
@@ -9301,874 +9301,6 @@ public partial class report : INotifyPropertyChanging, INotifyPropertyChanged
 	}
 }
 
-[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Test_Subject")]
-public partial class Test_Subject : INotifyPropertyChanging, INotifyPropertyChanged
-{
-	
-	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-	
-	private int _id;
-	
-	private System.Nullable<int> _project_id;
-	
-	private string _Nick_Name;
-	
-	private System.Nullable<System.DateTime> _Test_Date;
-	
-	private System.Nullable<short> _Age;
-	
-	private System.Nullable<bool> _Gender;
-	
-	private System.Nullable<int> _Test_Id;
-	
-	private System.Nullable<System.DateTime> _Test_Date_Start;
-	
-	private System.Nullable<int> _group_id;
-	
-	private string _fio;
-	
-	private System.Nullable<int> _BaseSubject_id;
-	
-	private int _MeasureNumber;
-	
-	private System.Nullable<System.Guid> _idUser;
-	
-	private bool _MailWasSent;
-	
-	private System.Nullable<int> _idTestLink;
-	
-	private EntitySet<Test_Data> _Test_Datas;
-	
-	private EntitySet<Test_Results_Txt> _Test_Results_Txts;
-	
-	private EntitySet<Param_Result> _Param_Results;
-	
-	private EntitySet<Test_Result> _Test_Results;
-	
-	private EntitySet<Test_Subject> _Test_Subjects;
-	
-	private EntitySet<idea> _ideas;
-	
-	private EntitySet<test_subject_approved> _test_subject_approveds;
-	
-	private EntitySet<Raw_Data> _Raw_Datas;
-	
-	private EntityRef<Test_Subject> _Test_Subject1;
-	
-	private EntityRef<project> _project;
-	
-	private EntityRef<user_account> _user_account;
-	
-	private EntityRef<Test_SubjectGroup_Link> _Test_SubjectGroup_Link;
-	
-	private EntityRef<test> _test;
-	
-	private EntityRef<subject_group> _subject_group;
-	
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnidChanging(int value);
-    partial void OnidChanged();
-    partial void Onproject_idChanging(System.Nullable<int> value);
-    partial void Onproject_idChanged();
-    partial void OnNick_NameChanging(string value);
-    partial void OnNick_NameChanged();
-    partial void OnTest_DateChanging(System.Nullable<System.DateTime> value);
-    partial void OnTest_DateChanged();
-    partial void OnAgeChanging(System.Nullable<short> value);
-    partial void OnAgeChanged();
-    partial void OnGenderChanging(System.Nullable<bool> value);
-    partial void OnGenderChanged();
-    partial void OnTest_IdChanging(System.Nullable<int> value);
-    partial void OnTest_IdChanged();
-    partial void OnTest_Date_StartChanging(System.Nullable<System.DateTime> value);
-    partial void OnTest_Date_StartChanged();
-    partial void Ongroup_idChanging(System.Nullable<int> value);
-    partial void Ongroup_idChanged();
-    partial void OnfioChanging(string value);
-    partial void OnfioChanged();
-    partial void OnBaseSubject_idChanging(System.Nullable<int> value);
-    partial void OnBaseSubject_idChanged();
-    partial void OnMeasureNumberChanging(int value);
-    partial void OnMeasureNumberChanged();
-    partial void OnidUserChanging(System.Nullable<System.Guid> value);
-    partial void OnidUserChanged();
-    partial void OnMailWasSentChanging(bool value);
-    partial void OnMailWasSentChanged();
-    partial void OnidTestLinkChanging(System.Nullable<int> value);
-    partial void OnidTestLinkChanged();
-    #endregion
-	
-	public Test_Subject()
-	{
-		this._Test_Datas = new EntitySet<Test_Data>(new Action<Test_Data>(this.attach_Test_Datas), new Action<Test_Data>(this.detach_Test_Datas));
-		this._Test_Results_Txts = new EntitySet<Test_Results_Txt>(new Action<Test_Results_Txt>(this.attach_Test_Results_Txts), new Action<Test_Results_Txt>(this.detach_Test_Results_Txts));
-		this._Param_Results = new EntitySet<Param_Result>(new Action<Param_Result>(this.attach_Param_Results), new Action<Param_Result>(this.detach_Param_Results));
-		this._Test_Results = new EntitySet<Test_Result>(new Action<Test_Result>(this.attach_Test_Results), new Action<Test_Result>(this.detach_Test_Results));
-		this._Test_Subjects = new EntitySet<Test_Subject>(new Action<Test_Subject>(this.attach_Test_Subjects), new Action<Test_Subject>(this.detach_Test_Subjects));
-		this._ideas = new EntitySet<idea>(new Action<idea>(this.attach_ideas), new Action<idea>(this.detach_ideas));
-		this._test_subject_approveds = new EntitySet<test_subject_approved>(new Action<test_subject_approved>(this.attach_test_subject_approveds), new Action<test_subject_approved>(this.detach_test_subject_approveds));
-		this._Raw_Datas = new EntitySet<Raw_Data>(new Action<Raw_Data>(this.attach_Raw_Datas), new Action<Raw_Data>(this.detach_Raw_Datas));
-		this._Test_Subject1 = default(EntityRef<Test_Subject>);
-		this._project = default(EntityRef<project>);
-		this._user_account = default(EntityRef<user_account>);
-		this._Test_SubjectGroup_Link = default(EntityRef<Test_SubjectGroup_Link>);
-		this._test = default(EntityRef<test>);
-		this._subject_group = default(EntityRef<subject_group>);
-		OnCreated();
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-	public int id
-	{
-		get
-		{
-			return this._id;
-		}
-		set
-		{
-			if ((this._id != value))
-			{
-				this.OnidChanging(value);
-				this.SendPropertyChanging();
-				this._id = value;
-				this.SendPropertyChanged("id");
-				this.OnidChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_project_id", DbType="Int")]
-	public System.Nullable<int> project_id
-	{
-		get
-		{
-			return this._project_id;
-		}
-		set
-		{
-			if ((this._project_id != value))
-			{
-				if (this._project.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.Onproject_idChanging(value);
-				this.SendPropertyChanging();
-				this._project_id = value;
-				this.SendPropertyChanged("project_id");
-				this.Onproject_idChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Nick_Name", DbType="NVarChar(255)")]
-	public string Nick_Name
-	{
-		get
-		{
-			return this._Nick_Name;
-		}
-		set
-		{
-			if ((this._Nick_Name != value))
-			{
-				this.OnNick_NameChanging(value);
-				this.SendPropertyChanging();
-				this._Nick_Name = value;
-				this.SendPropertyChanged("Nick_Name");
-				this.OnNick_NameChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Test_Date", DbType="SmallDateTime")]
-	public System.Nullable<System.DateTime> Test_Date
-	{
-		get
-		{
-			return this._Test_Date;
-		}
-		set
-		{
-			if ((this._Test_Date != value))
-			{
-				this.OnTest_DateChanging(value);
-				this.SendPropertyChanging();
-				this._Test_Date = value;
-				this.SendPropertyChanged("Test_Date");
-				this.OnTest_DateChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Age", DbType="SmallInt")]
-	public System.Nullable<short> Age
-	{
-		get
-		{
-			return this._Age;
-		}
-		set
-		{
-			if ((this._Age != value))
-			{
-				this.OnAgeChanging(value);
-				this.SendPropertyChanging();
-				this._Age = value;
-				this.SendPropertyChanged("Age");
-				this.OnAgeChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Gender", DbType="Bit")]
-	public System.Nullable<bool> Gender
-	{
-		get
-		{
-			return this._Gender;
-		}
-		set
-		{
-			if ((this._Gender != value))
-			{
-				this.OnGenderChanging(value);
-				this.SendPropertyChanging();
-				this._Gender = value;
-				this.SendPropertyChanged("Gender");
-				this.OnGenderChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Test_Id", DbType="Int")]
-	public System.Nullable<int> Test_Id
-	{
-		get
-		{
-			return this._Test_Id;
-		}
-		set
-		{
-			if ((this._Test_Id != value))
-			{
-				if (this._test.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnTest_IdChanging(value);
-				this.SendPropertyChanging();
-				this._Test_Id = value;
-				this.SendPropertyChanged("Test_Id");
-				this.OnTest_IdChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Test_Date_Start", DbType="SmallDateTime")]
-	public System.Nullable<System.DateTime> Test_Date_Start
-	{
-		get
-		{
-			return this._Test_Date_Start;
-		}
-		set
-		{
-			if ((this._Test_Date_Start != value))
-			{
-				this.OnTest_Date_StartChanging(value);
-				this.SendPropertyChanging();
-				this._Test_Date_Start = value;
-				this.SendPropertyChanged("Test_Date_Start");
-				this.OnTest_Date_StartChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_group_id", DbType="Int")]
-	public System.Nullable<int> group_id
-	{
-		get
-		{
-			return this._group_id;
-		}
-		set
-		{
-			if ((this._group_id != value))
-			{
-				if (this._subject_group.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.Ongroup_idChanging(value);
-				this.SendPropertyChanging();
-				this._group_id = value;
-				this.SendPropertyChanged("group_id");
-				this.Ongroup_idChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_fio", DbType="NVarChar(255)")]
-	public string fio
-	{
-		get
-		{
-			return this._fio;
-		}
-		set
-		{
-			if ((this._fio != value))
-			{
-				this.OnfioChanging(value);
-				this.SendPropertyChanging();
-				this._fio = value;
-				this.SendPropertyChanged("fio");
-				this.OnfioChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BaseSubject_id", DbType="Int")]
-	public System.Nullable<int> BaseSubject_id
-	{
-		get
-		{
-			return this._BaseSubject_id;
-		}
-		set
-		{
-			if ((this._BaseSubject_id != value))
-			{
-				if (this._Test_Subject1.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnBaseSubject_idChanging(value);
-				this.SendPropertyChanging();
-				this._BaseSubject_id = value;
-				this.SendPropertyChanged("BaseSubject_id");
-				this.OnBaseSubject_idChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MeasureNumber", AutoSync=AutoSync.Always, DbType="Int NOT NULL", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
-	public int MeasureNumber
-	{
-		get
-		{
-			return this._MeasureNumber;
-		}
-		set
-		{
-			if ((this._MeasureNumber != value))
-			{
-				this.OnMeasureNumberChanging(value);
-				this.SendPropertyChanging();
-				this._MeasureNumber = value;
-				this.SendPropertyChanged("MeasureNumber");
-				this.OnMeasureNumberChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idUser", DbType="UniqueIdentifier")]
-	public System.Nullable<System.Guid> idUser
-	{
-		get
-		{
-			return this._idUser;
-		}
-		set
-		{
-			if ((this._idUser != value))
-			{
-				if (this._user_account.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnidUserChanging(value);
-				this.SendPropertyChanging();
-				this._idUser = value;
-				this.SendPropertyChanged("idUser");
-				this.OnidUserChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MailWasSent", DbType="Bit NOT NULL")]
-	public bool MailWasSent
-	{
-		get
-		{
-			return this._MailWasSent;
-		}
-		set
-		{
-			if ((this._MailWasSent != value))
-			{
-				this.OnMailWasSentChanging(value);
-				this.SendPropertyChanging();
-				this._MailWasSent = value;
-				this.SendPropertyChanged("MailWasSent");
-				this.OnMailWasSentChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idTestLink", DbType="Int")]
-	public System.Nullable<int> idTestLink
-	{
-		get
-		{
-			return this._idTestLink;
-		}
-		set
-		{
-			if ((this._idTestLink != value))
-			{
-				if (this._Test_SubjectGroup_Link.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnidTestLinkChanging(value);
-				this.SendPropertyChanging();
-				this._idTestLink = value;
-				this.SendPropertyChanged("idTestLink");
-				this.OnidTestLinkChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Test_Data", Storage="_Test_Datas", ThisKey="id", OtherKey="Subject_ID")]
-	public EntitySet<Test_Data> Test_Datas
-	{
-		get
-		{
-			return this._Test_Datas;
-		}
-		set
-		{
-			this._Test_Datas.Assign(value);
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Test_Results_Txt", Storage="_Test_Results_Txts", ThisKey="id", OtherKey="subject_id")]
-	public EntitySet<Test_Results_Txt> Test_Results_Txts
-	{
-		get
-		{
-			return this._Test_Results_Txts;
-		}
-		set
-		{
-			this._Test_Results_Txts.Assign(value);
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Param_Result", Storage="_Param_Results", ThisKey="id", OtherKey="Subject_ID")]
-	public EntitySet<Param_Result> Param_Results
-	{
-		get
-		{
-			return this._Param_Results;
-		}
-		set
-		{
-			this._Param_Results.Assign(value);
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Test_Result", Storage="_Test_Results", ThisKey="id", OtherKey="Subject_ID")]
-	public EntitySet<Test_Result> Test_Results
-	{
-		get
-		{
-			return this._Test_Results;
-		}
-		set
-		{
-			this._Test_Results.Assign(value);
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Test_Subject", Storage="_Test_Subjects", ThisKey="id", OtherKey="BaseSubject_id")]
-	public EntitySet<Test_Subject> Test_Subjects
-	{
-		get
-		{
-			return this._Test_Subjects;
-		}
-		set
-		{
-			this._Test_Subjects.Assign(value);
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_idea", Storage="_ideas", ThisKey="id", OtherKey="idSubject")]
-	public EntitySet<idea> ideas
-	{
-		get
-		{
-			return this._ideas;
-		}
-		set
-		{
-			this._ideas.Assign(value);
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_test_subject_approved", Storage="_test_subject_approveds", ThisKey="id", OtherKey="idSubject")]
-	public EntitySet<test_subject_approved> test_subject_approveds
-	{
-		get
-		{
-			return this._test_subject_approveds;
-		}
-		set
-		{
-			this._test_subject_approveds.Assign(value);
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Raw_Data", Storage="_Raw_Datas", ThisKey="id", OtherKey="Subject_ID")]
-	public EntitySet<Raw_Data> Raw_Datas
-	{
-		get
-		{
-			return this._Raw_Datas;
-		}
-		set
-		{
-			this._Raw_Datas.Assign(value);
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Test_Subject", Storage="_Test_Subject1", ThisKey="BaseSubject_id", OtherKey="id", IsForeignKey=true)]
-	public Test_Subject Test_Subject1
-	{
-		get
-		{
-			return this._Test_Subject1.Entity;
-		}
-		set
-		{
-			Test_Subject previousValue = this._Test_Subject1.Entity;
-			if (((previousValue != value) 
-						|| (this._Test_Subject1.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._Test_Subject1.Entity = null;
-					previousValue.Test_Subjects.Remove(this);
-				}
-				this._Test_Subject1.Entity = value;
-				if ((value != null))
-				{
-					value.Test_Subjects.Add(this);
-					this._BaseSubject_id = value.id;
-				}
-				else
-				{
-					this._BaseSubject_id = default(Nullable<int>);
-				}
-				this.SendPropertyChanged("Test_Subject1");
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="project_Test_Subject", Storage="_project", ThisKey="project_id", OtherKey="id", IsForeignKey=true)]
-	public project project
-	{
-		get
-		{
-			return this._project.Entity;
-		}
-		set
-		{
-			project previousValue = this._project.Entity;
-			if (((previousValue != value) 
-						|| (this._project.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._project.Entity = null;
-					previousValue.Test_Subjects.Remove(this);
-				}
-				this._project.Entity = value;
-				if ((value != null))
-				{
-					value.Test_Subjects.Add(this);
-					this._project_id = value.id;
-				}
-				else
-				{
-					this._project_id = default(Nullable<int>);
-				}
-				this.SendPropertyChanged("project");
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="user_account_Test_Subject", Storage="_user_account", ThisKey="idUser", OtherKey="idUser", IsForeignKey=true)]
-	public user_account user_account
-	{
-		get
-		{
-			return this._user_account.Entity;
-		}
-		set
-		{
-			user_account previousValue = this._user_account.Entity;
-			if (((previousValue != value) 
-						|| (this._user_account.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._user_account.Entity = null;
-					previousValue.Test_Subjects.Remove(this);
-				}
-				this._user_account.Entity = value;
-				if ((value != null))
-				{
-					value.Test_Subjects.Add(this);
-					this._idUser = value.idUser;
-				}
-				else
-				{
-					this._idUser = default(Nullable<System.Guid>);
-				}
-				this.SendPropertyChanged("user_account");
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_SubjectGroup_Link_Test_Subject", Storage="_Test_SubjectGroup_Link", ThisKey="idTestLink", OtherKey="id", IsForeignKey=true)]
-	public Test_SubjectGroup_Link Test_SubjectGroup_Link
-	{
-		get
-		{
-			return this._Test_SubjectGroup_Link.Entity;
-		}
-		set
-		{
-			Test_SubjectGroup_Link previousValue = this._Test_SubjectGroup_Link.Entity;
-			if (((previousValue != value) 
-						|| (this._Test_SubjectGroup_Link.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._Test_SubjectGroup_Link.Entity = null;
-					previousValue.Test_Subjects.Remove(this);
-				}
-				this._Test_SubjectGroup_Link.Entity = value;
-				if ((value != null))
-				{
-					value.Test_Subjects.Add(this);
-					this._idTestLink = value.id;
-				}
-				else
-				{
-					this._idTestLink = default(Nullable<int>);
-				}
-				this.SendPropertyChanged("Test_SubjectGroup_Link");
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="test_Test_Subject", Storage="_test", ThisKey="Test_Id", OtherKey="id", IsForeignKey=true, DeleteRule="CASCADE")]
-	public test test
-	{
-		get
-		{
-			return this._test.Entity;
-		}
-		set
-		{
-			test previousValue = this._test.Entity;
-			if (((previousValue != value) 
-						|| (this._test.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._test.Entity = null;
-					previousValue.Test_Subjects.Remove(this);
-				}
-				this._test.Entity = value;
-				if ((value != null))
-				{
-					value.Test_Subjects.Add(this);
-					this._Test_Id = value.id;
-				}
-				else
-				{
-					this._Test_Id = default(Nullable<int>);
-				}
-				this.SendPropertyChanged("test");
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="subject_group_Test_Subject", Storage="_subject_group", ThisKey="group_id", OtherKey="id", IsForeignKey=true)]
-	public subject_group subject_group
-	{
-		get
-		{
-			return this._subject_group.Entity;
-		}
-		set
-		{
-			subject_group previousValue = this._subject_group.Entity;
-			if (((previousValue != value) 
-						|| (this._subject_group.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._subject_group.Entity = null;
-					previousValue.Test_Subjects.Remove(this);
-				}
-				this._subject_group.Entity = value;
-				if ((value != null))
-				{
-					value.Test_Subjects.Add(this);
-					this._group_id = value.id;
-				}
-				else
-				{
-					this._group_id = default(Nullable<int>);
-				}
-				this.SendPropertyChanged("subject_group");
-			}
-		}
-	}
-	
-	public event PropertyChangingEventHandler PropertyChanging;
-	
-	public event PropertyChangedEventHandler PropertyChanged;
-	
-	protected virtual void SendPropertyChanging()
-	{
-		if ((this.PropertyChanging != null))
-		{
-			this.PropertyChanging(this, emptyChangingEventArgs);
-		}
-	}
-	
-	protected virtual void SendPropertyChanged(String propertyName)
-	{
-		if ((this.PropertyChanged != null))
-		{
-			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-		}
-	}
-	
-	private void attach_Test_Datas(Test_Data entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_Subject = this;
-	}
-	
-	private void detach_Test_Datas(Test_Data entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_Subject = null;
-	}
-	
-	private void attach_Test_Results_Txts(Test_Results_Txt entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_Subject = this;
-	}
-	
-	private void detach_Test_Results_Txts(Test_Results_Txt entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_Subject = null;
-	}
-	
-	private void attach_Param_Results(Param_Result entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_Subject = this;
-	}
-	
-	private void detach_Param_Results(Param_Result entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_Subject = null;
-	}
-	
-	private void attach_Test_Results(Test_Result entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_Subject = this;
-	}
-	
-	private void detach_Test_Results(Test_Result entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_Subject = null;
-	}
-	
-	private void attach_Test_Subjects(Test_Subject entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_Subject1 = this;
-	}
-	
-	private void detach_Test_Subjects(Test_Subject entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_Subject1 = null;
-	}
-	
-	private void attach_ideas(idea entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_Subject = this;
-	}
-	
-	private void detach_ideas(idea entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_Subject = null;
-	}
-	
-	private void attach_test_subject_approveds(test_subject_approved entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_Subject = this;
-	}
-	
-	private void detach_test_subject_approveds(test_subject_approved entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_Subject = null;
-	}
-	
-	private void attach_Raw_Datas(Raw_Data entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_Subject = this;
-	}
-	
-	private void detach_Raw_Datas(Raw_Data entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_Subject = null;
-	}
-}
-
 [global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.user_account")]
 public partial class user_account : INotifyPropertyChanging, INotifyPropertyChanged
 {
@@ -10201,11 +9333,11 @@ public partial class user_account : INotifyPropertyChanging, INotifyPropertyChan
 	
 	private System.Nullable<System.DateTime> _DismissalDate;
 	
-	private EntitySet<Test_Subject> _Test_Subjects;
-	
 	private EntitySet<test_measure_link> _test_measure_links;
 	
 	private EntitySet<test_subject_approved> _test_subject_approveds;
+	
+	private EntitySet<Test_Subject> _Test_Subjects;
 	
 	private EntityRef<Job> _Job;
 	
@@ -10249,9 +9381,9 @@ public partial class user_account : INotifyPropertyChanging, INotifyPropertyChan
 	
 	public user_account()
 	{
-		this._Test_Subjects = new EntitySet<Test_Subject>(new Action<Test_Subject>(this.attach_Test_Subjects), new Action<Test_Subject>(this.detach_Test_Subjects));
 		this._test_measure_links = new EntitySet<test_measure_link>(new Action<test_measure_link>(this.attach_test_measure_links), new Action<test_measure_link>(this.detach_test_measure_links));
 		this._test_subject_approveds = new EntitySet<test_subject_approved>(new Action<test_subject_approved>(this.attach_test_subject_approveds), new Action<test_subject_approved>(this.detach_test_subject_approveds));
+		this._Test_Subjects = new EntitySet<Test_Subject>(new Action<Test_Subject>(this.attach_Test_Subjects), new Action<Test_Subject>(this.detach_Test_Subjects));
 		this._Job = default(EntityRef<Job>);
 		this._user_state = default(EntityRef<user_state>);
 		this._Company = default(EntityRef<Company>);
@@ -10535,19 +9667,6 @@ public partial class user_account : INotifyPropertyChanging, INotifyPropertyChan
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="user_account_Test_Subject", Storage="_Test_Subjects", ThisKey="idUser", OtherKey="idUser")]
-	public EntitySet<Test_Subject> Test_Subjects
-	{
-		get
-		{
-			return this._Test_Subjects;
-		}
-		set
-		{
-			this._Test_Subjects.Assign(value);
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="user_account_test_measure_link", Storage="_test_measure_links", ThisKey="idUser", OtherKey="idUser")]
 	public EntitySet<test_measure_link> test_measure_links
 	{
@@ -10571,6 +9690,19 @@ public partial class user_account : INotifyPropertyChanging, INotifyPropertyChan
 		set
 		{
 			this._test_subject_approveds.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="user_account_Test_Subject", Storage="_Test_Subjects", ThisKey="idUser", OtherKey="idUser")]
+	public EntitySet<Test_Subject> Test_Subjects
+	{
+		get
+		{
+			return this._Test_Subjects;
+		}
+		set
+		{
+			this._Test_Subjects.Assign(value);
 		}
 	}
 	
@@ -10730,18 +9862,6 @@ public partial class user_account : INotifyPropertyChanging, INotifyPropertyChan
 		}
 	}
 	
-	private void attach_Test_Subjects(Test_Subject entity)
-	{
-		this.SendPropertyChanging();
-		entity.user_account = this;
-	}
-	
-	private void detach_Test_Subjects(Test_Subject entity)
-	{
-		this.SendPropertyChanging();
-		entity.user_account = null;
-	}
-	
 	private void attach_test_measure_links(test_measure_link entity)
 	{
 		this.SendPropertyChanging();
@@ -10761,6 +9881,18 @@ public partial class user_account : INotifyPropertyChanging, INotifyPropertyChan
 	}
 	
 	private void detach_test_subject_approveds(test_subject_approved entity)
+	{
+		this.SendPropertyChanging();
+		entity.user_account = null;
+	}
+	
+	private void attach_Test_Subjects(Test_Subject entity)
+	{
+		this.SendPropertyChanging();
+		entity.user_account = this;
+	}
+	
+	private void detach_Test_Subjects(Test_Subject entity)
 	{
 		this.SendPropertyChanging();
 		entity.user_account = null;
@@ -10785,9 +9917,9 @@ public partial class Test_SubjectGroup_Link : INotifyPropertyChanging, INotifyPr
 	
 	private bool _isObjectRequired;
 	
-	private EntitySet<Test_Subject> _Test_Subjects;
-	
 	private EntitySet<test_measure_link> _test_measure_links;
+	
+	private EntitySet<Test_Subject> _Test_Subjects;
 	
 	private EntityRef<test> _test;
 	
@@ -10813,8 +9945,8 @@ public partial class Test_SubjectGroup_Link : INotifyPropertyChanging, INotifyPr
 	
 	public Test_SubjectGroup_Link()
 	{
-		this._Test_Subjects = new EntitySet<Test_Subject>(new Action<Test_Subject>(this.attach_Test_Subjects), new Action<Test_Subject>(this.detach_Test_Subjects));
 		this._test_measure_links = new EntitySet<test_measure_link>(new Action<test_measure_link>(this.attach_test_measure_links), new Action<test_measure_link>(this.detach_test_measure_links));
+		this._Test_Subjects = new EntitySet<Test_Subject>(new Action<Test_Subject>(this.attach_Test_Subjects), new Action<Test_Subject>(this.detach_Test_Subjects));
 		this._test = default(EntityRef<test>);
 		this._subject_group = default(EntityRef<subject_group>);
 		OnCreated();
@@ -10948,19 +10080,6 @@ public partial class Test_SubjectGroup_Link : INotifyPropertyChanging, INotifyPr
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_SubjectGroup_Link_Test_Subject", Storage="_Test_Subjects", ThisKey="id", OtherKey="idTestLink")]
-	public EntitySet<Test_Subject> Test_Subjects
-	{
-		get
-		{
-			return this._Test_Subjects;
-		}
-		set
-		{
-			this._Test_Subjects.Assign(value);
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_SubjectGroup_Link_test_measure_link", Storage="_test_measure_links", ThisKey="id", OtherKey="idTestMeasure")]
 	public EntitySet<test_measure_link> test_measure_links
 	{
@@ -10971,6 +10090,19 @@ public partial class Test_SubjectGroup_Link : INotifyPropertyChanging, INotifyPr
 		set
 		{
 			this._test_measure_links.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_SubjectGroup_Link_Test_Subject", Storage="_Test_Subjects", ThisKey="id", OtherKey="idTestLink")]
+	public EntitySet<Test_Subject> Test_Subjects
+	{
+		get
+		{
+			return this._Test_Subjects;
+		}
+		set
+		{
+			this._Test_Subjects.Assign(value);
 		}
 	}
 	
@@ -11062,18 +10194,6 @@ public partial class Test_SubjectGroup_Link : INotifyPropertyChanging, INotifyPr
 		}
 	}
 	
-	private void attach_Test_Subjects(Test_Subject entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_SubjectGroup_Link = this;
-	}
-	
-	private void detach_Test_Subjects(Test_Subject entity)
-	{
-		this.SendPropertyChanging();
-		entity.Test_SubjectGroup_Link = null;
-	}
-	
 	private void attach_test_measure_links(test_measure_link entity)
 	{
 		this.SendPropertyChanging();
@@ -11081,6 +10201,18 @@ public partial class Test_SubjectGroup_Link : INotifyPropertyChanging, INotifyPr
 	}
 	
 	private void detach_test_measure_links(test_measure_link entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_SubjectGroup_Link = null;
+	}
+	
+	private void attach_Test_Subjects(Test_Subject entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_SubjectGroup_Link = this;
+	}
+	
+	private void detach_Test_Subjects(Test_Subject entity)
 	{
 		this.SendPropertyChanging();
 		entity.Test_SubjectGroup_Link = null;
@@ -12867,13 +11999,13 @@ public partial class test : INotifyPropertyChanging, INotifyPropertyChanged
 	
 	private EntitySet<Scale> _Scales;
 	
-	private EntitySet<Test_Subject> _Test_Subjects;
-	
 	private EntitySet<Test_SubjectGroup_Link> _Test_SubjectGroup_Links;
 	
 	private EntitySet<interpretation> _interpretations;
 	
 	private EntitySet<rep_test_link> _rep_test_links;
+	
+	private EntitySet<Test_Subject> _Test_Subjects;
 	
 	private EntitySet<metric> _metrics;
 	
@@ -12979,10 +12111,10 @@ public partial class test : INotifyPropertyChanging, INotifyPropertyChanged
 		this._Test_Questions = new EntitySet<Test_Question>(new Action<Test_Question>(this.attach_Test_Questions), new Action<Test_Question>(this.detach_Test_Questions));
 		this._Params = new EntitySet<Param>(new Action<Param>(this.attach_Params), new Action<Param>(this.detach_Params));
 		this._Scales = new EntitySet<Scale>(new Action<Scale>(this.attach_Scales), new Action<Scale>(this.detach_Scales));
-		this._Test_Subjects = new EntitySet<Test_Subject>(new Action<Test_Subject>(this.attach_Test_Subjects), new Action<Test_Subject>(this.detach_Test_Subjects));
 		this._Test_SubjectGroup_Links = new EntitySet<Test_SubjectGroup_Link>(new Action<Test_SubjectGroup_Link>(this.attach_Test_SubjectGroup_Links), new Action<Test_SubjectGroup_Link>(this.detach_Test_SubjectGroup_Links));
 		this._interpretations = new EntitySet<interpretation>(new Action<interpretation>(this.attach_interpretations), new Action<interpretation>(this.detach_interpretations));
 		this._rep_test_links = new EntitySet<rep_test_link>(new Action<rep_test_link>(this.attach_rep_test_links), new Action<rep_test_link>(this.detach_rep_test_links));
+		this._Test_Subjects = new EntitySet<Test_Subject>(new Action<Test_Subject>(this.attach_Test_Subjects), new Action<Test_Subject>(this.detach_Test_Subjects));
 		this._metrics = new EntitySet<metric>(new Action<metric>(this.attach_metrics), new Action<metric>(this.detach_metrics));
 		this._test_category = default(EntityRef<test_category>);
 		this._DiagnosticFieldType = default(EntityRef<DiagnosticFieldType>);
@@ -13885,19 +13017,6 @@ public partial class test : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="test_Test_Subject", Storage="_Test_Subjects", ThisKey="id", OtherKey="Test_Id")]
-	public EntitySet<Test_Subject> Test_Subjects
-	{
-		get
-		{
-			return this._Test_Subjects;
-		}
-		set
-		{
-			this._Test_Subjects.Assign(value);
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="test_Test_SubjectGroup_Link", Storage="_Test_SubjectGroup_Links", ThisKey="id", OtherKey="idTest")]
 	public EntitySet<Test_SubjectGroup_Link> Test_SubjectGroup_Links
 	{
@@ -13934,6 +13053,19 @@ public partial class test : INotifyPropertyChanging, INotifyPropertyChanged
 		set
 		{
 			this._rep_test_links.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="test_Test_Subject", Storage="_Test_Subjects", ThisKey="id", OtherKey="Test_Id")]
+	public EntitySet<Test_Subject> Test_Subjects
+	{
+		get
+		{
+			return this._Test_Subjects;
+		}
+		set
+		{
+			this._Test_Subjects.Assign(value);
 		}
 	}
 	
@@ -14178,18 +13310,6 @@ public partial class test : INotifyPropertyChanging, INotifyPropertyChanged
 		entity.test = null;
 	}
 	
-	private void attach_Test_Subjects(Test_Subject entity)
-	{
-		this.SendPropertyChanging();
-		entity.test = this;
-	}
-	
-	private void detach_Test_Subjects(Test_Subject entity)
-	{
-		this.SendPropertyChanging();
-		entity.test = null;
-	}
-	
 	private void attach_Test_SubjectGroup_Links(Test_SubjectGroup_Link entity)
 	{
 		this.SendPropertyChanging();
@@ -14221,6 +13341,18 @@ public partial class test : INotifyPropertyChanging, INotifyPropertyChanged
 	}
 	
 	private void detach_rep_test_links(rep_test_link entity)
+	{
+		this.SendPropertyChanging();
+		entity.test = null;
+	}
+	
+	private void attach_Test_Subjects(Test_Subject entity)
+	{
+		this.SendPropertyChanging();
+		entity.test = this;
+	}
+	
+	private void detach_Test_Subjects(Test_Subject entity)
 	{
 		this.SendPropertyChanging();
 		entity.test = null;
@@ -14912,8 +14044,6 @@ public partial class subject_group : INotifyPropertyChanging, INotifyPropertyCha
 	
 	private EntitySet<Param> _Params;
 	
-	private EntitySet<Test_Subject> _Test_Subjects;
-	
 	private EntitySet<Test_SubjectGroup_Link> _Test_SubjectGroup_Links;
 	
 	private EntitySet<rep_item_link> _rep_item_links;
@@ -14921,6 +14051,8 @@ public partial class subject_group : INotifyPropertyChanging, INotifyPropertyCha
 	private EntitySet<schedule> _schedules;
 	
 	private EntitySet<indicator> _indicators;
+	
+	private EntitySet<Test_Subject> _Test_Subjects;
 	
 	private EntitySet<metric> _metrics;
 	
@@ -14969,11 +14101,11 @@ public partial class subject_group : INotifyPropertyChanging, INotifyPropertyCha
 	public subject_group()
 	{
 		this._Params = new EntitySet<Param>(new Action<Param>(this.attach_Params), new Action<Param>(this.detach_Params));
-		this._Test_Subjects = new EntitySet<Test_Subject>(new Action<Test_Subject>(this.attach_Test_Subjects), new Action<Test_Subject>(this.detach_Test_Subjects));
 		this._Test_SubjectGroup_Links = new EntitySet<Test_SubjectGroup_Link>(new Action<Test_SubjectGroup_Link>(this.attach_Test_SubjectGroup_Links), new Action<Test_SubjectGroup_Link>(this.detach_Test_SubjectGroup_Links));
 		this._rep_item_links = new EntitySet<rep_item_link>(new Action<rep_item_link>(this.attach_rep_item_links), new Action<rep_item_link>(this.detach_rep_item_links));
 		this._schedules = new EntitySet<schedule>(new Action<schedule>(this.attach_schedules), new Action<schedule>(this.detach_schedules));
 		this._indicators = new EntitySet<indicator>(new Action<indicator>(this.attach_indicators), new Action<indicator>(this.detach_indicators));
+		this._Test_Subjects = new EntitySet<Test_Subject>(new Action<Test_Subject>(this.attach_Test_Subjects), new Action<Test_Subject>(this.detach_Test_Subjects));
 		this._metrics = new EntitySet<metric>(new Action<metric>(this.attach_metrics), new Action<metric>(this.detach_metrics));
 		this._project = default(EntityRef<project>);
 		this._report = default(EntityRef<report>);
@@ -15306,19 +14438,6 @@ public partial class subject_group : INotifyPropertyChanging, INotifyPropertyCha
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="subject_group_Test_Subject", Storage="_Test_Subjects", ThisKey="id", OtherKey="group_id")]
-	public EntitySet<Test_Subject> Test_Subjects
-	{
-		get
-		{
-			return this._Test_Subjects;
-		}
-		set
-		{
-			this._Test_Subjects.Assign(value);
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="subject_group_Test_SubjectGroup_Link", Storage="_Test_SubjectGroup_Links", ThisKey="id", OtherKey="idGroup")]
 	public EntitySet<Test_SubjectGroup_Link> Test_SubjectGroup_Links
 	{
@@ -15368,6 +14487,19 @@ public partial class subject_group : INotifyPropertyChanging, INotifyPropertyCha
 		set
 		{
 			this._indicators.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="subject_group_Test_Subject", Storage="_Test_Subjects", ThisKey="id", OtherKey="group_id")]
+	public EntitySet<Test_Subject> Test_Subjects
+	{
+		get
+		{
+			return this._Test_Subjects;
+		}
+		set
+		{
+			this._Test_Subjects.Assign(value);
 		}
 	}
 	
@@ -15518,18 +14650,6 @@ public partial class subject_group : INotifyPropertyChanging, INotifyPropertyCha
 		entity.subject_group = null;
 	}
 	
-	private void attach_Test_Subjects(Test_Subject entity)
-	{
-		this.SendPropertyChanging();
-		entity.subject_group = this;
-	}
-	
-	private void detach_Test_Subjects(Test_Subject entity)
-	{
-		this.SendPropertyChanging();
-		entity.subject_group = null;
-	}
-	
 	private void attach_Test_SubjectGroup_Links(Test_SubjectGroup_Link entity)
 	{
 		this.SendPropertyChanging();
@@ -15573,6 +14693,18 @@ public partial class subject_group : INotifyPropertyChanging, INotifyPropertyCha
 	}
 	
 	private void detach_indicators(indicator entity)
+	{
+		this.SendPropertyChanging();
+		entity.subject_group = null;
+	}
+	
+	private void attach_Test_Subjects(Test_Subject entity)
+	{
+		this.SendPropertyChanging();
+		entity.subject_group = this;
+	}
+	
+	private void detach_Test_Subjects(Test_Subject entity)
 	{
 		this.SendPropertyChanging();
 		entity.subject_group = null;
@@ -17589,6 +16721,898 @@ public partial class metric_subj_filter : INotifyPropertyChanging, INotifyProper
 	}
 }
 
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Test_Subject")]
+public partial class Test_Subject : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private int _id;
+	
+	private System.Nullable<int> _project_id;
+	
+	private string _Nick_Name;
+	
+	private System.Nullable<System.DateTime> _Test_Date;
+	
+	private System.Nullable<short> _Age;
+	
+	private System.Nullable<bool> _Gender;
+	
+	private System.Nullable<int> _Test_Id;
+	
+	private System.Nullable<System.DateTime> _Test_Date_Start;
+	
+	private System.Nullable<int> _group_id;
+	
+	private string _fio;
+	
+	private System.Nullable<int> _BaseSubject_id;
+	
+	private int _MeasureNumber;
+	
+	private System.Nullable<System.Guid> _idUser;
+	
+	private bool _MailWasSent;
+	
+	private System.Nullable<int> _idTestLink;
+	
+	private bool _actual;
+	
+	private EntitySet<Test_Data> _Test_Datas;
+	
+	private EntitySet<Test_Results_Txt> _Test_Results_Txts;
+	
+	private EntitySet<Param_Result> _Param_Results;
+	
+	private EntitySet<Test_Result> _Test_Results;
+	
+	private EntitySet<idea> _ideas;
+	
+	private EntitySet<test_subject_approved> _test_subject_approveds;
+	
+	private EntitySet<Raw_Data> _Raw_Datas;
+	
+	private EntitySet<Test_Subject> _Test_Subjects;
+	
+	private EntityRef<Test_Subject> _Test_Subject1;
+	
+	private EntityRef<subject_group> _subject_group;
+	
+	private EntityRef<user_account> _user_account;
+	
+	private EntityRef<Test_SubjectGroup_Link> _Test_SubjectGroup_Link;
+	
+	private EntityRef<project> _project;
+	
+	private EntityRef<test> _test;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(int value);
+    partial void OnidChanged();
+    partial void Onproject_idChanging(System.Nullable<int> value);
+    partial void Onproject_idChanged();
+    partial void OnNick_NameChanging(string value);
+    partial void OnNick_NameChanged();
+    partial void OnTest_DateChanging(System.Nullable<System.DateTime> value);
+    partial void OnTest_DateChanged();
+    partial void OnAgeChanging(System.Nullable<short> value);
+    partial void OnAgeChanged();
+    partial void OnGenderChanging(System.Nullable<bool> value);
+    partial void OnGenderChanged();
+    partial void OnTest_IdChanging(System.Nullable<int> value);
+    partial void OnTest_IdChanged();
+    partial void OnTest_Date_StartChanging(System.Nullable<System.DateTime> value);
+    partial void OnTest_Date_StartChanged();
+    partial void Ongroup_idChanging(System.Nullable<int> value);
+    partial void Ongroup_idChanged();
+    partial void OnfioChanging(string value);
+    partial void OnfioChanged();
+    partial void OnBaseSubject_idChanging(System.Nullable<int> value);
+    partial void OnBaseSubject_idChanged();
+    partial void OnMeasureNumberChanging(int value);
+    partial void OnMeasureNumberChanged();
+    partial void OnidUserChanging(System.Nullable<System.Guid> value);
+    partial void OnidUserChanged();
+    partial void OnMailWasSentChanging(bool value);
+    partial void OnMailWasSentChanged();
+    partial void OnidTestLinkChanging(System.Nullable<int> value);
+    partial void OnidTestLinkChanged();
+    partial void OnactualChanging(bool value);
+    partial void OnactualChanged();
+    #endregion
+	
+	public Test_Subject()
+	{
+		this._Test_Datas = new EntitySet<Test_Data>(new Action<Test_Data>(this.attach_Test_Datas), new Action<Test_Data>(this.detach_Test_Datas));
+		this._Test_Results_Txts = new EntitySet<Test_Results_Txt>(new Action<Test_Results_Txt>(this.attach_Test_Results_Txts), new Action<Test_Results_Txt>(this.detach_Test_Results_Txts));
+		this._Param_Results = new EntitySet<Param_Result>(new Action<Param_Result>(this.attach_Param_Results), new Action<Param_Result>(this.detach_Param_Results));
+		this._Test_Results = new EntitySet<Test_Result>(new Action<Test_Result>(this.attach_Test_Results), new Action<Test_Result>(this.detach_Test_Results));
+		this._ideas = new EntitySet<idea>(new Action<idea>(this.attach_ideas), new Action<idea>(this.detach_ideas));
+		this._test_subject_approveds = new EntitySet<test_subject_approved>(new Action<test_subject_approved>(this.attach_test_subject_approveds), new Action<test_subject_approved>(this.detach_test_subject_approveds));
+		this._Raw_Datas = new EntitySet<Raw_Data>(new Action<Raw_Data>(this.attach_Raw_Datas), new Action<Raw_Data>(this.detach_Raw_Datas));
+		this._Test_Subjects = new EntitySet<Test_Subject>(new Action<Test_Subject>(this.attach_Test_Subjects), new Action<Test_Subject>(this.detach_Test_Subjects));
+		this._Test_Subject1 = default(EntityRef<Test_Subject>);
+		this._subject_group = default(EntityRef<subject_group>);
+		this._user_account = default(EntityRef<user_account>);
+		this._Test_SubjectGroup_Link = default(EntityRef<Test_SubjectGroup_Link>);
+		this._project = default(EntityRef<project>);
+		this._test = default(EntityRef<test>);
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+	public int id
+	{
+		get
+		{
+			return this._id;
+		}
+		set
+		{
+			if ((this._id != value))
+			{
+				this.OnidChanging(value);
+				this.SendPropertyChanging();
+				this._id = value;
+				this.SendPropertyChanged("id");
+				this.OnidChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_project_id", DbType="Int")]
+	public System.Nullable<int> project_id
+	{
+		get
+		{
+			return this._project_id;
+		}
+		set
+		{
+			if ((this._project_id != value))
+			{
+				if (this._project.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.Onproject_idChanging(value);
+				this.SendPropertyChanging();
+				this._project_id = value;
+				this.SendPropertyChanged("project_id");
+				this.Onproject_idChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Nick_Name", DbType="NVarChar(255)")]
+	public string Nick_Name
+	{
+		get
+		{
+			return this._Nick_Name;
+		}
+		set
+		{
+			if ((this._Nick_Name != value))
+			{
+				this.OnNick_NameChanging(value);
+				this.SendPropertyChanging();
+				this._Nick_Name = value;
+				this.SendPropertyChanged("Nick_Name");
+				this.OnNick_NameChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Test_Date", DbType="SmallDateTime")]
+	public System.Nullable<System.DateTime> Test_Date
+	{
+		get
+		{
+			return this._Test_Date;
+		}
+		set
+		{
+			if ((this._Test_Date != value))
+			{
+				this.OnTest_DateChanging(value);
+				this.SendPropertyChanging();
+				this._Test_Date = value;
+				this.SendPropertyChanged("Test_Date");
+				this.OnTest_DateChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Age", DbType="SmallInt")]
+	public System.Nullable<short> Age
+	{
+		get
+		{
+			return this._Age;
+		}
+		set
+		{
+			if ((this._Age != value))
+			{
+				this.OnAgeChanging(value);
+				this.SendPropertyChanging();
+				this._Age = value;
+				this.SendPropertyChanged("Age");
+				this.OnAgeChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Gender", DbType="Bit")]
+	public System.Nullable<bool> Gender
+	{
+		get
+		{
+			return this._Gender;
+		}
+		set
+		{
+			if ((this._Gender != value))
+			{
+				this.OnGenderChanging(value);
+				this.SendPropertyChanging();
+				this._Gender = value;
+				this.SendPropertyChanged("Gender");
+				this.OnGenderChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Test_Id", DbType="Int")]
+	public System.Nullable<int> Test_Id
+	{
+		get
+		{
+			return this._Test_Id;
+		}
+		set
+		{
+			if ((this._Test_Id != value))
+			{
+				if (this._test.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnTest_IdChanging(value);
+				this.SendPropertyChanging();
+				this._Test_Id = value;
+				this.SendPropertyChanged("Test_Id");
+				this.OnTest_IdChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Test_Date_Start", DbType="SmallDateTime")]
+	public System.Nullable<System.DateTime> Test_Date_Start
+	{
+		get
+		{
+			return this._Test_Date_Start;
+		}
+		set
+		{
+			if ((this._Test_Date_Start != value))
+			{
+				this.OnTest_Date_StartChanging(value);
+				this.SendPropertyChanging();
+				this._Test_Date_Start = value;
+				this.SendPropertyChanged("Test_Date_Start");
+				this.OnTest_Date_StartChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_group_id", DbType="Int")]
+	public System.Nullable<int> group_id
+	{
+		get
+		{
+			return this._group_id;
+		}
+		set
+		{
+			if ((this._group_id != value))
+			{
+				if (this._subject_group.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.Ongroup_idChanging(value);
+				this.SendPropertyChanging();
+				this._group_id = value;
+				this.SendPropertyChanged("group_id");
+				this.Ongroup_idChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_fio", DbType="NVarChar(255)")]
+	public string fio
+	{
+		get
+		{
+			return this._fio;
+		}
+		set
+		{
+			if ((this._fio != value))
+			{
+				this.OnfioChanging(value);
+				this.SendPropertyChanging();
+				this._fio = value;
+				this.SendPropertyChanged("fio");
+				this.OnfioChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BaseSubject_id", DbType="Int")]
+	public System.Nullable<int> BaseSubject_id
+	{
+		get
+		{
+			return this._BaseSubject_id;
+		}
+		set
+		{
+			if ((this._BaseSubject_id != value))
+			{
+				if (this._Test_Subject1.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnBaseSubject_idChanging(value);
+				this.SendPropertyChanging();
+				this._BaseSubject_id = value;
+				this.SendPropertyChanged("BaseSubject_id");
+				this.OnBaseSubject_idChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MeasureNumber", AutoSync=AutoSync.Always, DbType="Int NOT NULL", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
+	public int MeasureNumber
+	{
+		get
+		{
+			return this._MeasureNumber;
+		}
+		set
+		{
+			if ((this._MeasureNumber != value))
+			{
+				this.OnMeasureNumberChanging(value);
+				this.SendPropertyChanging();
+				this._MeasureNumber = value;
+				this.SendPropertyChanged("MeasureNumber");
+				this.OnMeasureNumberChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idUser", DbType="UniqueIdentifier")]
+	public System.Nullable<System.Guid> idUser
+	{
+		get
+		{
+			return this._idUser;
+		}
+		set
+		{
+			if ((this._idUser != value))
+			{
+				if (this._user_account.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidUserChanging(value);
+				this.SendPropertyChanging();
+				this._idUser = value;
+				this.SendPropertyChanged("idUser");
+				this.OnidUserChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MailWasSent", DbType="Bit NOT NULL")]
+	public bool MailWasSent
+	{
+		get
+		{
+			return this._MailWasSent;
+		}
+		set
+		{
+			if ((this._MailWasSent != value))
+			{
+				this.OnMailWasSentChanging(value);
+				this.SendPropertyChanging();
+				this._MailWasSent = value;
+				this.SendPropertyChanged("MailWasSent");
+				this.OnMailWasSentChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idTestLink", DbType="Int")]
+	public System.Nullable<int> idTestLink
+	{
+		get
+		{
+			return this._idTestLink;
+		}
+		set
+		{
+			if ((this._idTestLink != value))
+			{
+				if (this._Test_SubjectGroup_Link.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidTestLinkChanging(value);
+				this.SendPropertyChanging();
+				this._idTestLink = value;
+				this.SendPropertyChanged("idTestLink");
+				this.OnidTestLinkChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_actual", DbType="Bit NOT NULL")]
+	public bool actual
+	{
+		get
+		{
+			return this._actual;
+		}
+		set
+		{
+			if ((this._actual != value))
+			{
+				this.OnactualChanging(value);
+				this.SendPropertyChanging();
+				this._actual = value;
+				this.SendPropertyChanged("actual");
+				this.OnactualChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Test_Data", Storage="_Test_Datas", ThisKey="id", OtherKey="Subject_ID")]
+	public EntitySet<Test_Data> Test_Datas
+	{
+		get
+		{
+			return this._Test_Datas;
+		}
+		set
+		{
+			this._Test_Datas.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Test_Results_Txt", Storage="_Test_Results_Txts", ThisKey="id", OtherKey="subject_id")]
+	public EntitySet<Test_Results_Txt> Test_Results_Txts
+	{
+		get
+		{
+			return this._Test_Results_Txts;
+		}
+		set
+		{
+			this._Test_Results_Txts.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Param_Result", Storage="_Param_Results", ThisKey="id", OtherKey="Subject_ID")]
+	public EntitySet<Param_Result> Param_Results
+	{
+		get
+		{
+			return this._Param_Results;
+		}
+		set
+		{
+			this._Param_Results.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Test_Result", Storage="_Test_Results", ThisKey="id", OtherKey="Subject_ID")]
+	public EntitySet<Test_Result> Test_Results
+	{
+		get
+		{
+			return this._Test_Results;
+		}
+		set
+		{
+			this._Test_Results.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_idea", Storage="_ideas", ThisKey="id", OtherKey="idSubject")]
+	public EntitySet<idea> ideas
+	{
+		get
+		{
+			return this._ideas;
+		}
+		set
+		{
+			this._ideas.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_test_subject_approved", Storage="_test_subject_approveds", ThisKey="id", OtherKey="idSubject")]
+	public EntitySet<test_subject_approved> test_subject_approveds
+	{
+		get
+		{
+			return this._test_subject_approveds;
+		}
+		set
+		{
+			this._test_subject_approveds.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Raw_Data", Storage="_Raw_Datas", ThisKey="id", OtherKey="Subject_ID")]
+	public EntitySet<Raw_Data> Raw_Datas
+	{
+		get
+		{
+			return this._Raw_Datas;
+		}
+		set
+		{
+			this._Raw_Datas.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Test_Subject", Storage="_Test_Subjects", ThisKey="id", OtherKey="BaseSubject_id")]
+	public EntitySet<Test_Subject> Test_Subjects
+	{
+		get
+		{
+			return this._Test_Subjects;
+		}
+		set
+		{
+			this._Test_Subjects.Assign(value);
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_Subject_Test_Subject", Storage="_Test_Subject1", ThisKey="BaseSubject_id", OtherKey="id", IsForeignKey=true)]
+	public Test_Subject Test_Subject1
+	{
+		get
+		{
+			return this._Test_Subject1.Entity;
+		}
+		set
+		{
+			Test_Subject previousValue = this._Test_Subject1.Entity;
+			if (((previousValue != value) 
+						|| (this._Test_Subject1.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Test_Subject1.Entity = null;
+					previousValue.Test_Subjects.Remove(this);
+				}
+				this._Test_Subject1.Entity = value;
+				if ((value != null))
+				{
+					value.Test_Subjects.Add(this);
+					this._BaseSubject_id = value.id;
+				}
+				else
+				{
+					this._BaseSubject_id = default(Nullable<int>);
+				}
+				this.SendPropertyChanged("Test_Subject1");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="subject_group_Test_Subject", Storage="_subject_group", ThisKey="group_id", OtherKey="id", IsForeignKey=true)]
+	public subject_group subject_group
+	{
+		get
+		{
+			return this._subject_group.Entity;
+		}
+		set
+		{
+			subject_group previousValue = this._subject_group.Entity;
+			if (((previousValue != value) 
+						|| (this._subject_group.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._subject_group.Entity = null;
+					previousValue.Test_Subjects.Remove(this);
+				}
+				this._subject_group.Entity = value;
+				if ((value != null))
+				{
+					value.Test_Subjects.Add(this);
+					this._group_id = value.id;
+				}
+				else
+				{
+					this._group_id = default(Nullable<int>);
+				}
+				this.SendPropertyChanged("subject_group");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="user_account_Test_Subject", Storage="_user_account", ThisKey="idUser", OtherKey="idUser", IsForeignKey=true, DeleteRule="CASCADE")]
+	public user_account user_account
+	{
+		get
+		{
+			return this._user_account.Entity;
+		}
+		set
+		{
+			user_account previousValue = this._user_account.Entity;
+			if (((previousValue != value) 
+						|| (this._user_account.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._user_account.Entity = null;
+					previousValue.Test_Subjects.Remove(this);
+				}
+				this._user_account.Entity = value;
+				if ((value != null))
+				{
+					value.Test_Subjects.Add(this);
+					this._idUser = value.idUser;
+				}
+				else
+				{
+					this._idUser = default(Nullable<System.Guid>);
+				}
+				this.SendPropertyChanged("user_account");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Test_SubjectGroup_Link_Test_Subject", Storage="_Test_SubjectGroup_Link", ThisKey="idTestLink", OtherKey="id", IsForeignKey=true)]
+	public Test_SubjectGroup_Link Test_SubjectGroup_Link
+	{
+		get
+		{
+			return this._Test_SubjectGroup_Link.Entity;
+		}
+		set
+		{
+			Test_SubjectGroup_Link previousValue = this._Test_SubjectGroup_Link.Entity;
+			if (((previousValue != value) 
+						|| (this._Test_SubjectGroup_Link.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Test_SubjectGroup_Link.Entity = null;
+					previousValue.Test_Subjects.Remove(this);
+				}
+				this._Test_SubjectGroup_Link.Entity = value;
+				if ((value != null))
+				{
+					value.Test_Subjects.Add(this);
+					this._idTestLink = value.id;
+				}
+				else
+				{
+					this._idTestLink = default(Nullable<int>);
+				}
+				this.SendPropertyChanged("Test_SubjectGroup_Link");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="project_Test_Subject", Storage="_project", ThisKey="project_id", OtherKey="id", IsForeignKey=true)]
+	public project project
+	{
+		get
+		{
+			return this._project.Entity;
+		}
+		set
+		{
+			project previousValue = this._project.Entity;
+			if (((previousValue != value) 
+						|| (this._project.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._project.Entity = null;
+					previousValue.Test_Subjects.Remove(this);
+				}
+				this._project.Entity = value;
+				if ((value != null))
+				{
+					value.Test_Subjects.Add(this);
+					this._project_id = value.id;
+				}
+				else
+				{
+					this._project_id = default(Nullable<int>);
+				}
+				this.SendPropertyChanged("project");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="test_Test_Subject", Storage="_test", ThisKey="Test_Id", OtherKey="id", IsForeignKey=true, DeleteRule="CASCADE")]
+	public test test
+	{
+		get
+		{
+			return this._test.Entity;
+		}
+		set
+		{
+			test previousValue = this._test.Entity;
+			if (((previousValue != value) 
+						|| (this._test.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._test.Entity = null;
+					previousValue.Test_Subjects.Remove(this);
+				}
+				this._test.Entity = value;
+				if ((value != null))
+				{
+					value.Test_Subjects.Add(this);
+					this._Test_Id = value.id;
+				}
+				else
+				{
+					this._Test_Id = default(Nullable<int>);
+				}
+				this.SendPropertyChanged("test");
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+	
+	private void attach_Test_Datas(Test_Data entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject = this;
+	}
+	
+	private void detach_Test_Datas(Test_Data entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject = null;
+	}
+	
+	private void attach_Test_Results_Txts(Test_Results_Txt entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject = this;
+	}
+	
+	private void detach_Test_Results_Txts(Test_Results_Txt entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject = null;
+	}
+	
+	private void attach_Param_Results(Param_Result entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject = this;
+	}
+	
+	private void detach_Param_Results(Param_Result entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject = null;
+	}
+	
+	private void attach_Test_Results(Test_Result entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject = this;
+	}
+	
+	private void detach_Test_Results(Test_Result entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject = null;
+	}
+	
+	private void attach_ideas(idea entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject = this;
+	}
+	
+	private void detach_ideas(idea entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject = null;
+	}
+	
+	private void attach_test_subject_approveds(test_subject_approved entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject = this;
+	}
+	
+	private void detach_test_subject_approveds(test_subject_approved entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject = null;
+	}
+	
+	private void attach_Raw_Datas(Raw_Data entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject = this;
+	}
+	
+	private void detach_Raw_Datas(Raw_Data entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject = null;
+	}
+	
+	private void attach_Test_Subjects(Test_Subject entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject1 = this;
+	}
+	
+	private void detach_Test_Subjects(Test_Subject entity)
+	{
+		this.SendPropertyChanging();
+		entity.Test_Subject1 = null;
+	}
+}
+
 [global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.metric")]
 public partial class metric : INotifyPropertyChanging, INotifyPropertyChanged
 {
@@ -17618,6 +17642,8 @@ public partial class metric : INotifyPropertyChanging, INotifyPropertyChanged
 	private string _eliminate_scheme;
 	
 	private string _calc_description;
+	
+	private decimal _weight;
 	
 	private EntitySet<metric_subj_filter> _metric_subj_filters;
 	
@@ -17657,6 +17683,8 @@ public partial class metric : INotifyPropertyChanging, INotifyPropertyChanged
     partial void Oneliminate_schemeChanged();
     partial void Oncalc_descriptionChanging(string value);
     partial void Oncalc_descriptionChanged();
+    partial void OnweightChanging(decimal value);
+    partial void OnweightChanged();
     #endregion
 	
 	public metric()
@@ -17921,6 +17949,26 @@ public partial class metric : INotifyPropertyChanging, INotifyPropertyChanged
 				this._calc_description = value;
 				this.SendPropertyChanged("calc_description");
 				this.Oncalc_descriptionChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_weight", DbType="Decimal(4,1) NOT NULL")]
+	public decimal weight
+	{
+		get
+		{
+			return this._weight;
+		}
+		set
+		{
+			if ((this._weight != value))
+			{
+				this.OnweightChanging(value);
+				this.SendPropertyChanging();
+				this._weight = value;
+				this.SendPropertyChanged("weight");
+				this.OnweightChanged();
 			}
 		}
 	}

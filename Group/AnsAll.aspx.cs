@@ -95,6 +95,7 @@ public partial class Player_AnsAll : System.Web.UI.Page
             if (tsbj != null)
             {
                 tsbj.Test_Date = DateTime.UtcNow;
+                tsbj.actual = true;
                 subject_group sgroup = tsbj.subject_group;
                 if (sgroup != null)
                 {
@@ -111,12 +112,18 @@ public partial class Player_AnsAll : System.Web.UI.Page
                                 Test_Id = tsbj.Test_Id
                             }
                         );
-                    }                    
+                    }
+
                     if (sgroup.isAnonymous && rblAnon.SelectedValue == "1")
                     {// реализация анонимности
                         tsbj.fio = "Аноним";
                         tsbj.Nick_Name = "Аноним";
                         tsbj.idUser = null;
+                    }
+                    else
+                    {// смена состояния актуальности старых записей
+                        dc.Test_Subjects.Where(q => q.Test_Id == tsbj.Test_Id && q.idUser == tsbj.idUser && q.actual == true
+                            && q.Test_Date != null && q.Test_Date < tsbj.Test_Date).ToList().ForEach(x => x.actual = false);
                     }
                 }
             }

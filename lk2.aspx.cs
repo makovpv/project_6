@@ -655,6 +655,7 @@ public partial class lk2 : System.Web.UI.Page
             "join test_subject ts on ts.id = td.subject_id "+
             "join user_account ua on ua.iduser = ts.iduser " +
             "where m.idCompany = @idcompany and td.Test_Value < m.index_value and m.condition = '<' " +
+            " and ts.actual = 1 "+
             " and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null) "+
             " and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null) "+
             "group by m.idMetric, m.name, m.description "+

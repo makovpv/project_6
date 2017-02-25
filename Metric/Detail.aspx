@@ -48,7 +48,9 @@
         inner join Test_Data td on m.idScale = td.Scale_ID 
         inner join test_subject ts on ts.id = td.subject_id
         inner join user_account ua on ua.iduser = ts.iduser
-        where m.idMetric = @idMetric and td.Test_Value < m.index_value and m.condition = '<' 
+        where m.idMetric = @idMetric 
+            and ts.actual = 1
+            and td.Test_Value < m.index_value and m.condition = '<' 
             and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null) 
             and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null)
                        

@@ -1,6 +1,10 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MainBusinessMasterPage.master" AutoEventWireup="true" CodeFile="SubjFilter.aspx.cs" Inherits="Metric_SubjFilter" %>
+﻿<%@ Page Title="Метрика" Language="C#" MasterPageFile="~/MainBusinessMasterPage.master" AutoEventWireup="true" CodeFile="SubjFilter.aspx.cs" Inherits="Metric_SubjFilter" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+    <div class="nsi">
+        <h3>Фильтр для метрики</h3>
+        <a href="list.aspx">Вернуться к списку</a>
+    </div>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
 
@@ -17,9 +21,10 @@
             <asp:DropDownList runat="server" AutoPostBack="true" DataSourceID="SqlTest" DataTextField="Name" DataValueField="ID" ID="ddlTest"/>
             <br/>
             Шкала:
-            <asp:DropDownList ID="DropDownList1" runat="server" DataSourceID="SqlScales" DataTextField="Name" DataValueField="ID"/>
+            <asp:DropDownList ID="ddlScale" runat="server" DataSourceID="SqlScales" 
+                DataTextField="Name" DataValueField="ID" ondatabound="ddlScale_DataBound"/>
         </p>
-        <asp:Button runat="server" Text="Применить" />
+        <asp:Button runat="server" Text="Применить" OnClick="btnApplyClick"/>
         
         <hr/>
 
@@ -79,12 +84,12 @@
     <asp:SqlDataSource
         runat="server" ID="SqlTest"
         ConnectionString="<%$ ConnectionStrings:tester_dataConnectionString %>"
-        SelectCommand="select id, name from test where ispublished = 1 order by name">
+        SelectCommand="select cast (null as int) as id, '<не указан>' as name union all select id, name from test where ispublished = 1 order by name">
     </asp:SqlDataSource>
     <asp:SqlDataSource
         runat="server" ID="SqlScales"
         ConnectionString="<%$ ConnectionStrings:tester_dataConnectionString %>"
-        SelectCommand="select id, name from scales where test_id = @test_id order by name">
+        SelectCommand="select cast (null as int) as id, '<не указана>' as name union all select id, name from scales where test_id = @test_id order by name">
         <SelectParameters>
             <asp:ControlParameter ControlID="ddlTest" PropertyName="SelectedValue" DbType="Int32" Name="test_id" />
         </SelectParameters>

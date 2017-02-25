@@ -7,8 +7,8 @@
       <Column Name="StartMessage" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
       <Column Name="FinalMessage" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
       <Association Name="project_ProjectTest_Link" Member="ProjectTest_Links" ThisKey="id" OtherKey="Project_ID" Type="ProjectTest_Link" />
-      <Association Name="project_Test_Subject" Member="Test_Subjects" ThisKey="id" OtherKey="project_id" Type="Test_Subject" />
       <Association Name="project_subject_group" Member="subject_groups" ThisKey="id" OtherKey="project_id" Type="subject_group" />
+      <Association Name="project_Test_Subject" Member="Test_Subjects" ThisKey="id" OtherKey="project_id" Type="Test_Subject" />
     </Type>
   </Table>
   <Table Name="dbo.ProjectTest_Link" Member="ProjectTest_Links">
@@ -118,8 +118,8 @@
       <Column Name="subject_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="item_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="text" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
-      <Association Name="Test_Subject_Test_Results_Txt" Member="Test_Subject" ThisKey="subject_id" OtherKey="id" Type="Test_Subject" IsForeignKey="true" />
       <Association Name="item_Test_Results_Txt" Member="item" ThisKey="item_id" OtherKey="id" Type="item" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="Test_Subject_Test_Results_Txt" Member="Test_Subject" ThisKey="subject_id" OtherKey="id" Type="Test_Subject" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.ConditionRangeType" Member="ConditionRangeTypes">
@@ -295,8 +295,8 @@
       <Column Name="SubScale_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="SelectedValue" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
       <Association Name="SubScale_Test_Result" Member="SubScale" ThisKey="SubScale_ID" OtherKey="id" Type="SubScale" IsForeignKey="true" DeleteRule="CASCADE" />
-      <Association Name="Test_Subject_Test_Result" Member="Test_Subject" ThisKey="Subject_ID" OtherKey="id" Type="Test_Subject" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="item_Test_Result" Member="item" ThisKey="item_id" OtherKey="id" Type="item" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="Test_Subject_Test_Result" Member="Test_Subject" ThisKey="Subject_ID" OtherKey="id" Type="Test_Subject" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.Test_Question" Member="Test_Questions">
@@ -413,39 +413,6 @@
       <Association Name="report_subject_group" Member="subject_groups" ThisKey="idReport" OtherKey="idReport" Type="subject_group" />
     </Type>
   </Table>
-  <Table Name="dbo.Test_Subject" Member="Test_Subjects">
-    <Type Name="Test_Subject">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="project_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Nick_Name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="Test_Date" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-      <Column Name="Age" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="Gender" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="Test_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Test_Date_Start" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-      <Column Name="group_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="fio" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="BaseSubject_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="MeasureNumber" Type="System.Int32" DbType="Int NOT NULL" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="idUser" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
-      <Column Name="MailWasSent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="idTestLink" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Test_Subject_Test_Data" Member="Test_Datas" ThisKey="id" OtherKey="Subject_ID" Type="Test_Data" />
-      <Association Name="Test_Subject_Test_Results_Txt" Member="Test_Results_Txts" ThisKey="id" OtherKey="subject_id" Type="Test_Results_Txt" />
-      <Association Name="Test_Subject_Param_Result" Member="Param_Results" ThisKey="id" OtherKey="Subject_ID" Type="Param_Result" />
-      <Association Name="Test_Subject_Test_Result" Member="Test_Results" ThisKey="id" OtherKey="Subject_ID" Type="Test_Result" />
-      <Association Name="Test_Subject_Test_Subject" Member="Test_Subjects" ThisKey="id" OtherKey="BaseSubject_id" Type="Test_Subject" />
-      <Association Name="Test_Subject_idea" Member="ideas" ThisKey="id" OtherKey="idSubject" Type="idea" />
-      <Association Name="Test_Subject_test_subject_approved" Member="test_subject_approveds" ThisKey="id" OtherKey="idSubject" Type="test_subject_approved" />
-      <Association Name="Test_Subject_Raw_Data" Member="Raw_Datas" ThisKey="id" OtherKey="Subject_ID" Type="Raw_Data" />
-      <Association Name="Test_Subject_Test_Subject" Member="Test_Subject1" ThisKey="BaseSubject_id" OtherKey="id" Type="Test_Subject" IsForeignKey="true" />
-      <Association Name="project_Test_Subject" Member="project" ThisKey="project_id" OtherKey="id" Type="project" IsForeignKey="true" />
-      <Association Name="user_account_Test_Subject" Member="user_account" ThisKey="idUser" OtherKey="idUser" Type="user_account" IsForeignKey="true" />
-      <Association Name="Test_SubjectGroup_Link_Test_Subject" Member="Test_SubjectGroup_Link" ThisKey="idTestLink" OtherKey="id" Type="Test_SubjectGroup_Link" IsForeignKey="true" />
-      <Association Name="test_Test_Subject" Member="test" ThisKey="Test_Id" OtherKey="id" Type="test" IsForeignKey="true" DeleteRule="CASCADE" />
-      <Association Name="subject_group_Test_Subject" Member="subject_group" ThisKey="group_id" OtherKey="id" Type="subject_group" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.user_account" Member="user_accounts">
     <Type Name="user_account">
       <Column Name="idUser" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -461,9 +428,9 @@
       <Column Name="idState" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
       <Column Name="RecruteDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
       <Column Name="DismissalDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
-      <Association Name="user_account_Test_Subject" Member="Test_Subjects" ThisKey="idUser" OtherKey="idUser" Type="Test_Subject" />
       <Association Name="user_account_test_measure_link" Member="test_measure_links" ThisKey="idUser" OtherKey="idUser" Type="test_measure_link" />
       <Association Name="user_account_test_subject_approved" Member="test_subject_approveds" ThisKey="idUser" OtherKey="ApprovedByUser" Type="test_subject_approved" />
+      <Association Name="user_account_Test_Subject" Member="Test_Subjects" ThisKey="idUser" OtherKey="idUser" Type="Test_Subject" />
       <Association Name="Job_user_account" Member="Job" ThisKey="idJob" OtherKey="id" Type="Job" IsForeignKey="true" />
       <Association Name="user_state_user_account" Member="user_state" ThisKey="idState" OtherKey="id" Type="user_state" IsForeignKey="true" />
       <Association Name="Company_user_account" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" />
@@ -478,8 +445,8 @@
       <Column Name="OrdNumber" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
       <Column Name="MeasureObjectName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="isObjectRequired" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="Test_SubjectGroup_Link_Test_Subject" Member="Test_Subjects" ThisKey="id" OtherKey="idTestLink" Type="Test_Subject" />
       <Association Name="Test_SubjectGroup_Link_test_measure_link" Member="test_measure_links" ThisKey="id" OtherKey="idTestMeasure" Type="test_measure_link" />
+      <Association Name="Test_SubjectGroup_Link_Test_Subject" Member="Test_Subjects" ThisKey="id" OtherKey="idTestLink" Type="Test_Subject" />
       <Association Name="test_Test_SubjectGroup_Link" Member="test" ThisKey="idTest" OtherKey="id" Type="test" IsForeignKey="true" />
       <Association Name="subject_group_Test_SubjectGroup_Link" Member="subject_group" ThisKey="idGroup" OtherKey="id" Type="subject_group" IsForeignKey="true" />
     </Type>
@@ -619,11 +586,11 @@
       <Association Name="test_Test_Question" Member="Test_Questions" ThisKey="id" OtherKey="test_id" Type="Test_Question" />
       <Association Name="test_Param" Member="Params" ThisKey="id" OtherKey="Test_ID" Type="Param" />
       <Association Name="test_Scale" Member="Scales" ThisKey="id" OtherKey="test_id" Type="Scale" />
-      <Association Name="test_Test_Subject" Member="Test_Subjects" ThisKey="id" OtherKey="Test_Id" Type="Test_Subject" />
       <Association Name="test_Test_SubjectGroup_Link" Member="Test_SubjectGroup_Links" ThisKey="id" OtherKey="idTest" Type="Test_SubjectGroup_Link" />
       <Association Name="test_interpretation" Member="interpretations" ThisKey="id" OtherKey="test_id" Type="interpretation" />
       <Association Name="test_rep_test_link" Member="rep_test_links" ThisKey="id" OtherKey="idTest" Type="rep_test_link" />
       <Association Name="test_idea_generator" Member="idea_generators" ThisKey="id" OtherKey="idTest" Type="idea_generator" />
+      <Association Name="test_Test_Subject" Member="Test_Subjects" ThisKey="id" OtherKey="Test_Id" Type="Test_Subject" />
       <Association Name="test_metric" Member="metrics" ThisKey="id" OtherKey="idTest" Type="metric" />
       <Association Name="test_category_test" Member="test_category" ThisKey="category_id" OtherKey="id" Type="test_category" IsForeignKey="true" />
       <Association Name="DiagnosticFieldType_test" Member="DiagnosticFieldType" ThisKey="diagnostic_field" OtherKey="id" Type="DiagnosticFieldType" IsForeignKey="true" />
@@ -687,11 +654,11 @@
       <Column Name="isAutoEmpNew" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="isAnonymous" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="subject_group_Param" Member="Params" ThisKey="id" OtherKey="Group_ID" Type="Param" />
-      <Association Name="subject_group_Test_Subject" Member="Test_Subjects" ThisKey="id" OtherKey="group_id" Type="Test_Subject" />
       <Association Name="subject_group_Test_SubjectGroup_Link" Member="Test_SubjectGroup_Links" ThisKey="id" OtherKey="idGroup" Type="Test_SubjectGroup_Link" />
       <Association Name="subject_group_rep_item_link" Member="rep_item_links" ThisKey="id" OtherKey="idGroup" Type="rep_item_link" />
       <Association Name="subject_group_schedule" Member="schedules" ThisKey="id" OtherKey="idBaseGroup" Type="schedule" />
       <Association Name="subject_group_indicator" Member="indicators" ThisKey="id" OtherKey="idGroup" Type="indicator" />
+      <Association Name="subject_group_Test_Subject" Member="Test_Subjects" ThisKey="id" OtherKey="group_id" Type="Test_Subject" />
       <Association Name="subject_group_metric" Member="metrics" ThisKey="id" OtherKey="idSubjectGroup" Type="metric" />
       <Association Name="project_subject_group" Member="project" ThisKey="project_id" OtherKey="id" Type="project" IsForeignKey="true" />
       <Association Name="report_subject_group" Member="report" ThisKey="idReport" OtherKey="idReport" Type="report" IsForeignKey="true" />
@@ -786,6 +753,40 @@
       <Association Name="metric_metric_subj_filter" Member="metric" ThisKey="idMetric" OtherKey="idMetric" Type="metric" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
+  <Table Name="dbo.Test_Subject" Member="Test_Subjects">
+    <Type Name="Test_Subject">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="project_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Nick_Name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="Test_Date" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="Age" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="Gender" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Test_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Test_Date_Start" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="group_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="fio" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="BaseSubject_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MeasureNumber" Type="System.Int32" DbType="Int NOT NULL" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="idUser" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="MailWasSent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="idTestLink" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="actual" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Test_Subject_Test_Data" Member="Test_Datas" ThisKey="id" OtherKey="Subject_ID" Type="Test_Data" />
+      <Association Name="Test_Subject_Test_Results_Txt" Member="Test_Results_Txts" ThisKey="id" OtherKey="subject_id" Type="Test_Results_Txt" />
+      <Association Name="Test_Subject_Param_Result" Member="Param_Results" ThisKey="id" OtherKey="Subject_ID" Type="Param_Result" />
+      <Association Name="Test_Subject_Test_Result" Member="Test_Results" ThisKey="id" OtherKey="Subject_ID" Type="Test_Result" />
+      <Association Name="Test_Subject_idea" Member="ideas" ThisKey="id" OtherKey="idSubject" Type="idea" />
+      <Association Name="Test_Subject_test_subject_approved" Member="test_subject_approveds" ThisKey="id" OtherKey="idSubject" Type="test_subject_approved" />
+      <Association Name="Test_Subject_Raw_Data" Member="Raw_Datas" ThisKey="id" OtherKey="Subject_ID" Type="Raw_Data" />
+      <Association Name="Test_Subject_Test_Subject" Member="Test_Subjects" ThisKey="id" OtherKey="BaseSubject_id" Type="Test_Subject" />
+      <Association Name="Test_Subject_Test_Subject" Member="Test_Subject1" ThisKey="BaseSubject_id" OtherKey="id" Type="Test_Subject" IsForeignKey="true" />
+      <Association Name="subject_group_Test_Subject" Member="subject_group" ThisKey="group_id" OtherKey="id" Type="subject_group" IsForeignKey="true" />
+      <Association Name="user_account_Test_Subject" Member="user_account" ThisKey="idUser" OtherKey="idUser" Type="user_account" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="Test_SubjectGroup_Link_Test_Subject" Member="Test_SubjectGroup_Link" ThisKey="idTestLink" OtherKey="id" Type="Test_SubjectGroup_Link" IsForeignKey="true" />
+      <Association Name="project_Test_Subject" Member="project" ThisKey="project_id" OtherKey="id" Type="project" IsForeignKey="true" />
+      <Association Name="test_Test_Subject" Member="test" ThisKey="Test_Id" OtherKey="id" Type="test" IsForeignKey="true" DeleteRule="CASCADE" />
+    </Type>
+  </Table>
   <Table Name="dbo.metric" Member="metrics">
     <Type Name="metric">
       <Column Name="idMetric" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -800,6 +801,7 @@
       <Column Name="idCompany" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="eliminate_scheme" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="calc_description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="weight" Type="System.Decimal" DbType="Decimal(4,1) NOT NULL" CanBeNull="false" />
       <Association Name="metric_metric_subj_filter" Member="metric_subj_filters" ThisKey="idMetric" OtherKey="idMetric" Type="metric_subj_filter" />
       <Association Name="Company_metric" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" />
       <Association Name="Scale_metric" Member="Scale" ThisKey="idScale" OtherKey="id" Type="Scale" IsForeignKey="true" />
