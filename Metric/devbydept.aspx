@@ -25,7 +25,9 @@
 
     <asp:SqlDataSource runat="server" ID="sqlDevByDept"
         ConnectionString="<%$ ConnectionStrings:tester_dataConnectionString %>"
-        SelectCommand="declare @idcompany int select @idcompany = idcompany from dept where id = @iddept
+        SelectCommand="
+        set dateformat 'dmy'
+        declare @idcompany int select @idcompany = idcompany from dept where id = @iddept
         select fio, metric_name, convert (varchar(10), test_date, 104) as test_date from dbo.MetricDeviation(@idcompany, @iddept) md
         order by md.fio">
         <SelectParameters>

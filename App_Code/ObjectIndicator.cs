@@ -430,7 +430,8 @@ public class ObjectIndicator
                     //"left join dept on dept.id = q.iddept " +
                     //"group by q.iddept, dept.name) qq "+
                     //"group by qq.name, qq.iddept",
-
+                    
+                    "set dateformat 'dmy' " +
                     "select md.iddept, dept.name, count (*) as number "+
                     "from dbo.MetricDeviation ({0}, null) md " +
                     "left join dept on dept.id = md.idDept "+

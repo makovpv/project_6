@@ -43,6 +43,7 @@
     <asp:SqlDataSource runat="server" ID="sqlDetail"
         ConnectionString="<%$ ConnectionStrings:tester_dataConnectionString %>"
         SelectCommand="
+        set dateformat 'dmy' 
         declare @idcompany int select @idcompany  =idcompany from dbo.metric where idmetric = @idMetric
         select cast(md.test_value as int) as test_value, md.fio, convert (varchar(10), md.test_date, 104) as test_date
         from dbo.MetricDeviation (@idcompany, null) md

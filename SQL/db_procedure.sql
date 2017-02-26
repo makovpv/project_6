@@ -990,35 +990,59 @@ if object_id(N'[dbo].[MetricDeviation]') is not null
 drop function [dbo].MetricDeviation
 go
 -- отклонения по метрикам
-create function dbo.MetricDeviation (@idCompany int, @idDept int = null) returns table
-as return 
-(
-	select m.idMetric, m.name as metric_name, ua.idDept, ts.fio, td.Test_Value, ts.test_date
+create function dbo.MetricDeviation (@idCompany int, @idDept int = null) returns 
+	@res table (idmetric int, metric_name varchar(255), description varchar(max), iddept int, fio varchar(255), test_value decimal(8,3), test_date datetime)
+as 
+begin
+	set dateformat 'dmy'
+
+	INSERT into @res (idmetric, metric_name, description, iddept, fio, test_value, test_date)
+	SELECT m.idMetric, m.name as metric_name, m.description, ua.idDept, ts.fio, td.Test_Value, ts.test_date
 	from metric m
 	join Test_Data td on m.idScale = td.Scale_ID
 	join test_subject ts on ts.id = td.subject_id 
 	join user_account ua on ua.iduser = ts.iduser 
 	--left join dept on dept.id = ua.idDept
 	where m.idcompany = @idcompany and ua.idDept = isnull(@iddept, ua.iddept)
-		and ts.actual = 1
+		and m.idtest not in (1235)
+		and ts.actual = 1 and ts.test_date >= dateadd (mm, -3, getdate())
 		and td.Test_Value < m.index_value and m.condition = '<'
 		and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null) 
         and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null) 
 	
 	union all
-	select m.idMetric, m.name as metric_name, ua.idDept, ts.fio, null as Test_Value, null as test_date
+	--отсутствие идей
+	select m.idMetric, m.name as metric_name, m.description, ua.idDept, ts.fio, null as Test_Value, null as test_date
 	from metric m
 	join test_subject ts on ts.test_id = m.idtest
 	inner join user_account ua on ua.iduser = ts.iduser and ua.idcompany = m.idcompany
 	--left join dept on dept.id = ua.idDept
 	where m.idcompany = @idcompany and ua.idDept = isnull(@iddept, ua.iddept)
 		and m.condition = 'NE'  and m.index_value = 1 
+		and m.idtest not in (1235)
+		--and ts.test_date >= dateadd (mm, -3, getdate()) надо смотреть дату последней поданной идеи
 		and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null)   
         and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null)  
-	GROUP BY m.idMetric, m.name, ua.idDept, ts.iduser, ts.fio
+	GROUP BY m.idMetric, m.name, m.description, ua.idDept, ts.iduser, ts.fio
 	having count (ts.test_date) = 0
 
-)
+	union all
+	-- чтение книг
+	select m.idMetric, m.name as metric_name, m.description, ua.idDept, ts.fio, null as Test_Value, 
+		max(cast (case when isdate(txt.text)=1 then txt.text else null end as datetime)) as test_date
+	from metric m
+	join test_subject ts on ts.test_id = m.idtest
+	inner join user_account ua on ua.iduser = ts.iduser and ua.idcompany = m.idcompany
+	inner join test_results_txt txt on txt.subject_id = ts.id
+	where m.idtest = 1235 
+		and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null)   
+        and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null)  
+	group by m.idMetric, m.name, m.description, ua.idDept, ts.iduser, ts.fio
+	having max(cast (case when isdate(txt.text)=1 then txt.text else null end as datetime)) < dateadd (mm, -3, getdate())
+
+	return
+end
 go
+
 
 

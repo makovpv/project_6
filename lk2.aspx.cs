@@ -647,31 +647,36 @@ public partial class lk2 : System.Web.UI.Page
             " inner join interpretation ii on q.id=ii.id " +
             " inner join test t on t.id=ii.test_id " +
             " order by 4";
-        
-        SqlMetrics.SelectCommand = 
-            "select m.idMetric as id, m.name test_name, m.description as text, 1 as ismetric, count (*) as emp_count " +
-            "from metric m "+
-            "join Test_Data td on m.idScale = td.Scale_ID "+
-            "join test_subject ts on ts.id = td.subject_id "+
-            "join user_account ua on ua.iduser = ts.iduser " +
-            "where m.idCompany = @idcompany and td.Test_Value < m.index_value and m.condition = '<' " +
-            " and ts.actual = 1 "+
-            " and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null) "+
-            " and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null) "+
-            "group by m.idMetric, m.name, m.description "+
-            "UNION ALL " + // not exists
-            "select q.id, q.test_name, q.text, 1 as ismetric, count(*) as emp_count "+
-            "from ( "+
-            "SELECT m.idMetric as id, m.name test_name, m.description as text, 1 as ismetric "+
-            "FROM metric m  "+
-            "inner JOIN Test_Subject ts ON ts.test_id = m.idtest  "+
-            "inner join user_account ua on ua.iduser = ts.iduser and ua.idcompany = m.idcompany "+
-            "WHERE m.idcompany = @idCompany and m.condition = 'NE'  and m.index_value = 1 "+
-            "and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null)   "+
-            "and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null)  "+
-            "GROUP BY m.idMetric, m.name, m.description, ts.fio "+
-            "having count (ts.test_date) = 0) q "+
-            "group by q.id, q.test_name, q.text";
+
+        SqlMetrics.SelectCommand =
+            "set dateformat 'dmy' "+
+            "select md.idmetric as id, md.metric_name as test_name, md.description as text, 1 as ismetric, count(*) as emp_count " +
+            "from dbo.metricdeviation (@idcompany, null) md " +
+            "group by md.idmetric, md.metric_name, md.description";
+            
+            //"select m.idMetric as id, m.name test_name, m.description as text, 1 as ismetric, count (*) as emp_count " +
+            //"from metric m "+
+            //"join Test_Data td on m.idScale = td.Scale_ID "+
+            //"join test_subject ts on ts.id = td.subject_id "+
+            //"join user_account ua on ua.iduser = ts.iduser " +
+            //"where m.idCompany = @idcompany and td.Test_Value < m.index_value and m.condition = '<' " +
+            //" and ts.actual = 1 "+
+            //" and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null) "+
+            //" and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null) "+
+            //"group by m.idMetric, m.name, m.description "+
+            //"UNION ALL " + // not exists
+            //"select q.id, q.test_name, q.text, 1 as ismetric, count(*) as emp_count "+
+            //"from ( "+
+            //"SELECT m.idMetric as id, m.name test_name, m.description as text, 1 as ismetric "+
+            //"FROM metric m  "+
+            //"inner JOIN Test_Subject ts ON ts.test_id = m.idtest  "+
+            //"inner join user_account ua on ua.iduser = ts.iduser and ua.idcompany = m.idcompany "+
+            //"WHERE m.idcompany = @idCompany and m.condition = 'NE'  and m.index_value = 1 "+
+            //"and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null)   "+
+            //"and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null)  "+
+            //"GROUP BY m.idMetric, m.name, m.description, ts.fio "+
+            //"having count (ts.test_date) = 0) q "+
+            //"group by q.id, q.test_name, q.text";
 
     }
 
