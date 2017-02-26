@@ -994,7 +994,7 @@ create function dbo.MetricDeviation (@idCompany int, @idDept int = null) returns
 	@res table (idmetric int, metric_name varchar(255), description varchar(max), iddept int, fio varchar(255), test_value decimal(8,3), test_date datetime)
 as 
 begin
-	set dateformat 'dmy'
+	--set dateformat 'dmy'
 
 	INSERT into @res (idmetric, metric_name, description, iddept, fio, test_value, test_date)
 	SELECT m.idMetric, m.name as metric_name, m.description, ua.idDept, ts.fio, td.Test_Value, ts.test_date
