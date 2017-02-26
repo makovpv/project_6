@@ -43,8 +43,9 @@ public class ObjectIndicator
         public int Number;
     }
     class dept_value_info 
-    { 
-        public string name; 
+    {
+        public int idDept;
+        public string name;
         public int number;
     }
     struct InfoByUserName
@@ -398,47 +399,55 @@ public class ObjectIndicator
 
         int TotalDeviation = 0;
         foreach (dept_value_info dvi in p_dc.ExecuteQuery<dept_value_info>(
-                    "select name, sum(number) as number from ( " + // суммарный
-                    "select dept.name, count (*) as number " +
-                    "from metric m " +
-                    "join Test_Data td on m.idScale = td.Scale_ID " +
-                    "join test_subject ts on ts.id = td.subject_id " +
-                    "join user_account ua on ua.iduser = ts.iduser " +
-                    "left join dept on dept.id = ua.iddept " +
-                    "where m.idCompany = {0} and td.Test_Value < m.index_value and m.condition = '<' " +
-                    " and ts.actual = 1 " +
-                    " and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null) " +
-                    " and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null) " +
-                    "group by dept.id, dept.name " +
+                    //"declare @dt3m datetime set @dt3m=dateadd(mm,-3,getdate()) " +
+                    //"select iddept, name, sum(number) as number from ( " + // суммарный
+                    //"select dept.id as iddept, dept.name, count (*) as number " +
+                    //"from metric m " +
+                    //"join Test_Data td on m.idScale = td.Scale_ID " +
+                    //"join test_subject ts on ts.id = td.subject_id " +
+                    //"join user_account ua on ua.iduser = ts.iduser " +
+                    //"left join dept on dept.id = ua.iddept " +
+                    //"where m.idCompany = {0} and td.Test_Value < m.index_value and m.condition = '<' " +
+                    //" and ts.actual = 1 " +
+                    //" and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null) " +
+                    //" and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null) " +
+                    //"group by dept.id, dept.name " +
 
-                    "UNION ALL " + // not exists
-                    "select dept.name, sum(emp_count) as emp_count " +
-                    "from ( " +
-                    "SELECT m.idMetric as id, ua.iddept, count (*) emp_count " +
-                    "FROM metric m  " +
-                    "inner JOIN Test_Subject ts ON ts.test_id = m.idtest  " +
-                    "inner join user_account ua on ua.iduser = ts.iduser and ua.idcompany = m.idcompany " +
-                    "WHERE m.idcompany = {1} and m.condition = 'NE'  and m.index_value = 1 " +
-                    "and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null)   " +
-                    "and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null)  " +
-                    "GROUP BY m.idMetric, ts.iduser, ua.iddept " + // группировку по отделу выше на уровень, если будет искажать картину 
-                    "having count (ts.test_date) = 0) q " +
+                    //"UNION ALL " + // not exists
+                    //"select q.iddept, dept.name, sum(emp_count) as emp_count " +
+                    //"from ( " +
+                    //"SELECT m.idMetric as id, ua.iddept, count (*) emp_count " +
+                    //"FROM metric m  " +
+                    //"inner JOIN Test_Subject ts ON ts.test_id = m.idtest  " +
+                    //"inner join user_account ua on ua.iduser = ts.iduser and ua.idcompany = m.idcompany " +
+                    //"WHERE m.idcompany = {1} and ts.test_date >= @dt3M "+
+                    //"and m.condition = 'NE'  and m.index_value = 1 " +
+                    //"and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null)   " +
+                    //"and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null)  " +
+                    //"GROUP BY m.idMetric, ts.iduser, ua.iddept " + // группировку по отделу выше на уровень, если будет искажать картину 
+                    //"having count (ts.test_date) = 0) q " +
 
-                    "left join dept on dept.id = q.iddept " +
-                    "group by q.iddept, dept.name) qq "+
-                    "group by qq.name",
+                    //"left join dept on dept.id = q.iddept " +
+                    //"group by q.iddept, dept.name) qq "+
+                    //"group by qq.name, qq.iddept",
 
-                    new object[] { p_indicator.idCompany, p_indicator.idCompany }))
+                    "select md.iddept, dept.name, count (*) as number "+
+                    "from dbo.MetricDeviation ({0}, null) md " +
+                    "left join dept on dept.id = md.idDept "+
+                    "group by md.iddept, dept.name",
+
+                    new object[] { p_indicator.idCompany }))
         {
             if (dvi.number > 0)
             {
-                p_container.Controls.Add(new LiteralControl(string.Format("<br/>{0}: {1} отклонений ", dvi.name, dvi.number)));
+                p_container.Controls.Add(new LiteralControl(string.Format("<br/>{0}: ", dvi.name)));
+                p_container.Controls.Add(new HyperLink() { Text=dvi.number.ToString()+" отклонений", NavigateUrl="~\\metric\\devbydept.aspx?id="+dvi.idDept.ToString()});
                 TotalDeviation += dvi.number;
             }
         }
         if (TotalDeviation != 0)
         {
-            p_container.Controls.Add(new LiteralControl(string.Format("<br/><br/>Всего {0} отклонений ", TotalDeviation)));   
+            p_container.Controls.AddAt(2, new LiteralControl(string.Format("<br/><br/>Всего {0} отклонений ", TotalDeviation)));
         }
     }
     /// <summary>

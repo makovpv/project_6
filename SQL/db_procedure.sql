@@ -984,3 +984,41 @@ begin
 
 end
 go
+
+
+if object_id(N'[dbo].[MetricDeviation]') is not null
+drop function [dbo].MetricDeviation
+go
+-- отклонения по метрикам
+create function dbo.MetricDeviation (@idCompany int, @idDept int = null) returns table
+as return 
+(
+	select m.idMetric, m.name as metric_name, ua.idDept, ts.fio, td.Test_Value, ts.test_date
+	from metric m
+	join Test_Data td on m.idScale = td.Scale_ID
+	join test_subject ts on ts.id = td.subject_id 
+	join user_account ua on ua.iduser = ts.iduser 
+	--left join dept on dept.id = ua.idDept
+	where m.idcompany = @idcompany and ua.idDept = isnull(@iddept, ua.iddept)
+		and ts.actual = 1
+		and td.Test_Value < m.index_value and m.condition = '<'
+		and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null) 
+        and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null) 
+	
+	union all
+	select m.idMetric, m.name as metric_name, ua.idDept, ts.fio, null as Test_Value, null as test_date
+	from metric m
+	join test_subject ts on ts.test_id = m.idtest
+	inner join user_account ua on ua.iduser = ts.iduser and ua.idcompany = m.idcompany
+	--left join dept on dept.id = ua.idDept
+	where m.idcompany = @idcompany and ua.idDept = isnull(@iddept, ua.iddept)
+		and m.condition = 'NE'  and m.index_value = 1 
+		and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null)   
+        and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null)  
+	GROUP BY m.idMetric, m.name, ua.idDept, ts.iduser, ts.fio
+	having count (ts.test_date) = 0
+
+)
+go
+
+
