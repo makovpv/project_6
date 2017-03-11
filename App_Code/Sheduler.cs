@@ -17,8 +17,35 @@ public class Sheduler
         {
             CheckForSchedule(dc);
             CheckForNewEmployee(dc);
+            FixMetricDeviations(dc);
         }
         SchdlTimer.Change(TimerInterval, System.Threading.Timeout.Infinite);
+    }
+
+    /// <summary>
+    /// срез отклонений по метрикам на текущую дату
+    /// </summary>
+    private void FixMetricDeviations(TesterDataClassesDataContext dc)
+    {
+        dc.ExecuteCommand(
+            "DECLARE ccc CURSOR FAST_FORWARD FOR SELECT id FROM Company "+
+            "DECLARE @idcomp int "+
+            "OPEN ccc "+
+            "FETCH NEXT FROM ccc INTO @idcomp "+
+            "WHILE @@FETCH_STATUS = 0 BEGIN "+
+            "	INSERT INTO dbo.metric_hist	(idmetric, mdate, mNumber, idDept) "+
+            "	SELECT  "+
+            "		md.idMetric,  "+
+            "		GETDATE(), "+
+            "		COUNT(*) AS number, "+
+            "		idDept   "+
+            "	FROM dbo.MetricDeviation(@idcomp, null) md "+
+            "	GROUP BY md.idMetric, md.idDept "+
+	
+            "	FETCH NEXT FROM ccc INTO @idcomp   "+                        	
+            "END "+
+            "CLOSE ccc "+
+            "DEALLOCATE ccc");
     }
 
     private void CheckForNewEmployee(TesterDataClassesDataContext p_dc)

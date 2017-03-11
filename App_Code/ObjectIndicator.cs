@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.UI.DataVisualization.Charting;
+using System.Drawing;
 
 /// <summary>
 /// Summary description for ObjectIndicator
@@ -60,6 +62,11 @@ public class ObjectIndicator
         public string Name;
         public int Order;
     }
+    //struct DevCountByDate
+    //{
+    //    public DateTime mDate;
+    //    public int DevCount;
+    //}
 
     /// <summary>
     /// </summary>
@@ -87,7 +94,7 @@ public class ObjectIndicator
                             if (scl.isMain)
                             {
                                 CommonData.ScaleRateInfo info = CommonData.GetSubjectScaleRate(p_dc, subj.id, scl.id);
-                                Image img = new Image();
+                                System.Web.UI.WebControls.Image img = new System.Web.UI.WebControls.Image();
                                 Label valLabel = TesterChart.DrawScaleIndicator(info, p_ImageFolderPath, img);
                                 valLabel.Text = scl.name + " - " + valLabel.Text;
                                 valLabel.CssClass = "testerChartLabel";
@@ -397,6 +404,14 @@ public class ObjectIndicator
         p_container.Controls.Add(new Label() { Text = p_indicator.name, CssClass = "clsIndicatorName" });
         p_container.Controls.Add(new LiteralControl("<br/>"));
 
+        Panel ComboPanel = new Panel();
+        //ComboPanel.Style.Add("display", "inline-block");
+        p_container.Controls.Add(ComboPanel);
+        //System.Web.UI.HtmlControls.HtmlGenericControl dv = new System.Web.UI.HtmlControls.HtmlGenericControl();
+        
+        Panel pnlList = new Panel();
+        pnlList.Style.Add("display", "inline-block");
+        pnlList.Style.Add("vertical-align", "top");
         int TotalDeviation = 0;
         foreach (dept_value_info dvi in p_dc.ExecuteQuery<dept_value_info>(
                     //"declare @dt3m datetime set @dt3m=dateadd(mm,-3,getdate()) " +
@@ -441,15 +456,50 @@ public class ObjectIndicator
         {
             if (dvi.number > 0)
             {
-                p_container.Controls.Add(new LiteralControl(string.Format("<br/>{0}: ", dvi.name)));
-                p_container.Controls.Add(new HyperLink() { Text=dvi.number.ToString()+" отклонений", NavigateUrl="~\\metric\\devbydept.aspx?id="+dvi.idDept.ToString()});
+                pnlList.Controls.Add(new LiteralControl(string.Format("<br/>{0}: ", dvi.name)));
+                pnlList.Controls.Add(new HyperLink() { Text = dvi.number.ToString() + " отклонений", NavigateUrl = "~\\metric\\devbydept.aspx?id=" + dvi.idDept.ToString() });
                 TotalDeviation += dvi.number;
             }
         }
         if (TotalDeviation != 0)
         {
-            p_container.Controls.AddAt(2, new LiteralControl(string.Format("<br/><br/>Всего {0} отклонений ", TotalDeviation)));
+            //p_container.Controls.AddAt(2, new LiteralControl(string.Format("<br/><br/>Всего {0} отклонений ", TotalDeviation)));
+            pnlList.Controls.AddAt(0, new LiteralControl(string.Format("<br/><br/>Всего {0} отклонений<br/><br/>", TotalDeviation)));
         }
+        ComboPanel.Controls.Add(pnlList);
+
+        Panel pnlDiagram = new Panel();
+        pnlDiagram.Style.Add ("display", "inline-block");
+        DrawMetricDevHistory(p_dc, pnlDiagram, p_indicator);
+        ComboPanel.Controls.Add(pnlDiagram);
+
+    }
+
+    private static void DrawMetricDevHistory(TesterDataClassesDataContext p_dc, Control p_container, indicator p_indicator)
+    {
+
+        Chart dgr = new Chart() { Height = 200, BackColor = Color.Transparent};
+        Series sr = new Series();
+        foreach (var dcnt in (
+            from mh in p_dc.metric_hists
+            join d in p_dc.depts on mh.idDept equals d.id
+            where d.idCompany == p_indicator.idCompany
+            group mh by mh.mDate into g
+            select new {mDate = g.Key, mNumber = g.Sum(x=>x.mNumber)}).ToList()
+            )
+        {
+            sr.Points.Add(new DataPoint(dcnt.mDate.ToOADate(), dcnt.mNumber));
+        }
+        dgr.Series.Add(sr);
+        dgr.ChartAreas.Add(new ChartArea("chart area")
+        {
+            BackColor = System.Drawing.Color.Transparent
+        });
+        dgr.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+        dgr.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
+
+        p_container.Controls.Add(dgr);
+
     }
     /// <summary>
     /// план развития

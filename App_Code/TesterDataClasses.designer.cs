@@ -756,6 +756,14 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
 		}
 	}
 	
+	public System.Data.Linq.Table<metric_hist> metric_hists
+	{
+		get
+		{
+			return this.GetTable<metric_hist>();
+		}
+	}
+	
 	private void DeletevItemScaleLink(vItemScaleLink obj)
 	{
 		vItemScaleLink original = ((vItemScaleLink)(vItemScaleLinks.GetOriginalEntityState(obj)));
@@ -3535,7 +3543,7 @@ public partial class Resume_Item : INotifyPropertyChanging, INotifyPropertyChang
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resume_image", DbType="Image", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_resume_image", DbType="Image", UpdateCheck=UpdateCheck.Never)]
 	public System.Data.Linq.Binary resume_image
 	{
 		get
@@ -18152,6 +18160,87 @@ public partial class metric : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		this.SendPropertyChanging();
 		entity.metric = null;
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.metric_hist")]
+public partial class metric_hist
+{
+	
+	private int _idMetric;
+	
+	private System.DateTime _mDate;
+	
+	private int _mNumber;
+	
+	private System.Nullable<int> _idDept;
+	
+	public metric_hist()
+	{
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idMetric", DbType="Int NOT NULL")]
+	public int idMetric
+	{
+		get
+		{
+			return this._idMetric;
+		}
+		set
+		{
+			if ((this._idMetric != value))
+			{
+				this._idMetric = value;
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_mDate", DbType="DateTime NOT NULL")]
+	public System.DateTime mDate
+	{
+		get
+		{
+			return this._mDate;
+		}
+		set
+		{
+			if ((this._mDate != value))
+			{
+				this._mDate = value;
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_mNumber", DbType="Int NOT NULL")]
+	public int mNumber
+	{
+		get
+		{
+			return this._mNumber;
+		}
+		set
+		{
+			if ((this._mNumber != value))
+			{
+				this._mNumber = value;
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idDept", DbType="Int")]
+	public System.Nullable<int> idDept
+	{
+		get
+		{
+			return this._idDept;
+		}
+		set
+		{
+			if ((this._idDept != value))
+			{
+				this._idDept = value;
+			}
+		}
 	}
 }
 #pragma warning restore 1591

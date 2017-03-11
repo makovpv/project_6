@@ -411,7 +411,6 @@ go
 
 alter table dbo.test_subject add actual bit not null default 1
 go
---------------insert into idea_generator (idTest, idgeneratortype) values (1220, 2 )
 
 declare c cursor for
 select ts.Test_Id, ts.idUser, MAX(ts.Test_Date)
@@ -433,12 +432,12 @@ close c
 deallocate c
 go
 
-
---select * from test_subject where idUser = '809684B3-7CDD-4FED-99CF-0A4C2FCF9631' and Test_Id=1220
-select * from test_subject 
-where test_id = 1225 and iduser = '701CAE26-874B-4592-B622-AC43A54B68EE'
-
-
-
-
-
+CREATE TABLE dbo.metric_hist (
+	idMetric INT NOT NULL,
+	mDate DATETIME NOT NULL,
+	mNumber int NOT NULL,
+	idDept INT,
+	CONSTRAINT fk_metric_hist_metric FOREIGN KEY (idmetric) REFERENCES dbo.metric (idmetric) ON DELETE CASCADE,
+	CONSTRAINT fk_metric_hist_dept FOREIGN KEY (iddept) REFERENCES dbo.dept (id) ON DELETE CASCADE
+)
+GO

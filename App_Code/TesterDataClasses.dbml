@@ -334,6 +334,7 @@
       <Column Name="idCompany" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Association Name="dept_user_account" Member="user_accounts" ThisKey="id" OtherKey="idDept" Type="user_account" />
+      <Association Name="dept_metric_hist" Member="metric_hists" ThisKey="id" OtherKey="idDept" Type="metric_hist" />
       <Association Name="Company_dept" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" />
     </Type>
   </Table>
@@ -803,10 +804,21 @@
       <Column Name="calc_description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="weight" Type="System.Decimal" DbType="Decimal(4,1) NOT NULL" CanBeNull="false" />
       <Association Name="metric_metric_subj_filter" Member="metric_subj_filters" ThisKey="idMetric" OtherKey="idMetric" Type="metric_subj_filter" />
+      <Association Name="metric_metric_hist" Member="metric_hists" ThisKey="idMetric" OtherKey="idMetric" Type="metric_hist" />
       <Association Name="Company_metric" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" />
       <Association Name="Scale_metric" Member="Scale" ThisKey="idScale" OtherKey="id" Type="Scale" IsForeignKey="true" />
       <Association Name="subject_group_metric" Member="subject_group" ThisKey="idSubjectGroup" OtherKey="id" Type="subject_group" IsForeignKey="true" />
       <Association Name="test_metric" Member="test" ThisKey="idTest" OtherKey="id" Type="test" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.metric_hist" Member="metric_hists">
+    <Type Name="metric_hist">
+      <Column Name="idMetric" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="mDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="mNumber" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idDept" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="dept_metric_hist" Member="dept" ThisKey="idDept" OtherKey="id" Type="dept" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="metric_metric_hist" Member="metric" ThisKey="idMetric" OtherKey="idMetric" Type="metric" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Function Name="dbo.IsInterpretationFor" Method="IsInterpretationFor" IsComposable="true">
