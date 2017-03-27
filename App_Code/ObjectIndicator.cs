@@ -488,8 +488,20 @@ public class ObjectIndicator
             select new {mDate = g.Key, mNumber = g.Sum(x=>x.mNumber)}).ToList()
             )
         {
-            sr.Points.Add(new DataPoint(dcnt.mDate.ToOADate(), dcnt.mNumber));
+            sr.Points.Add(new DataPoint(dcnt.mDate.ToOADate(), dcnt.mNumber) { 
+                MarkerStyle = MarkerStyle.Circle,
+                //sr.MarkerBorderWidth = 5;
+                MarkerSize = 15
+            });
         }
+
+        sr.ChartType = SeriesChartType.FastLine;
+        sr.Color = Color.Red;
+        sr.BorderWidth = 3;
+
+        
+        
+        //sr.MarkerStep = 2;
         dgr.Series.Add(sr);
         dgr.ChartAreas.Add(new ChartArea("chart area")
         {
@@ -497,6 +509,7 @@ public class ObjectIndicator
         });
         dgr.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
         dgr.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
+        
 
         p_container.Controls.Add(dgr);
 
