@@ -50,7 +50,7 @@ begin
 
 	declare @HasKeys bit = 0
 
-	-- Г®ГЎГ»Г·Г­Г Гї ГёГЄГ Г«Г  (ГЄГ«ГѕГ·ГЁ)
+	-- обычная шкала (ключи)
 	insert into dbo.Raw_Data (Subject_ID, Scale_ID,  Raw_Value)
 	select @SubjectID, isl.scale_id, isnull(sum(isl.kf*tr.SelectedValue),0)
 	from Test_Results tr 
@@ -61,7 +61,7 @@ begin
 
 	if @@rowcount > 0 set @HasKeys = 1
 	
-	-- ГіГ·ГҐГІ ГЇГ® Г­Г Г«ГЁГ·ГЁГѕ Г®ГІГўГҐГІГ®Гў
+	-- учет по наличию ответов
 	declare @ans_count int, @anstext_count int, @TestID int
 	select @ans_count = count(distinct tr.item_id) from Test_Results tr where tr.Subject_ID = @SubjectID and isnull(tr.SelectedValue,0) <> 0
 	select @anstext_count = count(distinct trx.item_id) from Test_Results_txt trx where trx.Subject_ID = @SubjectID and isnull(trx.text,'') <> ''
@@ -73,7 +73,7 @@ begin
 	where s.test_id = @TestID and s.RawCalcType = 2 
 
 	if @HasKeys > 0 begin
-		-- ГЁГ­Г¤ГҐГЄГ±Г»
+		-- индексы
 		declare @ScaleID int, @Formula nvarchar(255)
 		declare c_idx_scl cursor fast_forward for
 		select s.id, s.Formula
@@ -117,8 +117,8 @@ begin
 	fetch next from c into @scaleID, @RawScore, @ScoreCalcType, @MaxValue
 	while @@FETCH_STATUS = 0 begin
 		set @TestValue = 0
-		if @ScoreCalcType = 2 set @TestValue = @RawScore -- ГІГҐГ±ГІГ®ГўГ»Г© Г°Г ГўГҐГ­ Г±Г»Г°Г®Г¬Гі
-		else if @ScoreCalcType = 1 begin -- Г’-ГЎГ Г«Г«
+		if @ScoreCalcType = 2 set @TestValue = @RawScore -- тестовый равен сырому
+		else if @ScoreCalcType = 1 begin -- Т-балл
 			select top 1 @TestValue = sr.Score 
 			from Scale_Range sr 
 			left join Scales s on s.id = sr.Scale_ID
@@ -127,7 +127,7 @@ begin
 			and (s.Param2_ID is null or sr.Param2_Value_ID in (select pv.Param_Value_ID from Param_Results pv where pv.Subject_ID=@SubjectID))
 			order by sr.Max_Value
 		end
-		else if @ScoreCalcType = 3 begin -- ГЇГ°Г®Г¶ГҐГ­ГІГ»
+		else if @ScoreCalcType = 3 begin -- проценты
 			if isnull(@MaxValue,0)<>0
 				set @TestValue = cast(100.0 * @RawScore / @MaxValue as int)
 			else set @TestValue = @RawScore 
@@ -135,7 +135,7 @@ begin
 		else begin
 			close c
 			deallocate c
-			raiserror ('Г­ГҐГўГҐГ°Г­Г»Г© ГІГЁГЇ Г°Г Г±Г·ГҐГІГ  ГЎГ Г«Г ', 16, 1)
+			raiserror ('неверный тип расчета бала', 16, 1)
 			return
 		end
 		
@@ -279,7 +279,7 @@ go
 
 drop procedure dbo.Recalc_Scale_Range
 go
--- ГЇГҐГ°ГҐГ®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­ГЁГҐ Г§Г­Г Г·ГҐГ­ГЁГ© Г¤Г«Гї Г°Г Г±Г·ГҐГІГ  ГІГҐГ±ГІГ®ГўГЈГ® ГЎГ Г«Г  Г¤Г«Гї ГёГЄГ Г«Г»
+-- переопределение значений для расчета тестовго бала для шкалы
 create procedure dbo.Recalc_Scale_Range (@ScaleID int) as
 begin
 	delete from Scale_Range where Scale_ID = @ScaleID
@@ -324,7 +324,7 @@ begin
 	
 	delete from ItemScale_Link where scale_id = @ScaleID and item_id = @DestItemID
 
-	insert into ItemScale_Link (item_id, kf, scale_id, subscale_id) -- ГµГ¬... Г ... dimension_id ГЄГ ГЄГ Гї Г¤Г®Г«Г¦Г­Г  ГЎГ»ГІГј ?
+	insert into ItemScale_Link (item_id, kf, scale_id, subscale_id) -- хм... а... dimension_id какая должна быть ?
 	select @DestItemID, lnk.kf, @ScaleID, ss_d.id 
 	from ItemScale_Link lnk
 	inner join SubScales ss_s on ss_s.id = lnk.subscale_id
@@ -344,7 +344,7 @@ go
 --	select @Author = t.author
 --	from test t where id = @TestID
 
---	set @res = REPLACE (@res, '[ГЂГўГІГ®Г°]', @Author)
+--	set @res = REPLACE (@res, '[Автор]', @Author)
 
 --	return @res
 --end
@@ -440,7 +440,7 @@ begin
 				where tq.test_id = @tid
 			end
 
-	-- Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ Г­Г Г§ГўГ Г­ГЁГї dimension
+	-- обновление названия dimension
 	declare c cursor fast_forward for select s.name from SubScales s where s.Dimension_ID = @DimensionID order by s.OrderNumber
 	declare @Str nvarchar(255), @DimStr nvarchar(255) set @DimStr = ''
 	open c
@@ -505,7 +505,7 @@ begin
 end
 go
 
--- Г€Г‹Г€ ГІГ ГЄГ®Г© ГўГ Г°ГЁГ Г­ГІ (ГЇГ® ГЇГ«Г Г­Гі ГµГіГ¦ГҐ, ГЇГ® Г±Г¬Г»Г±Г«Гі ... Г¬Г®Г¦ГҐГІ ГЎГ»ГІГј ГЎГ®Г«ГҐГҐ ГЇГ°Г ГўГЁГ«ГјГ­Г»Г©)
+-- ИЛИ такой вариант (по плану хуже, по смыслу ... может быть более правильный)
 drop function dbo.SubjectAnswers
 go
 create function dbo.SubjectAnswers (@SubjectID int) returns @tbl table (answer nvarchar(255)) 
@@ -564,12 +564,12 @@ begin
 	from test t
 	where isPublished = 1 and
 	(
-		(patindex('%Г«ГЁГ·Г­Г®Г±ГІГј%', @tags)>0 and t.tags like '%Г«ГЁГ·Г­Г®Г±ГІГј%') or
-		(patindex('%ГЇГ±ГЁГµГЁГ·ГҐГ±ГЄГ®ГҐ Г§Г¤Г®Г°Г®ГўГјГҐ%', @tags)>0 and t.tags like '%ГЇГ±ГЁГµГЁГ·ГҐГ±ГЄГ®ГҐ Г§Г¤Г®Г°Г®ГўГјГҐ%') or
-		(patindex('%ГЁГ­ГІГҐГ«Г«ГҐГЄГІ%', @tags)>0 and t.tags like '%ГЁГ­ГІГҐГ«Г«ГҐГЄГІ%') or
-		(patindex('%Г°Г ГЎГ®ГІГ %', @tags)>0 and t.tags like '%Г°Г ГЎГ®ГІГ %') or
-		(patindex('%Г®ГІГ­Г®ГёГҐГ­ГЁГї%', @tags)>0 and t.tags like '%Г®ГІГ­Г®ГёГҐГ­ГЁГї%') or
-		(patindex('%Г®ГІГ­Г®ГёГҐГ­ГЁГї%', @tags)=0 and patindex('%Г°Г ГЎГ®ГІГ %', @tags)=0 and patindex('%ГЁГ­ГІГҐГ«Г«ГҐГЄГІ%', @tags)=0 and patindex('%ГЇГ±ГЁГµГЁГ·ГҐГ±ГЄГ®ГҐ Г§Г¤Г®Г°Г®ГўГјГҐ%', @tags)=0 and patindex('%Г«ГЁГ·Г­Г®Г±ГІГј%', @tags)=0)
+		(patindex('%личность%', @tags)>0 and t.tags like '%личность%') or
+		(patindex('%психическое здоровье%', @tags)>0 and t.tags like '%психическое здоровье%') or
+		(patindex('%интеллект%', @tags)>0 and t.tags like '%интеллект%') or
+		(patindex('%работа%', @tags)>0 and t.tags like '%работа%') or
+		(patindex('%отношения%', @tags)>0 and t.tags like '%отношения%') or
+		(patindex('%отношения%', @tags)=0 and patindex('%работа%', @tags)=0 and patindex('%интеллект%', @tags)=0 and patindex('%психическое здоровье%', @tags)=0 and patindex('%личность%', @tags)=0)
 	)
 	and id not in (
 		select test_id from test_subject where nick_name =@Nick
@@ -610,12 +610,12 @@ create procedure dbo.Add_Param_Gender (@TestID int, @GroupID int) as
 begin
 	declare @param_id int
 	insert into Params (Test_ID, name, Param_Type, Group_ID)
-	values (@TestID, 'ГЏГ®Г«', 1, @GroupID)
+	values (@TestID, 'Пол', 1, @GroupID)
 	set @param_id = @@IDENTITY
 	insert into Param_Values (Param_ID, str_value, ivalue_1, ivalue_2)
-	values (@param_id, 'Г¬ГіГ¦Г±ГЄГ®Г©', 1, 1)
+	values (@param_id, 'мужской', 1, 1)
 	insert into Param_Values (Param_ID, str_value, ivalue_1, ivalue_2)
-	values (@param_id, 'Г¦ГҐГ­Г±ГЄГЁГ©', 0, 0)
+	values (@param_id, 'женский', 0, 0)
 end
 go
 
@@ -625,7 +625,7 @@ create procedure dbo.Add_Param_Age (@TestID int, @GroupID int) as
 begin
 	declare @param_id int
 	insert into Params (Test_ID, name, Param_Type, Group_ID)
-	values (@TestID, 'Г‚Г®Г§Г°Г Г±ГІ', 2, @GroupID)
+	values (@TestID, 'Возраст', 2, @GroupID)
 	set @param_id = @@IDENTITY
 	insert into Param_Values (Param_ID, str_value, ivalue_1, ivalue_2)
 	select @param_id, '0-10', 0, 10 union all
@@ -692,7 +692,7 @@ begin
 	ITVersionSpecific, diagnostic_field, social_advisability_idx, qualification_demand, mthd_recomendation,
 	use_restriction, lnk_analog, lnk_research, lnk_FullMethodInfo, lnk_DeveloperInfo, lnk_SaleMethodic,
 	language_type, category_id, Short_Description)
-	select 'ГЉГ®ГЇГЁГї '+name, author, NEWID(), abbreviature, instruction, 0, Tags, StimulSource, GETDATE(),
+	select 'Копия '+name, author, NEWID(), abbreviature, instruction, 0, Tags, StimulSource, GETDATE(),
 	Comment, dbo.next_test_version (version_number), 
 	test_type, publish_year, publisher, Theory_Construct_Info, reliability_info,
 	validation_info, test_norms, jur_law, develop_history, key_security, psy_task, diagnostic_subj,
@@ -847,7 +847,7 @@ begin
 	left join @ParamValTbl pv1 on pv1.idOld=sr.Param_Value_ID
 	left join @ParamValTbl pv2 on pv2.idOld=sr.Param2_Value_ID
 
-	-- ГЎГ«Г®ГЄГЁ
+	-- блоки
 	declare c_block cursor fast_forward for select id from Test_Question where test_id = @idTest
 	open c_block
 	fetch next from c_block into @idBlock
@@ -939,14 +939,14 @@ begin
 		set @for_date = getdate()
 	set @delta = datediff (dd, @action_date, @for_date)
 	if (@delta <= 31)
-		set @res= cast(@delta as varchar(10)) +' Г¤Г­. Г­Г Г§Г Г¤'
+		set @res= cast(@delta as varchar(10)) +' дн. назад'
 	else begin
 		set @delta = datediff (mm, @action_date, @for_date)
 		if (@delta <= 12)
-			set @res= cast(@delta as varchar(10)) +' Г¬ГҐГ±. Г­Г Г§Г Г¤'
+			set @res= cast(@delta as varchar(10)) +' мес. назад'
 		else begin
 			set @delta = datediff (yy, @action_date, @for_date)
-			set @res= cast(@delta as varchar(10)) +' ГЈ. Г­Г Г§Г Г¤'
+			set @res= cast(@delta as varchar(10)) +' г. назад'
 		end
 	end
 	return @res
@@ -963,7 +963,7 @@ go
 
 create function [dbo].[DateToPeriodID]( @p_dt as datetime)
 returns smallint
-with schemabinding -- Г¤Г«Гї Г¤ГҐГІГҐГ°Г¬ГЁГ­ГЁГ§Г¬Г 
+with schemabinding -- для детерминизма
 begin
   if @p_dt is null
     set @p_dt = '19010101'
@@ -989,7 +989,7 @@ go
 if object_id(N'[dbo].[MetricDeviation]') is not null
 drop function [dbo].MetricDeviation
 go
--- Г®ГІГЄГ«Г®Г­ГҐГ­ГЁГї ГЇГ® Г¬ГҐГІГ°ГЁГЄГ Г¬
+-- отклонения по метрикам
 create function dbo.MetricDeviation (@idCompany int, @idDept int = null) returns 
 	@res table (idmetric int, metric_name varchar(255), description varchar(max), iddept int, fio varchar(255), test_value decimal(8,3), test_date datetime)
 as 
@@ -1011,7 +1011,7 @@ begin
         and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null) 
 	
 	union all
-	--Г®ГІГ±ГіГІГ±ГІГўГЁГҐ ГЁГ¤ГҐГ©
+	--отсутствие идей / прохождений теста
 	select m.idMetric, m.name as metric_name, m.description, ua.idDept, ts.fio, null as Test_Value, null as test_date
 	from metric m
 	join test_subject ts on ts.test_id = m.idtest
@@ -1027,7 +1027,7 @@ begin
 	having max (ts.test_date) < dateadd (mm, -3, GETDATE()) OR max (ts.test_date) IS NULL
 
 	union all
-	-- Г·ГІГҐГ­ГЁГҐ ГЄГ­ГЁГЈ
+	-- чтение книг
 	select m.idMetric, m.name as metric_name, m.description, ua.idDept, ts.fio, null as Test_Value, 
 		max(cast (case when isdate(txt.text)=1 then txt.text else null end as datetime)) as test_date
 	from metric m
@@ -1039,6 +1039,18 @@ begin
         and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null)  
 	group by m.idMetric, m.name, m.description, ua.idDept, ts.iduser, ts.fio
 	having max(cast (case when isdate(txt.text)=1 then txt.text else null end as datetime)) < dateadd (mm, -3, getdate())
+
+	union all
+	-- подтверждение кварт.оценки
+	select m.idMetric, m.name as metric_name, m.description, ua.idDept, ua.fio, null as Test_Value, ts.test_date
+	from metric m
+	join test_subject ts on ts.test_id = m.idtest
+	join test_subject_approved tsa on tsa.idSubject = ts.id
+	join user_account ua on ua.iduser = tsa.ApprovedByUser and ua.idcompany = m.idcompany
+	where tsa.isapproved = 0 and m.condition = 'AP'
+	and m.idcompany = @idcompany and ua.idDept = isnull(@iddept, ua.iddept)
+	and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null)   
+	and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null)  
 
 	return
 end
