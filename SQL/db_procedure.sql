@@ -1048,6 +1048,7 @@ begin
 	join test_subject_approved tsa on tsa.idSubject = ts.id
 	join user_account ua on ua.iduser = tsa.ApprovedByUser and ua.idcompany = m.idcompany
 	where tsa.isapproved = 0 and m.condition = 'AP'
+	and datediff (mm, ts.test_date, getdate()) < 2
 	and m.idcompany = @idcompany and ua.idDept = isnull(@iddept, ua.iddept)
 	and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null)   
 	and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null)  

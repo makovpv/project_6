@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.IO;
 
 /// <summary>
 /// мониторинг и автоматическое создание запланированных исследований по расписанию
@@ -13,6 +14,11 @@ public class Sheduler
     
     private void do_it(object p_state)
     {
+        using (StreamWriter sw = File.AppendText(string.Format(@"{0}\Data\log.txt", HttpRuntime.AppDomainAppPath)))
+        {
+            sw.WriteLine("********* do it *********");
+        }
+        
         using (TesterDataClassesDataContext dc = new TesterDataClassesDataContext())
         {
             FixMetricDeviations(dc);
@@ -28,18 +34,31 @@ public class Sheduler
     /// </summary>
     private void FixMetricDeviations(TesterDataClassesDataContext dc)
     {
+        using (StreamWriter sw = File.AppendText(string.Format(@"{0}\Data\log.txt", HttpRuntime.AppDomainAppPath)))
+        {
+            sw.WriteLine("void FixMetricDeviations");
+        }
+        
         try
         {
+            using (StreamWriter sw = File.AppendText(string.Format(@"{0}\Data\log.txt", HttpRuntime.AppDomainAppPath)))
+            {
+                sw.WriteLine(string.Format ("exec at {0}", DateTime.Now.ToString()));
+            }
+
             dc.ExecuteCommand(
+                "DECLARE @idcomp int, @d datetime " +
+                "set @d = cast (getdate() as date) " +
+                "if not exists (select top 1 1 from metric_hist where mdate = @d) begin " +
+                
                 "DECLARE ccc CURSOR FAST_FORWARD FOR SELECT id FROM Company " +
-                "DECLARE @idcomp int " +
                 "OPEN ccc " +
                 "FETCH NEXT FROM ccc INTO @idcomp " +
                 "WHILE @@FETCH_STATUS = 0 BEGIN " +
                 "	INSERT INTO dbo.metric_hist	(idmetric, mdate, mNumber, idDept) " +
                 "	SELECT  " +
                 "		md.idMetric,  " +
-                "		GETDATE(), " +
+                "		@d, " +
                 "		COUNT(*) AS number, " +
                 "		idDept   " +
                 "	FROM dbo.MetricDeviation(@idcomp, null) md " +
@@ -48,11 +67,23 @@ public class Sheduler
                 "	FETCH NEXT FROM ccc INTO @idcomp   " +
                 "END " +
                 "CLOSE ccc " +
-                "DEALLOCATE ccc");
+                "DEALLOCATE ccc " +
+
+                "end");
+
+            using (StreamWriter sw = File.AppendText(string.Format(@"{0}\Data\log.txt", HttpRuntime.AppDomainAppPath)))
+            {
+                sw.WriteLine("exec is finished");
+            }
+
         }
         catch (Exception ex)
         { 
             //write to log
+            using (StreamWriter sw = File.AppendText(string.Format(@"{0}\Data\log.txt", HttpRuntime.AppDomainAppPath)))
+            {
+                sw.WriteLine(ex.Message);
+            }
         }
     }
 

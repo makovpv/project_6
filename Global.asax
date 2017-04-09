@@ -50,7 +50,8 @@
 
     void Application_Start(object sender, EventArgs e) {
         RegisterRoutes(RouteTable.Routes);
-        Sheduler sch = new Sheduler(86400000); // 24 часа
+        //Sheduler sch = new Sheduler(86400000); // 24 часа
+        Sheduler sch = new Sheduler(3600000);  // 60 min
         //Sheduler sch = new Sheduler(600000);  // 10 min
         //Sheduler sch = new Sheduler(60000); 
         //Sheduler sch = new Sheduler(10000); 
