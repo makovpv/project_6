@@ -9,15 +9,12 @@ using System.IO;
 /// </summary>
 public class Sheduler
 {
-    int TimerInterval {get;set;}    
+    long TimerInterval {get;set;}    
     System.Threading.Timer SchdlTimer;
     
     private void do_it(object p_state)
     {
-        using (StreamWriter sw = File.AppendText(string.Format(@"{0}\Data\log.txt", HttpRuntime.AppDomainAppPath)))
-        {
-            sw.WriteLine("********* do it *********");
-        }
+        writeLog("********* do it *********");
         
         using (TesterDataClassesDataContext dc = new TesterDataClassesDataContext())
         {
@@ -27,6 +24,15 @@ public class Sheduler
             
         }
         SchdlTimer.Change(TimerInterval, System.Threading.Timeout.Infinite);
+        writeLog("timer changed");
+    }
+
+    private static void writeLog(string p_text)
+    {
+        using (StreamWriter sw = File.AppendText(string.Format(@"{0}\Data\log.txt", HttpRuntime.AppDomainAppPath)))
+        {
+            sw.WriteLine(p_text);
+        }
     }
 
     /// <summary>
@@ -34,17 +40,11 @@ public class Sheduler
     /// </summary>
     private void FixMetricDeviations(TesterDataClassesDataContext dc)
     {
-        using (StreamWriter sw = File.AppendText(string.Format(@"{0}\Data\log.txt", HttpRuntime.AppDomainAppPath)))
-        {
-            sw.WriteLine("void FixMetricDeviations");
-        }
+        writeLog("void FixMetricDeviations");
         
         try
         {
-            using (StreamWriter sw = File.AppendText(string.Format(@"{0}\Data\log.txt", HttpRuntime.AppDomainAppPath)))
-            {
-                sw.WriteLine(string.Format ("exec at {0}", DateTime.Now.ToString()));
-            }
+            writeLog(string.Format ("exec at {0}", DateTime.Now.ToString()));
 
             dc.ExecuteCommand(
                 "DECLARE @idcomp int, @d datetime " +
@@ -71,19 +71,12 @@ public class Sheduler
 
                 "end");
 
-            using (StreamWriter sw = File.AppendText(string.Format(@"{0}\Data\log.txt", HttpRuntime.AppDomainAppPath)))
-            {
-                sw.WriteLine("exec is finished");
-            }
+            writeLog("exec is finished");
 
         }
         catch (Exception ex)
-        { 
-            //write to log
-            using (StreamWriter sw = File.AppendText(string.Format(@"{0}\Data\log.txt", HttpRuntime.AppDomainAppPath)))
-            {
-                sw.WriteLine(ex.Message);
-            }
+        {
+            writeLog(ex.Message);
         }
     }
 
@@ -110,7 +103,7 @@ public class Sheduler
         }
     }
 
-    public Sheduler(int p_interval)
+    public Sheduler(long p_interval)
 	{
         TimerInterval = p_interval;
         SchdlTimer = new System.Threading.Timer(do_it, null, TimerInterval, System.Threading.Timeout.Infinite);
