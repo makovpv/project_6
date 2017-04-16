@@ -14,7 +14,7 @@ public class Sheduler
     
     private void do_it(object p_state)
     {
-        writeLog("********* do it *********");
+        //writeLog("********* do it *********");
         
         using (TesterDataClassesDataContext dc = new TesterDataClassesDataContext())
         {
@@ -24,7 +24,7 @@ public class Sheduler
             
         }
         SchdlTimer.Change(TimerInterval, System.Threading.Timeout.Infinite);
-        writeLog("timer changed");
+        //writeLog("timer changed");
     }
 
     private static void writeLog(string p_text)
@@ -40,11 +40,11 @@ public class Sheduler
     /// </summary>
     private void FixMetricDeviations(TesterDataClassesDataContext dc)
     {
-        writeLog("void FixMetricDeviations");
+        //writeLog("void FixMetricDeviations");
         
         try
         {
-            writeLog(string.Format ("exec at {0}", DateTime.Now.ToString()));
+            //writeLog(string.Format ("exec at {0}", DateTime.Now.ToString()));
 
             dc.ExecuteCommand(
                 "DECLARE @idcomp int, @d datetime " +
@@ -71,7 +71,7 @@ public class Sheduler
 
                 "end");
 
-            writeLog("exec is finished");
+            //writeLog("exec is finished");
 
         }
         catch (Exception ex)

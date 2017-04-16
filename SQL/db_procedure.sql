@@ -991,13 +991,22 @@ drop function [dbo].MetricDeviation
 go
 -- отклонения по метрикам
 create function dbo.MetricDeviation (@idCompany int, @idDept int = null) returns 
-	@res table (idmetric int, metric_name varchar(255), description varchar(max), iddept int, fio varchar(255), test_value decimal(8,3), test_date datetime)
+	@res table (
+		idmetric int, 
+		metric_name varchar(255), 
+		description varchar(max), 
+		iddept int, 
+		fio varchar(255), 
+		test_value decimal(8,3), 
+		test_date datetime,
+		comment varchar(255))
 as 
 begin
 	--set dateformat 'dmy'
 
-	INSERT into @res (idmetric, metric_name, description, iddept, fio, test_value, test_date)
-	SELECT m.idMetric, m.name as metric_name, m.description, ua.idDept, ts.fio, td.Test_Value, ts.test_date
+	INSERT into @res (idmetric, metric_name, description, iddept, fio, test_value, test_date, comment)
+	SELECT m.idMetric, m.name as metric_name, m.description, ua.idDept, ts.fio, td.Test_Value, ts.test_date,
+		null as comment
 	from metric m
 	join Test_Data td on m.idScale = td.Scale_ID
 	join test_subject ts on ts.id = td.subject_id 
@@ -1012,7 +1021,8 @@ begin
 	
 	union all
 	--отсутствие идей / прохождений теста
-	select m.idMetric, m.name as metric_name, m.description, ua.idDept, ts.fio, null as Test_Value, null as test_date
+	select m.idMetric, m.name as metric_name, m.description, ua.idDept, ts.fio, null as Test_Value, null as test_date,
+		null as comment
 	from metric m
 	join test_subject ts on ts.test_id = m.idtest
 	inner join user_account ua on ua.iduser = ts.iduser and ua.idcompany = m.idcompany
@@ -1029,7 +1039,8 @@ begin
 	union all
 	-- чтение книг
 	select m.idMetric, m.name as metric_name, m.description, ua.idDept, ts.fio, null as Test_Value, 
-		max(cast (case when isdate(txt.text)=1 then txt.text else null end as datetime)) as test_date
+		max(cast (case when isdate(txt.text)=1 then txt.text else null end as datetime)) as test_date,
+		null as comment
 	from metric m
 	join test_subject ts on ts.test_id = m.idtest
 	inner join user_account ua on ua.iduser = ts.iduser and ua.idcompany = m.idcompany
@@ -1042,7 +1053,8 @@ begin
 
 	union all
 	-- подтверждение кварт.оценки
-	select m.idMetric, m.name as metric_name, m.description, ua.idDept, ua.fio, null as Test_Value, ts.test_date
+	select m.idMetric, m.name as metric_name, m.description, ua.idDept, ua.fio, null as Test_Value, ts.test_date,
+	'не подтверждено для '+ts.fio as comment
 	from metric m
 	join test_subject ts on ts.test_id = m.idtest
 	join test_subject_approved tsa on tsa.idSubject = ts.id
