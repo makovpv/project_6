@@ -332,7 +332,7 @@ public class ObjectIndicator
                     }
                     break;
                 case 180: // квартальная оценка 
-                    QuartAssessment(p_dc, p_indicator, p_container, QuartNumber, QuartBegin, p_ua);
+                    QuartAssessment(p_dc, p_indicator, p_container, QuartBegin, p_ua);
                     break;
                 case 190: // риски
                     int RiskCount = (
@@ -463,7 +463,6 @@ public class ObjectIndicator
         }
         if (TotalDeviation != 0)
         {
-            //p_container.Controls.AddAt(2, new LiteralControl(string.Format("<br/><br/>Всего {0} отклонений ", TotalDeviation)));
             pnlList.Controls.AddAt(0, new LiteralControl(string.Format("<br/><br/>Всего {0} отклонений<br/><br/>", TotalDeviation)));
         }
         ComboPanel.Controls.Add(pnlList);
@@ -485,12 +484,11 @@ public class ObjectIndicator
             join d in p_dc.depts on mh.idDept equals d.id
             where d.idCompany == p_indicator.idCompany
             group mh by mh.mDate into g
-            select new {mDate = g.Key, mNumber = g.Sum(x=>x.mNumber)}).ToList()
+            select new {mDate = g.Key, mNumber = g.Sum(x=>x.mNumber)}).OrderBy(ob=> ob.mDate).ToList()
             )
         {
             sr.Points.Add(new DataPoint(dcnt.mDate.ToOADate(), dcnt.mNumber) { 
                 MarkerStyle = MarkerStyle.Circle,
-                //sr.MarkerBorderWidth = 5;
                 MarkerSize = 15
             });
         }
@@ -499,9 +497,6 @@ public class ObjectIndicator
         sr.Color = Color.Red;
         sr.BorderWidth = 3;
 
-        
-        
-        //sr.MarkerStep = 2;
         dgr.Series.Add(sr);
         dgr.ChartAreas.Add(new ChartArea("chart area")
         {
@@ -659,13 +654,14 @@ public class ObjectIndicator
     /// <summary>
     /// квартальная оценка
     /// </summary>
-    private static void QuartAssessment(TesterDataClassesDataContext p_dc, indicator p_indicator, Control p_container, int QuartNumber, DateTime QuartBegin,
+    private static void QuartAssessment(TesterDataClassesDataContext p_dc, indicator p_indicator, Control p_container, DateTime QuartBegin,
         user_account p_ua)
     {
+        int PriorQuartNumber = (DateTime.Today.AddMonths(-3).Month + 2) / 3;
+        int PriorQuartYear = DateTime.Today.AddMonths(-3).Year;
         p_container.Controls.Add(new Label()
         {
-            //Text = p_indicator.name,
-            Text = string.Format("{0} за {1} квартал {2} года", p_indicator.name, QuartNumber, DateTime.Today.Year), 
+            Text = string.Format("{0} за {1} квартал {2} года", p_indicator.name, PriorQuartNumber, PriorQuartYear), 
             CssClass = "clsIndicatorName"
         });
         
@@ -689,8 +685,9 @@ public class ObjectIndicator
             foreach (FieldDataSet sas in (
                 from td in p_dc.Test_Datas
                 join ts in p_dc.Test_Subjects on td.Subject_ID equals ts.id
+                join tsa in p_dc.test_subject_approveds on ts.id equals tsa.idSubject
                 join ig in p_dc.idea_generators on ts.Test_Id equals ig.idTest
-                where ig.idGeneratorType == 2 && ts.Test_Date >= QuartBegin
+                where ig.idGeneratorType == 2 && ts.Test_Date >= QuartBegin && tsa.isApproved
                 group td by td.Scale into g
                 select new FieldDataSet { Name = g.Key.name, Value = g.Average(a => a.Test_Value), Order = g.Key.isMain ? 1 : 0 }).OrderByDescending(o => o.Order))
             {
@@ -701,9 +698,10 @@ public class ObjectIndicator
             Dictionary<string, decimal> dd =
             (from tr in p_dc.Test_Results
              join ts in p_dc.Test_Subjects on tr.Subject_ID equals ts.id
+             join tsa in p_dc.test_subject_approveds on ts.id equals tsa.idSubject
              join ig in p_dc.idea_generators on ts.Test_Id equals ig.idTest
              join ss in p_dc.SubScales on tr.SubScale_ID equals ss.id
-             where ig.idGeneratorType == 2 && ts.Test_Date >= QuartBegin
+             where ig.idGeneratorType == 2 && ts.Test_Date >= QuartBegin && tsa.isApproved
              group tr by new { tr.SubScale.name, tr.SubScale.OrderNumber } into g
              select new FieldDataSet { Name = g.Key.name, Value = (decimal)g.Sum(s => s.SelectedValue), Order = g.Key.OrderNumber }).OrderBy(o => o.Order
              ).ToDictionary(d => d.Name, d => d.Value);
