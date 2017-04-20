@@ -52,6 +52,18 @@
             </Columns>
         </asp:GridView>
         <asp:Button ID="Button1" Text="Добавить все должности" runat="server" OnClick = "btnAddJobFilterClick"/>
+
+        <h5>Отдел</h5>
+        <asp:GridView runat="server" DataSourceID="sqlDept" AutoGenerateColumns="false" DataKeyNames="idFilter" ID="gv_dept">
+            <Columns>
+                <asp:BoundField DataField="name" HeaderText="Статус"/>
+                <asp:ButtonField ButtonType="Image" ImageUrl="~/Images/delete_small.ico" 
+                    CommandName="Delete" 
+                    Text="Удалить"/>
+
+            </Columns>
+        </asp:GridView>
+        <asp:Button ID="Button2" Text="Добавить все отделы" runat="server" OnClick = "btnAddDeptFilterClick"/>
     </div>
 
     <asp:SqlDataSource
@@ -74,6 +86,19 @@
         where idMetric = @idMetric and f.idjob is not null
         order by j.name"
         DeleteCommand="delete from dbo.metric_subj_filter where idFilter = @idFilter">
+
+        <SelectParameters>
+            <asp:QueryStringParameter  QueryStringField="id" Name="idMetric" DbType="Int32"/>
+        </SelectParameters>
+
+    </asp:SqlDataSource>
+    <asp:SqlDataSource
+        runat="server" ID="sqlDept"
+        ConnectionString="<%$ ConnectionStrings:tester_dataConnectionString %>"
+        SelectCommand="select d.name, f.idfilter from dbo.metric_subj_filter f join dept d on d.id = f.idDept
+        where idMetric = @idMetric and f.idDept is not null
+        order by d.name"
+        DeleteCommand="delete from dbo.metric_subj_filter where idFilter = @idfilter">
 
         <SelectParameters>
             <asp:QueryStringParameter  QueryStringField="id" Name="idMetric" DbType="Int32"/>

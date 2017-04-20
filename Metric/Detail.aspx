@@ -31,7 +31,8 @@
         <asp:GridView runat="server" DataSourceID="sqlDetail" AutoGenerateColumns="false" >
             <Columns>
                 <asp:BoundField DataField="fio" HeaderText="ФИО"  ItemStyle-Width="25%"/>
-                <asp:BoundField DataField="dept_name" HeaderText="Отдел"  ItemStyle-Width="25%"/>
+                <asp:BoundField DataField="dept_name" HeaderText="Отдел"  ItemStyle-Width="15%"/>
+                <asp:BoundField DataField="job_name" HeaderText="Должность"  ItemStyle-Width="20%"/>
                 <asp:BoundField DataField="test_date" HeaderText="Дата" ItemStyle-Width="12%" ItemStyle-HorizontalAlign="Center" />
                 <asp:BoundField DataField="test_value" HeaderText="Значение" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="12%" />
                 <asp:BoundField DataField="comment" HeaderText="Комментарий" ItemStyle-Width="26%" />
@@ -48,10 +49,12 @@
         set dateformat 'dmy' 
         declare @idcompany int select @idcompany  =idcompany from dbo.metric where idmetric = @idMetric
         SELECT cast(md.test_value as int) as test_value, md.fio, convert (varchar(10), md.test_date, 104) as test_date,
-        d.name as dept_name,
-        md.comment
+            d.name as dept_name,
+            j.name as job_name,
+            md.comment
         FROM dbo.MetricDeviation (@idcompany, null) md
         left join dept d on d.id = md.iddept
+        left join job j on j.id = md.idjob
         where idmetric = @idMetric
         order by md.fio">
 

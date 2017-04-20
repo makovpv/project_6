@@ -203,15 +203,15 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
   partial void InsertRaw_Data(Raw_Data instance);
   partial void UpdateRaw_Data(Raw_Data instance);
   partial void DeleteRaw_Data(Raw_Data instance);
-  partial void Insertmetric_subj_filter(metric_subj_filter instance);
-  partial void Updatemetric_subj_filter(metric_subj_filter instance);
-  partial void Deletemetric_subj_filter(metric_subj_filter instance);
   partial void InsertTest_Subject(Test_Subject instance);
   partial void UpdateTest_Subject(Test_Subject instance);
   partial void DeleteTest_Subject(Test_Subject instance);
   partial void Insertmetric(metric instance);
   partial void Updatemetric(metric instance);
   partial void Deletemetric(metric instance);
+  partial void Insertmetric_subj_filter(metric_subj_filter instance);
+  partial void Updatemetric_subj_filter(metric_subj_filter instance);
+  partial void Deletemetric_subj_filter(metric_subj_filter instance);
   #endregion
 	
 	public TesterDataClassesDataContext() : 
@@ -732,14 +732,6 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
 		}
 	}
 	
-	public System.Data.Linq.Table<metric_subj_filter> metric_subj_filters
-	{
-		get
-		{
-			return this.GetTable<metric_subj_filter>();
-		}
-	}
-	
 	public System.Data.Linq.Table<Test_Subject> Test_Subjects
 	{
 		get
@@ -761,6 +753,14 @@ public partial class TesterDataClassesDataContext : System.Data.Linq.DataContext
 		get
 		{
 			return this.GetTable<metric_hist>();
+		}
+	}
+	
+	public System.Data.Linq.Table<metric_subj_filter> metric_subj_filters
+	{
+		get
+		{
+			return this.GetTable<metric_subj_filter>();
 		}
 	}
 	
@@ -7454,6 +7454,8 @@ public partial class dept : INotifyPropertyChanging, INotifyPropertyChanged
 	
 	private EntitySet<user_account> _user_accounts;
 	
+	private EntitySet<metric_subj_filter> _metric_subj_filters;
+	
 	private EntityRef<Company> _Company;
 	
     #region Extensibility Method Definitions
@@ -7471,6 +7473,7 @@ public partial class dept : INotifyPropertyChanging, INotifyPropertyChanged
 	public dept()
 	{
 		this._user_accounts = new EntitySet<user_account>(new Action<user_account>(this.attach_user_accounts), new Action<user_account>(this.detach_user_accounts));
+		this._metric_subj_filters = new EntitySet<metric_subj_filter>(new Action<metric_subj_filter>(this.attach_metric_subj_filters), new Action<metric_subj_filter>(this.detach_metric_subj_filters));
 		this._Company = default(EntityRef<Company>);
 		OnCreated();
 	}
@@ -7552,6 +7555,19 @@ public partial class dept : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="dept_metric_subj_filter", Storage="_metric_subj_filters", ThisKey="id", OtherKey="idDept")]
+	public EntitySet<metric_subj_filter> metric_subj_filters
+	{
+		get
+		{
+			return this._metric_subj_filters;
+		}
+		set
+		{
+			this._metric_subj_filters.Assign(value);
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_dept", Storage="_Company", ThisKey="idCompany", OtherKey="id", IsForeignKey=true)]
 	public Company Company
 	{
@@ -7613,6 +7629,18 @@ public partial class dept : INotifyPropertyChanging, INotifyPropertyChanged
 	}
 	
 	private void detach_user_accounts(user_account entity)
+	{
+		this.SendPropertyChanging();
+		entity.dept = null;
+	}
+	
+	private void attach_metric_subj_filters(metric_subj_filter entity)
+	{
+		this.SendPropertyChanging();
+		entity.dept = this;
+	}
+	
+	private void detach_metric_subj_filters(metric_subj_filter entity)
 	{
 		this.SendPropertyChanging();
 		entity.dept = null;
@@ -16472,263 +16500,6 @@ public partial class Raw_Data : INotifyPropertyChanging, INotifyPropertyChanged
 	}
 }
 
-[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.metric_subj_filter")]
-public partial class metric_subj_filter : INotifyPropertyChanging, INotifyPropertyChanged
-{
-	
-	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-	
-	private int _idFilter;
-	
-	private int _idMetric;
-	
-	private System.Nullable<int> _idJob;
-	
-	private System.Nullable<byte> _idState;
-	
-	private EntityRef<Job> _Job;
-	
-	private EntityRef<user_state> _user_state;
-	
-	private EntityRef<metric> _metric;
-	
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnidFilterChanging(int value);
-    partial void OnidFilterChanged();
-    partial void OnidMetricChanging(int value);
-    partial void OnidMetricChanged();
-    partial void OnidJobChanging(System.Nullable<int> value);
-    partial void OnidJobChanged();
-    partial void OnidStateChanging(System.Nullable<byte> value);
-    partial void OnidStateChanged();
-    #endregion
-	
-	public metric_subj_filter()
-	{
-		this._Job = default(EntityRef<Job>);
-		this._user_state = default(EntityRef<user_state>);
-		this._metric = default(EntityRef<metric>);
-		OnCreated();
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idFilter", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-	public int idFilter
-	{
-		get
-		{
-			return this._idFilter;
-		}
-		set
-		{
-			if ((this._idFilter != value))
-			{
-				this.OnidFilterChanging(value);
-				this.SendPropertyChanging();
-				this._idFilter = value;
-				this.SendPropertyChanged("idFilter");
-				this.OnidFilterChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idMetric", DbType="Int NOT NULL")]
-	public int idMetric
-	{
-		get
-		{
-			return this._idMetric;
-		}
-		set
-		{
-			if ((this._idMetric != value))
-			{
-				if (this._metric.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnidMetricChanging(value);
-				this.SendPropertyChanging();
-				this._idMetric = value;
-				this.SendPropertyChanged("idMetric");
-				this.OnidMetricChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idJob", DbType="Int")]
-	public System.Nullable<int> idJob
-	{
-		get
-		{
-			return this._idJob;
-		}
-		set
-		{
-			if ((this._idJob != value))
-			{
-				if (this._Job.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnidJobChanging(value);
-				this.SendPropertyChanging();
-				this._idJob = value;
-				this.SendPropertyChanged("idJob");
-				this.OnidJobChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idState", DbType="TinyInt")]
-	public System.Nullable<byte> idState
-	{
-		get
-		{
-			return this._idState;
-		}
-		set
-		{
-			if ((this._idState != value))
-			{
-				if (this._user_state.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnidStateChanging(value);
-				this.SendPropertyChanging();
-				this._idState = value;
-				this.SendPropertyChanged("idState");
-				this.OnidStateChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Job_metric_subj_filter", Storage="_Job", ThisKey="idJob", OtherKey="id", IsForeignKey=true)]
-	public Job Job
-	{
-		get
-		{
-			return this._Job.Entity;
-		}
-		set
-		{
-			Job previousValue = this._Job.Entity;
-			if (((previousValue != value) 
-						|| (this._Job.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._Job.Entity = null;
-					previousValue.metric_subj_filters.Remove(this);
-				}
-				this._Job.Entity = value;
-				if ((value != null))
-				{
-					value.metric_subj_filters.Add(this);
-					this._idJob = value.id;
-				}
-				else
-				{
-					this._idJob = default(Nullable<int>);
-				}
-				this.SendPropertyChanged("Job");
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="user_state_metric_subj_filter", Storage="_user_state", ThisKey="idState", OtherKey="id", IsForeignKey=true)]
-	public user_state user_state
-	{
-		get
-		{
-			return this._user_state.Entity;
-		}
-		set
-		{
-			user_state previousValue = this._user_state.Entity;
-			if (((previousValue != value) 
-						|| (this._user_state.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._user_state.Entity = null;
-					previousValue.metric_subj_filters.Remove(this);
-				}
-				this._user_state.Entity = value;
-				if ((value != null))
-				{
-					value.metric_subj_filters.Add(this);
-					this._idState = value.id;
-				}
-				else
-				{
-					this._idState = default(Nullable<byte>);
-				}
-				this.SendPropertyChanged("user_state");
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="metric_metric_subj_filter", Storage="_metric", ThisKey="idMetric", OtherKey="idMetric", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-	public metric metric
-	{
-		get
-		{
-			return this._metric.Entity;
-		}
-		set
-		{
-			metric previousValue = this._metric.Entity;
-			if (((previousValue != value) 
-						|| (this._metric.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._metric.Entity = null;
-					previousValue.metric_subj_filters.Remove(this);
-				}
-				this._metric.Entity = value;
-				if ((value != null))
-				{
-					value.metric_subj_filters.Add(this);
-					this._idMetric = value.idMetric;
-				}
-				else
-				{
-					this._idMetric = default(int);
-				}
-				this.SendPropertyChanged("metric");
-			}
-		}
-	}
-	
-	public event PropertyChangingEventHandler PropertyChanging;
-	
-	public event PropertyChangedEventHandler PropertyChanged;
-	
-	protected virtual void SendPropertyChanging()
-	{
-		if ((this.PropertyChanging != null))
-		{
-			this.PropertyChanging(this, emptyChangingEventArgs);
-		}
-	}
-	
-	protected virtual void SendPropertyChanged(String propertyName)
-	{
-		if ((this.PropertyChanged != null))
-		{
-			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-		}
-	}
-}
-
 [global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Test_Subject")]
 public partial class Test_Subject : INotifyPropertyChanging, INotifyPropertyChanged
 {
@@ -18240,6 +18011,328 @@ public partial class metric_hist
 			{
 				this._idDept = value;
 			}
+		}
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.metric_subj_filter")]
+public partial class metric_subj_filter : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private int _idFilter;
+	
+	private int _idMetric;
+	
+	private System.Nullable<int> _idJob;
+	
+	private System.Nullable<byte> _idState;
+	
+	private System.Nullable<int> _idDept;
+	
+	private EntityRef<metric> _metric;
+	
+	private EntityRef<dept> _dept;
+	
+	private EntityRef<Job> _Job;
+	
+	private EntityRef<user_state> _user_state;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidFilterChanging(int value);
+    partial void OnidFilterChanged();
+    partial void OnidMetricChanging(int value);
+    partial void OnidMetricChanged();
+    partial void OnidJobChanging(System.Nullable<int> value);
+    partial void OnidJobChanged();
+    partial void OnidStateChanging(System.Nullable<byte> value);
+    partial void OnidStateChanged();
+    partial void OnidDeptChanging(System.Nullable<int> value);
+    partial void OnidDeptChanged();
+    #endregion
+	
+	public metric_subj_filter()
+	{
+		this._metric = default(EntityRef<metric>);
+		this._dept = default(EntityRef<dept>);
+		this._Job = default(EntityRef<Job>);
+		this._user_state = default(EntityRef<user_state>);
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idFilter", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+	public int idFilter
+	{
+		get
+		{
+			return this._idFilter;
+		}
+		set
+		{
+			if ((this._idFilter != value))
+			{
+				this.OnidFilterChanging(value);
+				this.SendPropertyChanging();
+				this._idFilter = value;
+				this.SendPropertyChanged("idFilter");
+				this.OnidFilterChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idMetric", DbType="Int NOT NULL")]
+	public int idMetric
+	{
+		get
+		{
+			return this._idMetric;
+		}
+		set
+		{
+			if ((this._idMetric != value))
+			{
+				if (this._metric.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidMetricChanging(value);
+				this.SendPropertyChanging();
+				this._idMetric = value;
+				this.SendPropertyChanged("idMetric");
+				this.OnidMetricChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idJob", DbType="Int")]
+	public System.Nullable<int> idJob
+	{
+		get
+		{
+			return this._idJob;
+		}
+		set
+		{
+			if ((this._idJob != value))
+			{
+				if (this._Job.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidJobChanging(value);
+				this.SendPropertyChanging();
+				this._idJob = value;
+				this.SendPropertyChanged("idJob");
+				this.OnidJobChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idState", DbType="TinyInt")]
+	public System.Nullable<byte> idState
+	{
+		get
+		{
+			return this._idState;
+		}
+		set
+		{
+			if ((this._idState != value))
+			{
+				if (this._user_state.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidStateChanging(value);
+				this.SendPropertyChanging();
+				this._idState = value;
+				this.SendPropertyChanged("idState");
+				this.OnidStateChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idDept", DbType="Int")]
+	public System.Nullable<int> idDept
+	{
+		get
+		{
+			return this._idDept;
+		}
+		set
+		{
+			if ((this._idDept != value))
+			{
+				if (this._dept.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnidDeptChanging(value);
+				this.SendPropertyChanging();
+				this._idDept = value;
+				this.SendPropertyChanged("idDept");
+				this.OnidDeptChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="metric_metric_subj_filter", Storage="_metric", ThisKey="idMetric", OtherKey="idMetric", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+	public metric metric
+	{
+		get
+		{
+			return this._metric.Entity;
+		}
+		set
+		{
+			metric previousValue = this._metric.Entity;
+			if (((previousValue != value) 
+						|| (this._metric.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._metric.Entity = null;
+					previousValue.metric_subj_filters.Remove(this);
+				}
+				this._metric.Entity = value;
+				if ((value != null))
+				{
+					value.metric_subj_filters.Add(this);
+					this._idMetric = value.idMetric;
+				}
+				else
+				{
+					this._idMetric = default(int);
+				}
+				this.SendPropertyChanged("metric");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="dept_metric_subj_filter", Storage="_dept", ThisKey="idDept", OtherKey="id", IsForeignKey=true)]
+	public dept dept
+	{
+		get
+		{
+			return this._dept.Entity;
+		}
+		set
+		{
+			dept previousValue = this._dept.Entity;
+			if (((previousValue != value) 
+						|| (this._dept.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._dept.Entity = null;
+					previousValue.metric_subj_filters.Remove(this);
+				}
+				this._dept.Entity = value;
+				if ((value != null))
+				{
+					value.metric_subj_filters.Add(this);
+					this._idDept = value.id;
+				}
+				else
+				{
+					this._idDept = default(Nullable<int>);
+				}
+				this.SendPropertyChanged("dept");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Job_metric_subj_filter", Storage="_Job", ThisKey="idJob", OtherKey="id", IsForeignKey=true)]
+	public Job Job
+	{
+		get
+		{
+			return this._Job.Entity;
+		}
+		set
+		{
+			Job previousValue = this._Job.Entity;
+			if (((previousValue != value) 
+						|| (this._Job.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Job.Entity = null;
+					previousValue.metric_subj_filters.Remove(this);
+				}
+				this._Job.Entity = value;
+				if ((value != null))
+				{
+					value.metric_subj_filters.Add(this);
+					this._idJob = value.id;
+				}
+				else
+				{
+					this._idJob = default(Nullable<int>);
+				}
+				this.SendPropertyChanged("Job");
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="user_state_metric_subj_filter", Storage="_user_state", ThisKey="idState", OtherKey="id", IsForeignKey=true)]
+	public user_state user_state
+	{
+		get
+		{
+			return this._user_state.Entity;
+		}
+		set
+		{
+			user_state previousValue = this._user_state.Entity;
+			if (((previousValue != value) 
+						|| (this._user_state.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._user_state.Entity = null;
+					previousValue.metric_subj_filters.Remove(this);
+				}
+				this._user_state.Entity = value;
+				if ((value != null))
+				{
+					value.metric_subj_filters.Add(this);
+					this._idState = value.id;
+				}
+				else
+				{
+					this._idState = default(Nullable<byte>);
+				}
+				this.SendPropertyChanged("user_state");
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

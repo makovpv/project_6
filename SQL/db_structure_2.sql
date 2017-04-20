@@ -441,3 +441,7 @@ CREATE TABLE dbo.metric_hist (
 	CONSTRAINT fk_metric_hist_dept FOREIGN KEY (iddept) REFERENCES dbo.dept (id) ON DELETE CASCADE
 )
 GO
+
+alter table dbo.metric_subj_filter add idDept int null
+alter table dbo.metric_subj_filter add constraint fk_ms_filter_dept foreign key (idDept) references dept (id)
+go

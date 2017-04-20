@@ -996,6 +996,7 @@ create function dbo.MetricDeviation (@idCompany int, @idDept int = null) returns
 		metric_name varchar(255), 
 		description varchar(max), 
 		iddept int, 
+		idjob int,
 		fio varchar(255), 
 		test_value decimal(8,3), 
 		test_date datetime,
@@ -1004,8 +1005,8 @@ as
 begin
 	--set dateformat 'dmy'
 
-	INSERT into @res (idmetric, metric_name, description, iddept, fio, test_value, test_date, comment)
-	SELECT m.idMetric, m.name as metric_name, m.description, ua.idDept, ts.fio, td.Test_Value, ts.test_date,
+	INSERT into @res (idmetric, metric_name, description, iddept, idjob, fio, test_value, test_date, comment)
+	SELECT m.idMetric, m.name as metric_name, m.description, ua.idDept, ua.idjob, ts.fio, td.Test_Value, ts.test_date,
 		null as comment
 	from metric m
 	join Test_Data td on m.idScale = td.Scale_ID
@@ -1021,7 +1022,7 @@ begin
 	
 	union all
 	--отсутствие идей / прохождений теста
-	select m.idMetric, m.name as metric_name, m.description, ua.idDept, ts.fio, null as Test_Value, null as test_date,
+	select m.idMetric, m.name as metric_name, m.description, ua.idDept, ua.idjob, ts.fio, null as Test_Value, null as test_date,
 		null as comment
 	from metric m
 	join test_subject ts on ts.test_id = m.idtest
@@ -1032,13 +1033,13 @@ begin
 		and m.idtest not in (1235)
 		and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null)   
         and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null)  
-	GROUP BY m.idMetric, m.name, m.description, ua.idDept, ts.iduser, ts.fio
+	GROUP BY m.idMetric, m.name, m.description, ua.idDept, ua.idjob, ts.iduser, ts.fio
 	--having count (ts.test_date) = 0
 	having max (ts.test_date) < dateadd (mm, -3, GETDATE()) OR max (ts.test_date) IS NULL
 
 	union all
 	-- чтение книг
-	select m.idMetric, m.name as metric_name, m.description, ua.idDept, ts.fio, null as Test_Value, 
+	select m.idMetric, m.name as metric_name, m.description, ua.idDept, ua.idjob, ts.fio, null as Test_Value, 
 		max(cast (case when isdate(txt.text)=1 then txt.text else null end as datetime)) as test_date,
 		null as comment
 	from metric m
@@ -1048,12 +1049,12 @@ begin
 	where m.idtest = 1235 
 		and ua.idjob in (select idjob from metric_subj_filter where idmetric = m.idmetric and idjob is not null)   
         and ua.idstate in (select idstate from metric_subj_filter where idmetric = m.idmetric and idstate is not null)  
-	group by m.idMetric, m.name, m.description, ua.idDept, ts.iduser, ts.fio
+	group by m.idMetric, m.name, m.description, ua.idDept, ua.idjob, ts.iduser, ts.fio
 	having max(cast (case when isdate(txt.text)=1 then txt.text else null end as datetime)) < dateadd (mm, -3, getdate())
 
 	union all
 	-- подтверждение кварт.оценки
-	select m.idMetric, m.name as metric_name, m.description, ua.idDept, ua.fio, null as Test_Value, ts.test_date,
+	select m.idMetric, m.name as metric_name, m.description, ua.idDept, ua.idjob, ua.fio, null as Test_Value, ts.test_date,
 	'не подтверждено для '+ts.fio as comment
 	from metric m
 	join test_subject ts on ts.test_id = m.idtest

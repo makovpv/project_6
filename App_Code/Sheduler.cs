@@ -40,38 +40,35 @@ public class Sheduler
     /// </summary>
     private void FixMetricDeviations(TesterDataClassesDataContext dc)
     {
-        //writeLog("void FixMetricDeviations");
-        
         try
         {
-            //writeLog(string.Format ("exec at {0}", DateTime.Now.ToString()));
+            if (DateTime.Today.DayOfWeek == DayOfWeek.Sunday)
+            {
+                dc.ExecuteCommand(
+                    "DECLARE @idcomp int, @d datetime " +
+                    "set @d = cast (getdate() as date) " +
+                    "if not exists (select top 1 1 from metric_hist where mdate = @d) begin " +
 
-            dc.ExecuteCommand(
-                "DECLARE @idcomp int, @d datetime " +
-                "set @d = cast (getdate() as date) " +
-                "if not exists (select top 1 1 from metric_hist where mdate = @d) begin " +
-                
-                "DECLARE ccc CURSOR FAST_FORWARD FOR SELECT id FROM Company " +
-                "OPEN ccc " +
-                "FETCH NEXT FROM ccc INTO @idcomp " +
-                "WHILE @@FETCH_STATUS = 0 BEGIN " +
-                "	INSERT INTO dbo.metric_hist	(idmetric, mdate, mNumber, idDept) " +
-                "	SELECT  " +
-                "		md.idMetric,  " +
-                "		@d, " +
-                "		COUNT(*) AS number, " +
-                "		idDept   " +
-                "	FROM dbo.MetricDeviation(@idcomp, null) md " +
-                "	GROUP BY md.idMetric, md.idDept " +
+                    "DECLARE ccc CURSOR FAST_FORWARD FOR SELECT id FROM Company " +
+                    "OPEN ccc " +
+                    "FETCH NEXT FROM ccc INTO @idcomp " +
+                    "WHILE @@FETCH_STATUS = 0 BEGIN " +
+                    "	INSERT INTO dbo.metric_hist	(idmetric, mdate, mNumber, idDept) " +
+                    "	SELECT  " +
+                    "		md.idMetric,  " +
+                    "		@d, " +
+                    "		COUNT(*) AS number, " +
+                    "		idDept   " +
+                    "	FROM dbo.MetricDeviation(@idcomp, null) md " +
+                    "	GROUP BY md.idMetric, md.idDept " +
 
-                "	FETCH NEXT FROM ccc INTO @idcomp   " +
-                "END " +
-                "CLOSE ccc " +
-                "DEALLOCATE ccc " +
+                    "	FETCH NEXT FROM ccc INTO @idcomp   " +
+                    "END " +
+                    "CLOSE ccc " +
+                    "DEALLOCATE ccc " +
 
-                "end");
-
-            //writeLog("exec is finished");
+                    "end");
+            }
 
         }
         catch (Exception ex)

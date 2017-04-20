@@ -335,6 +335,7 @@
       <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Association Name="dept_user_account" Member="user_accounts" ThisKey="id" OtherKey="idDept" Type="user_account" />
       <Association Name="dept_metric_hist" Member="metric_hists" ThisKey="id" OtherKey="idDept" Type="metric_hist" />
+      <Association Name="dept_metric_subj_filter" Member="metric_subj_filters" ThisKey="id" OtherKey="idDept" Type="metric_subj_filter" />
       <Association Name="Company_dept" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" />
     </Type>
   </Table>
@@ -743,17 +744,6 @@
       <Association Name="Test_Subject_Raw_Data" Member="Test_Subject" ThisKey="Subject_ID" OtherKey="id" Type="Test_Subject" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.metric_subj_filter" Member="metric_subj_filters">
-    <Type Name="metric_subj_filter">
-      <Column Name="idFilter" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="idMetric" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="idJob" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="idState" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
-      <Association Name="Job_metric_subj_filter" Member="Job" ThisKey="idJob" OtherKey="id" Type="Job" IsForeignKey="true" />
-      <Association Name="user_state_metric_subj_filter" Member="user_state" ThisKey="idState" OtherKey="id" Type="user_state" IsForeignKey="true" />
-      <Association Name="metric_metric_subj_filter" Member="metric" ThisKey="idMetric" OtherKey="idMetric" Type="metric" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.Test_Subject" Member="Test_Subjects">
     <Type Name="Test_Subject">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -803,8 +793,8 @@
       <Column Name="eliminate_scheme" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="calc_description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="weight" Type="System.Decimal" DbType="Decimal(4,1) NOT NULL" CanBeNull="false" />
-      <Association Name="metric_metric_subj_filter" Member="metric_subj_filters" ThisKey="idMetric" OtherKey="idMetric" Type="metric_subj_filter" />
       <Association Name="metric_metric_hist" Member="metric_hists" ThisKey="idMetric" OtherKey="idMetric" Type="metric_hist" />
+      <Association Name="metric_metric_subj_filter" Member="metric_subj_filters" ThisKey="idMetric" OtherKey="idMetric" Type="metric_subj_filter" />
       <Association Name="Company_metric" Member="Company" ThisKey="idCompany" OtherKey="id" Type="Company" IsForeignKey="true" />
       <Association Name="Scale_metric" Member="Scale" ThisKey="idScale" OtherKey="id" Type="Scale" IsForeignKey="true" />
       <Association Name="subject_group_metric" Member="subject_group" ThisKey="idSubjectGroup" OtherKey="id" Type="subject_group" IsForeignKey="true" />
@@ -819,6 +809,19 @@
       <Column Name="idDept" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="dept_metric_hist" Member="dept" ThisKey="idDept" OtherKey="id" Type="dept" IsForeignKey="true" DeleteRule="CASCADE" />
       <Association Name="metric_metric_hist" Member="metric" ThisKey="idMetric" OtherKey="idMetric" Type="metric" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.metric_subj_filter" Member="metric_subj_filters">
+    <Type Name="metric_subj_filter">
+      <Column Name="idFilter" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="idMetric" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idJob" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="idState" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="idDept" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="metric_metric_subj_filter" Member="metric" ThisKey="idMetric" OtherKey="idMetric" Type="metric" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="dept_metric_subj_filter" Member="dept" ThisKey="idDept" OtherKey="id" Type="dept" IsForeignKey="true" />
+      <Association Name="Job_metric_subj_filter" Member="Job" ThisKey="idJob" OtherKey="id" Type="Job" IsForeignKey="true" />
+      <Association Name="user_state_metric_subj_filter" Member="user_state" ThisKey="idState" OtherKey="id" Type="user_state" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.IsInterpretationFor" Method="IsInterpretationFor" IsComposable="true">

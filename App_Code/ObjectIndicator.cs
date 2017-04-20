@@ -61,6 +61,7 @@ public class ObjectIndicator
         public decimal Value;
         public string Name;
         public int Order;
+        public int idSubScale;
     }
     //struct DevCountByDate
     //{
@@ -477,12 +478,14 @@ public class ObjectIndicator
     private static void DrawMetricDevHistory(TesterDataClassesDataContext p_dc, Control p_container, indicator p_indicator)
     {
 
-        Chart dgr = new Chart() { Height = 200, BackColor = Color.Transparent};
+        Chart dgr = new Chart() { Height = 250, Width = 500, BackColor = Color.Transparent};
+        dgr.Titles.Add(new Title("График изменения кол-ва отклонений за период с " + DateTime.Today.AddMonths(-3).ToString("dd.MM.yyyy"), Docking.Top, new Font("Arial", 14), Color.Black));
+        
         Series sr = new Series();
         foreach (var dcnt in (
             from mh in p_dc.metric_hists
             join d in p_dc.depts on mh.idDept equals d.id
-            where d.idCompany == p_indicator.idCompany
+            where d.idCompany == p_indicator.idCompany && mh.mDate >= DateTime.Today.AddMonths (-3)
             group mh by mh.mDate into g
             select new {mDate = g.Key, mNumber = g.Sum(x=>x.mNumber)}).OrderBy(ob=> ob.mDate).ToList()
             )
@@ -504,8 +507,14 @@ public class ObjectIndicator
         });
         dgr.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
         dgr.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
-        
 
+
+        //Label laDgrTitle = new Label () {
+        //    CssClass="clsIndicatorName",
+        //    Text = "График изменения кол-ва отклонений за период с " + DateTime.Today.AddMonths(-3).ToString("dd.MM.yyyy")};
+        //laDgrTitle.Attributes.Add ("text-align", "center");
+        //p_container.Controls.Add(laDgrTitle);
+        //p_container.Controls.Add(new LiteralControl ("<br/>"));
         p_container.Controls.Add(dgr);
 
     }
@@ -695,23 +704,24 @@ public class ObjectIndicator
             }
             p_container.Controls.Add(new LiteralControl("<br/>"));
             //3. процент по каждому уровню оценки
-            Dictionary<string, decimal> dd =
+            var dd =
             (from tr in p_dc.Test_Results
              join ts in p_dc.Test_Subjects on tr.Subject_ID equals ts.id
              join tsa in p_dc.test_subject_approveds on ts.id equals tsa.idSubject
              join ig in p_dc.idea_generators on ts.Test_Id equals ig.idTest
              join ss in p_dc.SubScales on tr.SubScale_ID equals ss.id
              where ig.idGeneratorType == 2 && ts.Test_Date >= QuartBegin && tsa.isApproved
-             group tr by new { tr.SubScale.name, tr.SubScale.OrderNumber } into g
-             select new FieldDataSet { Name = g.Key.name, Value = (decimal)g.Sum(s => s.SelectedValue), Order = g.Key.OrderNumber }).OrderBy(o => o.Order
-             ).ToDictionary(d => d.Name, d => d.Value);
+             group tr by new { tr.SubScale.name, tr.SubScale.OrderNumber, tr.SubScale.id } into g
+             select new FieldDataSet { Name = g.Key.name, Value = (decimal)g.Sum(s => s.SelectedValue), Order = g.Key.OrderNumber, idSubScale = g.Key.id }).OrderBy(o => o.Order
+             ).ToList();
 
             total = decimal.ToInt32(dd.Sum(s => s.Value));
             if (total != 0)
             {
                 foreach (var n in dd)
                 {
-                    p_container.Controls.Add(new LiteralControl(string.Format("<br/>{0} - {1}%", n.Key, (n.Value * 100 / total).ToString("0.0"))));
+                    p_container.Controls.Add(new LiteralControl(string.Format("<br/><a href='analyse\\qassessment.aspx?id={0}'>{1}</a> - {2}%", 
+                        n.idSubScale, n.Name, (n.Value * 100 / total).ToString("0.0"))));
                 }
             }
         }

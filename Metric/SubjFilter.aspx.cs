@@ -43,14 +43,27 @@ public partial class Metric_SubjFilter : System.Web.UI.Page
         using (TesterDataClassesDataContext dc = new TesterDataClassesDataContext())
         {
             metric mm = dc.metrics.Single(q => q.idMetric == idMetric);
-            foreach (Job j in dc.Jobs)
+            foreach (Job j in dc.Jobs.Where(nn=> dc.user_accounts.Select(q => q.idJob).Contains (nn.id)))
             {
                 mm.metric_subj_filters.Add(new metric_subj_filter() { idJob = j.id });
-
             }
             dc.SubmitChanges();
         }        
         gv_job.DataBind();
+    }
+    protected void btnAddDeptFilterClick(object sender, EventArgs e)
+    {
+        using (TesterDataClassesDataContext dc = new TesterDataClassesDataContext())
+        {
+            metric mm = dc.metrics.Single(q => q.idMetric == idMetric);
+            foreach (dept dpt in dc.depts.Where(nn=> dc.user_accounts.Select(q=> q.idDept).Contains(nn.id)))
+            {
+                mm.metric_subj_filters.Add(new metric_subj_filter() { idDept = dpt.id });
+
+            }
+            dc.SubmitChanges();
+        }
+        gv_dept.DataBind();
     }
 
     protected void btnApplyClick(object sender, EventArgs e)
